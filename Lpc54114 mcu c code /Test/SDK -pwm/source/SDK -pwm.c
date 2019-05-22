@@ -32,7 +32,6 @@
  * @file    SDK -pwm.c
  * @brief   Application entry point.
  */
-#include <stdio.h>
 #include "board.h"
 #include "peripherals.h"
 #include "pin_mux.h"
@@ -42,20 +41,57 @@
 /* TODO: insert other include files here. */
 
 /* TODO: insert other definitions and declarations here. */
-
+#define SCTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_BusClk)
+#define DEMO_FIRST_SCTIMER_OUT kSCTIMER_Out_4
+#define DEMO_SECOND_SCTIMER_OUT kSCTIMER_Out_2
 /*
  * @brief   Application entry point.
  */
 int main(void) {
 
+	 sctimer_config_t sctimerInfo;
+	    sctimer_pwm_signal_param_t pwmParam;
+	    uint32_t event;
+	    uint32_t sctimerClock;
+
   	/* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
-  	/* Init FSL debug console. */
+
+    /* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-    PRINTF("Hello World\n");
+
+
+    SCTIMER_GetDefaultConfig(&sctimerInfo);
+
+       /* Initialize SCTimer module */
+       SCTIMER_Init(SCT0, &sctimerInfo);
+
+       /* Configure first PWM with frequency 24kHZ from first output */
+          pwmParam.output = DEMO_FIRST_SCTIMER_OUT;
+          pwmParam.level = kSCTIMER_HighTrue;
+          pwmParam.dutyCyclePercent = 50;
+          if (SCTIMER_SetupPwm(SCT0, &pwmParam, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
+          {
+              return -1;
+          }
+
+
+          /* Configure second PWM with different duty cycle but same frequency as before */
+             pwmParam.output = DEMO_SECOND_SCTIMER_OUT;
+             pwmParam.level = kSCTIMER_LowTrue;
+             pwmParam.dutyCyclePercent = 20;
+             if (SCTIMER_SetupPwm(SCT0, &pwmParam, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
+             {
+                 return -1;
+             }
+
+             /* Start the timer */
+             SCTIMER_StartTimer(SCT0, kSCTIMER_Counter_L);
+
+
 
     /* Force the counter to be placed into memory. */
     volatile static int i = 0 ;
