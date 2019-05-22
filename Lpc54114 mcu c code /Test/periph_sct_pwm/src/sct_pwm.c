@@ -46,13 +46,13 @@
 
 #define SCT_PWM            LPC_SCT
 #if defined(BOARD_NXP_LPCXPRESSO_54114)
-#define SCT_PWM_PIN_OUT    7		/* COUT7 Generate square wave */
+#define SCT_PWM_PIN_OUT    9		/* COUT7 Generate square wave */
 #define SCT_PWM_PIN_LED    4		/* COUT4 [index 2] Controls LED */
 #else
 #error "Board not supported - setup SCT outputs for example"
 #endif
 
-#define SCT_PWM_OUT        1		/* Index of OUT PWM */
+#define SCT_PWM_OUT        17		/* Index of OUT PWM */
 #define SCT_PWM_LED        2		/* Index of LED PWM */
 #define SCT_PWM_RATE   10000		/* PWM frequency 10 KHz */
 
@@ -77,7 +77,7 @@ static void app_setup_pin(void)
 	/* SCT_OUT5 on PIO1_2 mapped to FUNC3: LED_GREEN */
 	Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 10, IOCON_FUNC3 | IOCON_MODE_INACT | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF);
 	/* SCT_OUT5 on PIO1_1 mapped to FUNC2: Oscilloscope input */
-	Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 14, IOCON_FUNC3 | IOCON_MODE_INACT | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 15, IOCON_FUNC3 | IOCON_MODE_INACT | IOCON_DIGITAL_EN | IOCON_INPFILT_OFF);
 #else
 #warning "No SCT pin muxing defined"
 #endif
