@@ -17,8 +17,8 @@
  ******************************************************************************/
 
 #define SCTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_BusClk)
-#define DEMO_FIRST_SCTIMER_OUT kSCTIMER_Out_4
-#define DEMO_SECOND_SCTIMER_OUT kSCTIMER_Out_2
+#define DEMO_FIRST_SCTIMER_OUT kSCTIMER_Out_7
+#define DEMO_SECOND_SCTIMER_OUT kSCTIMER_Out_5
 
 /*******************************************************************************
  * Prototypes
@@ -64,7 +64,7 @@ int main(void)
     /* Configure first PWM with frequency 24kHZ from first output */
     pwmParam.output = DEMO_FIRST_SCTIMER_OUT;
     pwmParam.level = kSCTIMER_HighTrue;
-    pwmParam.dutyCyclePercent = 50;
+    pwmParam.dutyCyclePercent = 90;
     if (SCTIMER_SetupPwm(SCT0, &pwmParam, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
     {
         return -1;
@@ -73,7 +73,7 @@ int main(void)
     /* Configure second PWM with different duty cycle but same frequency as before */
     pwmParam.output = DEMO_SECOND_SCTIMER_OUT;
     pwmParam.level = kSCTIMER_LowTrue;
-    pwmParam.dutyCyclePercent = 20;
+    pwmParam.dutyCyclePercent = 30;
     if (SCTIMER_SetupPwm(SCT0, &pwmParam, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
     {
         return -1;
