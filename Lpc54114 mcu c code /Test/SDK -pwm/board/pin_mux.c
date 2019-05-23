@@ -107,6 +107,8 @@ BOARD_InitPins_cm4:
 - pin_list:
   - {pin_num: '57', peripheral: SCT0, signal: 'OUT, 7', pin_signal: PIO1_14/FC2_RXD_SDA_MOSI/SCT0_OUT7/FC7_TXD_SCL_MISO_WS}
   - {pin_num: '62', peripheral: SCT0, signal: 'OUT, 5', pin_signal: PIO1_15/PDM0_CLK/SCT0_OUT5/CTIMER1_CAP3/FC7_CTS_SDA_SSEL0}
+  - {pin_num: '15', peripheral: SCT0, signal: 'OUT, 4', pin_signal: PIO1_1/SWO/SCT0_OUT4/FC5_SSEL2/FC4_TXD_SCL_MISO/ADC0_4}
+  - {pin_num: '11', peripheral: SCT0, signal: 'OUT, 2', pin_signal: PIO0_29/FC1_RXD_SDA_MOSI/SCT0_OUT2/CTIMER0_MAT3/CTIMER0_CAP1/CTIMER0_MAT1/ADC0_0, identifier: ''}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -122,6 +124,30 @@ void BOARD_InitPins_cm4(void)
 {
     /* Enables the clock for the IOCON block. 0 = Disable; 1 = Enable.: 0x01u */
     CLOCK_EnableClock(kCLOCK_Iocon);
+
+    IOCON->PIO[0][29] = ((IOCON->PIO[0][29] &
+                          /* Mask bits to zero which are setting */
+                          (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                         /* Selects pin function.
+                          * : PORT029 (pin 11) is configured as SCT0_OUT2. */
+                         | IOCON_PIO_FUNC(PIO029_FUNC_ALT2)
+
+                         /* Select Analog/Digital mode.
+                          * : Digital mode. */
+                         | IOCON_PIO_DIGIMODE(PIO029_DIGIMODE_DIGITAL));
+
+    IOCON->PIO[1][1] = ((IOCON->PIO[1][1] &
+                         /* Mask bits to zero which are setting */
+                         (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                        /* Selects pin function.
+                         * : PORT11 (pin 15) is configured as SCT0_OUT4. */
+                        | IOCON_PIO_FUNC(PIO11_FUNC_ALT3)
+
+                        /* Select Analog/Digital mode.
+                         * : Digital mode. */
+                        | IOCON_PIO_DIGIMODE(PIO11_DIGIMODE_DIGITAL));
 
     IOCON->PIO[1][14] = ((IOCON->PIO[1][14] &
                           /* Mask bits to zero which are setting */

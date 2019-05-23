@@ -25,10 +25,14 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
+#define PIO029_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
+#define PIO029_FUNC_ALT2 0x02u        /*!<@brief Selects pin function.: Alternative connection 2. */
 #define PIO114_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
 #define PIO114_FUNC_ALT3 0x03u        /*!<@brief Selects pin function.: Alternative connection 3. */
 #define PIO115_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
 #define PIO115_FUNC_ALT2 0x02u        /*!<@brief Selects pin function.: Alternative connection 2. */
+#define PIO11_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
+#define PIO11_FUNC_ALT3 0x03u         /*!<@brief Selects pin function.: Alternative connection 3. */
 
 /*! @name SCT0_OUT7 (number 57), J2[1]/P1_14-SCTO7
   @{ */

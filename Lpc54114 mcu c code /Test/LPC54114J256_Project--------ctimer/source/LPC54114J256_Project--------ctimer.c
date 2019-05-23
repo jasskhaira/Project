@@ -29,7 +29,7 @@
  */
  
 /**
- * @file    LPC54114J256_Project-ctimertesting.c
+ * @file    LPC54114J256_Project--------ctimer.c
  * @brief   Application entry point.
  */
 #include <stdio.h>
@@ -39,9 +39,19 @@
 #include "clock_config.h"
 #include "LPC54114_cm4.h"
 #include "fsl_debug_console.h"
+
+
+
+
 /* TODO: insert other include files here. */
 
+
+
 /* TODO: insert other definitions and declarations here. */
+
+#define CTIMER CTIMER1                 /* Timer 1 */
+
+
 
 /*
  * @brief   Application entry point.

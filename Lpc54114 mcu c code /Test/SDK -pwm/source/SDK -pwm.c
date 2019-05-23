@@ -1,37 +1,4 @@
-/*
- * Copyright 2016-2018 NXP
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of NXP Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
- 
-/**
- * @file    SDK -pwm.c
- * @brief   Application entry point.
- */
+
 #include "board.h"
 #include "peripherals.h"
 #include "pin_mux.h"
@@ -44,15 +11,18 @@
 
 /* TODO: insert other definitions and declarations here. */
 #define SCTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_BusClk)
-#define DEMO_FIRST_SCTIMER_OUT kSCTIMER_Out_4
-#define DEMO_SECOND_SCTIMER_OUT kSCTIMER_Out_2
+#define LEFT_MOTOR_SIGNAL1 kSCTIMER_Out_4
+#define LEFT_MOTOR_SIGNAL2 kSCTIMER_Out_5
+#define RIGHT_MOTOR_SIGNAL1 kSCTIMER_Out_5
+#define RIGHT_MOTOR_SIGNAL2 kSCTIMER_Out_7
 /*
  * @brief   Application entry point.
  */
+
 int main(void) {
 
 	 sctimer_config_t sctimerInfo;
-	    sctimer_pwm_signal_param_t pwmParam;
+	    sctimer_pwm_signal_param_t pwmParam_left1,pwmParam_left2,pwmParam_right1,pwmParam_right2;
 	    uint32_t event;
 	    uint32_t sctimerClock;
 
@@ -64,6 +34,30 @@ int main(void) {
     /* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
+    sctimerClock = SCTIMER_CLK_FREQ;
+
+    /* Configure first PWM with frequency 24kHZ from LEFT MOTOR FIRST SIGNAL output */
+    pwmParam_left1.output = LEFT_MOTOR_SIGNAL1;
+    pwmParam_left1.level = kSCTIMER_HighTrue;
+    pwmParam_left1.dutyCyclePercent = 50;
+
+
+       /* Configure first PWM with frequency 24kHZ from LEFT MOTOR SECOND SIGNAL output */
+    pwmParam_left2.output = LEFT_MOTOR_SIGNAL2;
+    pwmParam_left2.level = kSCTIMER_HighTrue;
+    pwmParam_left2.dutyCyclePercent = 50;
+
+          /* Configure first PWM with frequency 24kHZ from RIGHT MOTOR FIRST SIGNAL output */
+    pwmParam_right1.output = RIGHT_MOTOR_SIGNAL1;
+    pwmParam_right1.level = kSCTIMER_HighTrue;
+    pwmParam_right1.dutyCyclePercent = 50;
+
+             /* Configure first PWM with frequency 24kHZ from RIGHT MOTOR SECOND SIGNAL output */
+    pwmParam_right2.output = RIGHT_MOTOR_SIGNAL2;
+    pwmParam_right2.level = kSCTIMER_HighTrue;
+    pwmParam_right2.dutyCyclePercent = 50;
+
+
 
 
     SCTIMER_GetDefaultConfig(&sctimerInfo);
@@ -71,24 +65,31 @@ int main(void) {
        /* Initialize SCTimer module */
        SCTIMER_Init(SCT0, &sctimerInfo);
 
-       /* Configure first PWM with frequency 24kHZ from first output */
-          pwmParam.output = DEMO_FIRST_SCTIMER_OUT;
-          pwmParam.level = kSCTIMER_HighTrue;
-          pwmParam.dutyCyclePercent = 80;
-          if (SCTIMER_SetupPwm(SCT0, &pwmParam, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
+          if (SCTIMER_SetupPwm(SCT0, &pwmParam_left1, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
           {
               return -1;
           }
 
 
-          /* Configure second PWM with different duty cycle but same frequency as before */
-             pwmParam.output = DEMO_SECOND_SCTIMER_OUT;
-             pwmParam.level = kSCTIMER_LowTrue;
-             pwmParam.dutyCyclePercent = 80;
-             if (SCTIMER_SetupPwm(SCT0, &pwmParam, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
+
+             if (SCTIMER_SetupPwm(SCT0, &pwmParam_left2, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
              {
                  return -1;
              }
+
+
+
+             if (SCTIMER_SetupPwm(SCT0, &pwmParam_right1, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
+                      {
+                          return -1;
+                      }
+
+
+
+              if (SCTIMER_SetupPwm(SCT0, &pwmParam_right2, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
+                         {
+                             return -1;
+                         }
 
              /* Start the timer */
              SCTIMER_StartTimer(SCT0, kSCTIMER_Counter_L);
