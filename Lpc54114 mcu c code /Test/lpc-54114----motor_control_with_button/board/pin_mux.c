@@ -20,7 +20,7 @@ pin_labels:
 - {pin_num: '4', pin_signal: PIO0_26/FC4_CTS_SDA_SSEL0/CTIMER0_CAP3, label: 'J1[3]/JS5[1]/U10[5]/P0_26-FC4_SDAX', identifier: FC4_SDAX}
 - {pin_num: '5', pin_signal: USB0_DP, label: 'J5[3]/U7[2]/USB_DP', identifier: USB_DP}
 - {pin_num: '6', pin_signal: USB0_DM, label: 'J5[2]/U7[3]/USB_DM', identifier: USB_DM}
-- {pin_num: '7', pin_signal: PIO1_16/PDM0_DATA/CTIMER0_MAT0/CTIMER0_CAP0/FC7_RTS_SCL_SSEL1, label: 'J1[19]/P1_16-CT32B0_MAT0-GYRO_INT1'}
+- {pin_num: '7', pin_signal: PIO1_16/PDM0_DATA/CTIMER0_MAT0/CTIMER0_CAP0/FC7_RTS_SCL_SSEL1, label: 'J1[19]/P1_16-CT32B0_MAT0-GYRO_INT1', identifier: right_motor_speeddn}
 - {pin_num: '8', pin_signal: VDD8, label: VDD_LPC5411x_IC}
 - {pin_num: '24', pin_signal: VDD24, label: VDD_LPC5411x_IC}
 - {pin_num: '34', pin_signal: VDD34, label: VDD_LPC5411x_IC}
@@ -59,7 +59,7 @@ pin_labels:
 - {pin_num: '40', pin_signal: PIO0_6/FC6_TXD_SCL_MISO_WS/CTIMER0_MAT1/UTICK_CAP0, label: 'J1[18]/P0_6-FC6_TXD_SCL_MISO_FRAME'}
 - {pin_num: '41', pin_signal: PIO0_7/FC6_SCK/SCT0_OUT0/CTIMER0_MAT2/CTIMER0_CAP2, label: 'J1[16]/P0_7-FC6_SCK'}
 - {pin_num: '42', pin_signal: PIO1_11/FC6_RTS_SCL_SSEL1/CTIMER1_CAP0/FC4_SCK/USB0_VBUS, label: 'J2[19]/P1_11-FC6_RTS_SSEL1-MAG_DRDY'}
-- {pin_num: '43', pin_signal: PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3, label: 'J2[15]/P0_8-FC2_RXD_SDA_MOSI', identifier: lefft_motor_speedup}
+- {pin_num: '43', pin_signal: PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3, label: 'J2[15]/P0_8-FC2_RXD_SDA_MOSI', identifier: lefft_motor_speedup;left_motor_speedup}
 - {pin_num: '44', pin_signal: PIO0_9/FC2_TXD_SCL_MISO/SCT0_OUT2/CTIMER3_CAP0/FC3_CTS_SDA_SSEL0, label: 'J2[13]/P0_9-FC2_TXD_SCL_MISO', identifier: left_motor_speeddn}
 - {pin_num: '45', pin_signal: PIO0_10/FC2_SCK/SCT0_OUT3/CTIMER3_MAT0, label: 'J2[11]/P0_10-FC2_SCK-CT32B3_MAT0', identifier: left_motor_dir}
 - {pin_num: '46', pin_signal: PIO0_11/FC3_SCK/FC6_RXD_SDA_MOSI_DATA/CTIMER2_MAT1, label: 'J4[4]/U9[13]/BRIDGE_T_SCK', identifier: BRIDGE_T_SCK}
@@ -70,7 +70,7 @@ pin_labels:
 - {pin_num: '51', pin_signal: PIO1_12/FC5_RXD_SDA_MOSI/CTIMER1_MAT0/FC7_SCK/UTICK_CAP2, label: 'J2[9]/P1_12-CT32B1_MAT0-ACCl_INT1', identifier: right_motor_dir}
 - {pin_num: '52', pin_signal: PIO0_16/FC3_SSEL2/FC6_CTS_SDA_SSEL0/CTIMER3_MAT1/SWCLK, label: 'J2[4]/JS28/U4[4]/TCK-SWDCLK_TRGT-SPIFI_IO1', identifier: DEBUG_SWD_SWDCLK}
 - {pin_num: '53', pin_signal: PIO0_17/FC3_SSEL3/FC6_RTS_SCL_SSEL1/CTIMER3_MAT2/SWDIO, label: 'J2[6]/P1[2]/U2[5]/U14[4]/IF_TMS_SWDIO-SPIFI_IO0', identifier: DEBUG_SWD_SWDIO}
-- {pin_num: '54', pin_signal: PIO1_13/FC5_TXD_SCL_MISO/CTIMER1_MAT1/FC7_RXD_SDA_MOSI_DATA, label: 'J2[7]/P1_13-CT32B1_MAT1'}
+- {pin_num: '54', pin_signal: PIO1_13/FC5_TXD_SCL_MISO/CTIMER1_MAT1/FC7_RXD_SDA_MOSI_DATA, label: 'J2[7]/P1_13-CT32B1_MAT1', identifier: right_motor_speedup}
 - {pin_num: '57', pin_signal: PIO1_14/FC2_RXD_SDA_MOSI/SCT0_OUT7/FC7_TXD_SCL_MISO_WS, label: 'J2[1]/P1_14-SCTO7', identifier: left_m2}
 - {pin_num: '58', pin_signal: PIO0_18/FC5_TXD_SCL_MISO/SCT0_OUT0/CTIMER0_MAT0, label: 'J1[11]/U5[2]/P0_18-FC5_TXD_SCL_MISO', identifier: SPI_FLASH_MISO}
 - {pin_num: '59', pin_signal: PIO0_19/FC5_SCK/SCT0_OUT1/CTIMER0_MAT1, label: 'J1[9]/J2[8]/U5[6]/P0_19-FC5_SCK-SPIFI_CSn', identifier: SPI_FLASH_SCK}
@@ -109,10 +109,12 @@ BOARD_InitPins_cm4:
   - {pin_num: '15', peripheral: SCT0, signal: 'OUT, 4', pin_signal: PIO1_1/SWO/SCT0_OUT4/FC5_SSEL2/FC4_TXD_SCL_MISO/ADC0_4}
   - {pin_num: '62', peripheral: SCT0, signal: 'OUT, 5', pin_signal: PIO1_15/PDM0_CLK/SCT0_OUT5/CTIMER1_CAP3/FC7_CTS_SDA_SSEL0}
   - {pin_num: '11', peripheral: SCT0, signal: 'OUT, 2', pin_signal: PIO0_29/FC1_RXD_SDA_MOSI/SCT0_OUT2/CTIMER0_MAT3/CTIMER0_CAP1/CTIMER0_MAT1/ADC0_0, identifier: left_m1}
-  - {pin_num: '43', peripheral: GPIO, signal: 'PIO0, 8', pin_signal: PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3, direction: INPUT}
+  - {pin_num: '43', peripheral: GPIO, signal: 'PIO0, 8', pin_signal: PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3, identifier: left_motor_speedup, direction: INPUT}
   - {pin_num: '44', peripheral: GPIO, signal: 'PIO0, 9', pin_signal: PIO0_9/FC2_TXD_SCL_MISO/SCT0_OUT2/CTIMER3_CAP0/FC3_CTS_SDA_SSEL0, direction: INPUT}
   - {pin_num: '45', peripheral: GPIO, signal: 'PIO0, 10', pin_signal: PIO0_10/FC2_SCK/SCT0_OUT3/CTIMER3_MAT0, direction: INPUT}
   - {pin_num: '51', peripheral: GPIO, signal: 'PIO1, 12', pin_signal: PIO1_12/FC5_RXD_SDA_MOSI/CTIMER1_MAT0/FC7_SCK/UTICK_CAP2, direction: INPUT}
+  - {pin_num: '54', peripheral: GPIO, signal: 'PIO1, 13', pin_signal: PIO1_13/FC5_TXD_SCL_MISO/CTIMER1_MAT1/FC7_RXD_SDA_MOSI_DATA, direction: INPUT}
+  - {pin_num: '7', peripheral: GPIO, signal: 'PIO1, 16', pin_signal: PIO1_16/PDM0_DATA/CTIMER0_MAT0/CTIMER0_CAP0/FC7_RTS_SCL_SSEL1, direction: INPUT}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -133,12 +135,12 @@ void BOARD_InitPins_cm4(void)
     /* Enables the clock for the GPIO1 module */
     CLOCK_EnableClock(kCLOCK_Gpio1);
 
-    gpio_pin_config_t lefft_motor_speedup_config = {
+    gpio_pin_config_t left_motor_speedup_config = {
         .pinDirection = kGPIO_DigitalInput,
         .outputLogic = 0U
     };
     /* Initialize GPIO functionality on pin PIO0_8 (pin 43)  */
-    GPIO_PinInit(BOARD_lefft_motor_speedup_GPIO, BOARD_lefft_motor_speedup_PORT, BOARD_lefft_motor_speedup_PIN, &lefft_motor_speedup_config);
+    GPIO_PinInit(BOARD_left_motor_speedup_GPIO, BOARD_left_motor_speedup_PORT, BOARD_left_motor_speedup_PIN, &left_motor_speedup_config);
 
     gpio_pin_config_t left_motor_speeddn_config = {
         .pinDirection = kGPIO_DigitalInput,
@@ -160,6 +162,20 @@ void BOARD_InitPins_cm4(void)
     };
     /* Initialize GPIO functionality on pin PIO1_12 (pin 51)  */
     GPIO_PinInit(BOARD_right_motor_dir_GPIO, BOARD_right_motor_dir_PORT, BOARD_right_motor_dir_PIN, &right_motor_dir_config);
+
+    gpio_pin_config_t right_motor_speedup_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PIO1_13 (pin 54)  */
+    GPIO_PinInit(BOARD_right_motor_speedup_GPIO, BOARD_right_motor_speedup_PORT, BOARD_right_motor_speedup_PIN, &right_motor_speedup_config);
+
+    gpio_pin_config_t right_motor_speeddn_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PIO1_16 (pin 7)  */
+    GPIO_PinInit(BOARD_right_motor_speeddn_GPIO, BOARD_right_motor_speeddn_PORT, BOARD_right_motor_speeddn_PIN, &right_motor_speeddn_config);
 
     IOCON->PIO[0][10] = ((IOCON->PIO[0][10] &
                           /* Mask bits to zero which are setting */
@@ -233,6 +249,18 @@ void BOARD_InitPins_cm4(void)
                           * : Digital mode. */
                          | IOCON_PIO_DIGIMODE(PIO112_DIGIMODE_DIGITAL));
 
+    IOCON->PIO[1][13] = ((IOCON->PIO[1][13] &
+                          /* Mask bits to zero which are setting */
+                          (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                         /* Selects pin function.
+                          * : PORT113 (pin 54) is configured as PIO1_13. */
+                         | IOCON_PIO_FUNC(PIO113_FUNC_ALT0)
+
+                         /* Select Analog/Digital mode.
+                          * : Digital mode. */
+                         | IOCON_PIO_DIGIMODE(PIO113_DIGIMODE_DIGITAL));
+
     IOCON->PIO[1][14] = ((IOCON->PIO[1][14] &
                           /* Mask bits to zero which are setting */
                           (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
@@ -256,6 +284,18 @@ void BOARD_InitPins_cm4(void)
                          /* Select Analog/Digital mode.
                           * : Digital mode. */
                          | IOCON_PIO_DIGIMODE(PIO115_DIGIMODE_DIGITAL));
+
+    IOCON->PIO[1][16] = ((IOCON->PIO[1][16] &
+                          /* Mask bits to zero which are setting */
+                          (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                         /* Selects pin function.
+                          * : PORT116 (pin 7) is configured as PIO1_16. */
+                         | IOCON_PIO_FUNC(PIO116_FUNC_ALT0)
+
+                         /* Select Analog/Digital mode.
+                          * : Digital mode. */
+                         | IOCON_PIO_DIGIMODE(PIO116_DIGIMODE_DIGITAL));
 }
 
 /* clang-format off */

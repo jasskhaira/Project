@@ -30,6 +30,30 @@ uint32_t eventNumberOutput;
  * @brief   Application entry point.
  */
 int main(void) {
+	uint32_t dutycycle_left=50,dutycycle_right=50,a=0,b=0;
+
+		/* Define the init structure for the output LED pin*/
+	    gpio_pin_config_t left_motor_speedup = {
+	        kGPIO_DigitalInput, 1,
+	    };
+	    gpio_pin_config_t left_motor_speeddn = {
+	    	        kGPIO_DigitalInput, 1,
+	    	    };
+
+	    gpio_pin_config_t right_motor_speedup = {
+	   	        kGPIO_DigitalInput, 1,
+	   	    };
+
+	    gpio_pin_config_t right_motor_speeddn = {
+	   	        kGPIO_DigitalInput, 1,
+	   	    };
+
+	    gpio_pin_config_t left_motor_dir = {
+	   	        kGPIO_DigitalInput, 1,
+	   	    };
+	    gpio_pin_config_t right_motor_dir = {
+	   	        kGPIO_DigitalInput, 1,
+	   	    };
 
 	 sctimer_config_t sctimerInfo;
 		    sctimer_pwm_signal_param_t pwmParam_left1,pwmParam_left2,pwmParam_right1,pwmParam_right2;
@@ -52,28 +76,44 @@ int main(void) {
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
+    /* enable clock for GPIO*/
+       CLOCK_EnableClock(kCLOCK_Gpio0);
+       CLOCK_EnableClock(kCLOCK_Gpio1);
+
+
+      // GPIO_PortInit(GPIO, BOARD_lefft_motor_speedup_PORT);
+     GPIO_PinInit(GPIO, BOARD_left_motor_speedup_PORT, BOARD_left_motor_speedup_PIN, &left_motor_speedup);
+     GPIO_PinInit(GPIO, BOARD_left_motor_speeddn_PORT, BOARD_left_motor_speeddn_PIN, &left_motor_speeddn);
+
+     GPIO_PinInit(GPIO, BOARD_right_motor_speedup_PORT, BOARD_right_motor_speedup_PIN, &right_motor_speedup);
+     GPIO_PinInit(GPIO, BOARD_right_motor_speeddn_PORT, BOARD_right_motor_speeddn_PIN, &right_motor_speeddn);
+
+     GPIO_PinInit(GPIO, BOARD_left_motor_dir_PORT, BOARD_left_motor_dir_PIN, &left_motor_dir);
+     GPIO_PinInit(GPIO, BOARD_right_motor_dir_PORT, BOARD_right_motor_dir_PIN, &right_motor_dir);
+
+
     sctimerClock = SCTIMER_CLK_FREQ;
 
     /* Configure first PWM with frequency 24kHZ from LEFT MOTOR FIRST SIGNAL output */
         pwmParam_left1.output = LEFT_MOTOR_SIGNAL1;
         pwmParam_left1.level = kSCTIMER_HighTrue;
-        pwmParam_left1.dutyCyclePercent = 20;
+        pwmParam_left1.dutyCyclePercent = 10;
 
 
            /* Configure first PWM with frequency 24kHZ from LEFT MOTOR SECOND SIGNAL output */
         pwmParam_left2.output = LEFT_MOTOR_SIGNAL2;
         pwmParam_left2.level = kSCTIMER_HighTrue;
-        pwmParam_left2.dutyCyclePercent = 80;
+        pwmParam_left2.dutyCyclePercent = 50;
 
               /* Configure first PWM with frequency 24kHZ from RIGHT MOTOR FIRST SIGNAL output */
         pwmParam_right1.output = RIGHT_MOTOR_SIGNAL1;
         pwmParam_right1.level = kSCTIMER_HighTrue;
-        pwmParam_right1.dutyCyclePercent = 50;
+        pwmParam_right1.dutyCyclePercent = 10;
 
                  /* Configure first PWM with frequency 24kHZ from RIGHT MOTOR SECOND SIGNAL output */
         pwmParam_right2.output = RIGHT_MOTOR_SIGNAL2;
         pwmParam_right2.level = kSCTIMER_HighTrue;
-        pwmParam_right2.dutyCyclePercent = 70;
+        pwmParam_right2.dutyCyclePercent = 50;
 
         SCTIMER_GetDefaultConfig(&sctimerInfo);
 
@@ -88,16 +128,88 @@ int main(void) {
 
         SCTIMER_StartTimer(SCT0, kSCTIMER_Counter_L);
 
-        SCTIMER_UpdatePwmDutycycle(SCT0,LEFT_MOTOR_SIGNAL1,90,eventNumberOutput);
 
 
 
 
     /* Force the counter to be placed into memory. */
-    volatile static int i = 0 ;
+
     /* Enter an infinite loop, just incrementing a counter. */
     while(1) {
-        i++ ;
+
+    	if(GPIO_PinRead(GPIO, BOARD_left_motor_speedup_PORT, BOARD_left_motor_speedup_PIN)==0)
+    	{
+    		while(GPIO_PinRead(GPIO, BOARD_left_motor_speedup_PORT, BOARD_left_motor_speedup_PIN)==0);
+    		dutycycle_left=dutycycle_left+20;
+    		if(dutycycle_left==100)
+    			dutycycle_left=20;
+
+    	}
+
+    	if(GPIO_PinRead(GPIO, BOARD_left_motor_speeddn_PORT, BOARD_left_motor_speeddn_PIN)==0)
+    	    	{
+    		while(GPIO_PinRead(GPIO, BOARD_left_motor_speeddn_PORT, BOARD_left_motor_speeddn_PIN)==0);
+    		dutycycle_left=dutycycle_left-20;
+    	    	}
+
+
+    	if(GPIO_PinRead(GPIO, BOARD_right_motor_speedup_PORT, BOARD_right_motor_speedup_PIN)==0)
+    	    	{
+    		while(GPIO_PinRead(GPIO, BOARD_right_motor_speedup_PORT, BOARD_right_motor_speedup_PIN)==0);
+    		dutycycle_right=dutycycle_right+20;
+    		 if(dutycycle_right==100)
+    		    dutycycle_right=10;
+    	    	}
+
+
+    	if(GPIO_PinRead(GPIO, BOARD_right_motor_speeddn_PORT, BOARD_right_motor_speeddn_PIN)==0)
+    	    	{
+    		while(GPIO_PinRead(GPIO, BOARD_right_motor_speeddn_PORT, BOARD_right_motor_speeddn_PIN)==0);
+    		dutycycle_right=dutycycle_right-20;
+    	    	}
+
+    	if(GPIO_PinRead(GPIO, BOARD_left_motor_dir_PORT, BOARD_left_motor_dir_PIN)==0)
+    	{
+    		while(GPIO_PinRead(GPIO, BOARD_left_motor_dir_PORT, BOARD_left_motor_dir_PIN)==0);
+    		a=a+1;
+    		if (a==2)
+    		{
+    			a=0;
+
+    		}
+
+    	}
+
+    	if(GPIO_PinRead(GPIO, BOARD_right_motor_dir_PORT, BOARD_right_motor_dir_PIN)==0)
+    	    	{
+    		while(GPIO_PinRead(GPIO, BOARD_right_motor_dir_PORT, BOARD_right_motor_dir_PIN)==0);
+    		b=b+1;
+    		  if (b==2)
+    		   {
+    		   	b=0;
+
+    		    }}
+    if(a==0){
+    	SCTIMER_UpdatePwmDutycycle(SCT0,LEFT_MOTOR_SIGNAL1,dutycycle_left,eventNumberOutput);
+    	SCTIMER_UpdatePwmDutycycle(SCT0,LEFT_MOTOR_SIGNAL2,10,eventNumberOutput);
     }
-    return 0 ;
+    if(a==1)
+    {
+    	SCTIMER_UpdatePwmDutycycle(SCT0,LEFT_MOTOR_SIGNAL1,1,eventNumberOutput);
+    	SCTIMER_UpdatePwmDutycycle(SCT0,LEFT_MOTOR_SIGNAL2,dutycycle_left,eventNumberOutput);
+
+    }
+
+    if(b==0){
+    	SCTIMER_UpdatePwmDutycycle(SCT0,RIGHT_MOTOR_SIGNAL1,dutycycle_right,eventNumberOutput);
+    	SCTIMER_UpdatePwmDutycycle(SCT0,RIGHT_MOTOR_SIGNAL2,1,eventNumberOutput);
+    }
+    if(b==0){
+        	SCTIMER_UpdatePwmDutycycle(SCT0,RIGHT_MOTOR_SIGNAL1,1,eventNumberOutput);
+        	SCTIMER_UpdatePwmDutycycle(SCT0,RIGHT_MOTOR_SIGNAL2,dutycycle_right,eventNumberOutput);
+        }
+
+
+}
+return 0;
 }

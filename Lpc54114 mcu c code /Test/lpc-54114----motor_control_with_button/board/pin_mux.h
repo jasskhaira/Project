@@ -35,10 +35,14 @@ void BOARD_InitBootPins(void);
 #define PIO09_FUNC_ALT0 0x00u         /*!<@brief Selects pin function.: Alternative connection 0. */
 #define PIO112_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
 #define PIO112_FUNC_ALT0 0x00u        /*!<@brief Selects pin function.: Alternative connection 0. */
+#define PIO113_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
+#define PIO113_FUNC_ALT0 0x00u        /*!<@brief Selects pin function.: Alternative connection 0. */
 #define PIO114_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
 #define PIO114_FUNC_ALT3 0x03u        /*!<@brief Selects pin function.: Alternative connection 3. */
 #define PIO115_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
 #define PIO115_FUNC_ALT2 0x02u        /*!<@brief Selects pin function.: Alternative connection 2. */
+#define PIO116_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
+#define PIO116_FUNC_ALT0 0x00u        /*!<@brief Selects pin function.: Alternative connection 0. */
 #define PIO11_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
 #define PIO11_FUNC_ALT3 0x03u         /*!<@brief Selects pin function.: Alternative connection 3. */
 
@@ -60,10 +64,10 @@ void BOARD_InitBootPins(void);
 
 /*! @name PIO0_8 (number 43), J2[15]/P0_8-FC2_RXD_SDA_MOSI
   @{ */
-#define BOARD_lefft_motor_speedup_GPIO GPIO /*!<@brief GPIO device name: GPIO */
-#define BOARD_lefft_motor_speedup_PORT 0U   /*!<@brief PORT device name: 0U */
-#define BOARD_lefft_motor_speedup_PIN 8U    /*!<@brief 0U pin index: 8 */
-                                            /* @} */
+#define BOARD_left_motor_speedup_GPIO GPIO /*!<@brief GPIO device name: GPIO */
+#define BOARD_left_motor_speedup_PORT 0U   /*!<@brief PORT device name: 0U */
+#define BOARD_left_motor_speedup_PIN 8U    /*!<@brief 0U pin index: 8 */
+                                           /* @} */
 
 /*! @name PIO0_9 (number 44), J2[13]/P0_9-FC2_TXD_SCL_MISO
   @{ */
@@ -85,6 +89,20 @@ void BOARD_InitBootPins(void);
 #define BOARD_right_motor_dir_PORT 1U   /*!<@brief PORT device name: 1U */
 #define BOARD_right_motor_dir_PIN 12U   /*!<@brief 1U pin index: 12 */
                                         /* @} */
+
+/*! @name PIO1_13 (number 54), J2[7]/P1_13-CT32B1_MAT1
+  @{ */
+#define BOARD_right_motor_speedup_GPIO GPIO /*!<@brief GPIO device name: GPIO */
+#define BOARD_right_motor_speedup_PORT 1U   /*!<@brief PORT device name: 1U */
+#define BOARD_right_motor_speedup_PIN 13U   /*!<@brief 1U pin index: 13 */
+                                            /* @} */
+
+/*! @name PIO1_16 (number 7), J1[19]/P1_16-CT32B0_MAT0-GYRO_INT1
+  @{ */
+#define BOARD_right_motor_speeddn_GPIO GPIO /*!<@brief GPIO device name: GPIO */
+#define BOARD_right_motor_speeddn_PORT 1U   /*!<@brief PORT device name: 1U */
+#define BOARD_right_motor_speeddn_PIN 16U   /*!<@brief 1U pin index: 16 */
+                                            /* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
