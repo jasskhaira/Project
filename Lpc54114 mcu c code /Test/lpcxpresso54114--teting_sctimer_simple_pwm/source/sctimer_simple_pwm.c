@@ -65,10 +65,7 @@ int main(void)
     pwmParam.output = DEMO_FIRST_SCTIMER_OUT;
     pwmParam.level = kSCTIMER_HighTrue;
     pwmParam.dutyCyclePercent = 90;
-    if (SCTIMER_SetupPwm(SCT0, &pwmParam, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event) == kStatus_Fail)
-    {
-        return -1;
-    }
+    SCTIMER_SetupPwm(SCT0, &pwmParam, kSCTIMER_CenterAlignedPwm, 24000U, sctimerClock, &event);
 
     /* Configure second PWM with different duty cycle but same frequency as before */
     pwmParam.output = DEMO_SECOND_SCTIMER_OUT;
