@@ -255,7 +255,7 @@
 								<option id="com.crt.advproject.link.gcc.nanofloat.248832653" superClass="com.crt.advproject.link.gcc.nanofloat"/>
 								<option id="com.crt.advproject.link.gcc.nanofloat.scanf.1549061244" superClass="com.crt.advproject.link.gcc.nanofloat.scanf"/>
 								<option id="com.crt.advproject.link.toram.612424540" superClass="com.crt.advproject.link.toram"/>
-								<option id="com.crt.advproject.link.memory.heapAndStack.style.1288794703" superClass="com.crt.advproject.link.memory.heapAndStack.style"/>
+								<option defaultValue="com.crt.advproject.heapAndStack.mcuXpressoStyle" id="com.crt.advproject.link.memory.heapAndStack.style.1288794703" superClass="com.crt.advproject.link.memory.heapAndStack.style" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.stackOffset.1110643850" superClass="com.crt.advproject.link.stackOffset"/>
 								<option id="com.crt.advproject.link.gcc.multicore.empty.842389940" superClass="com.crt.advproject.link.gcc.multicore.empty"/>
 								<option id="com.crt.advproject.link.config.1785537629" superClass="com.crt.advproject.link.config"/>
@@ -535,7 +535,7 @@
 								<option id="com.crt.advproject.link.gcc.nanofloat.1175226819" superClass="com.crt.advproject.link.gcc.nanofloat"/>
 								<option id="com.crt.advproject.link.gcc.nanofloat.scanf.1542550470" superClass="com.crt.advproject.link.gcc.nanofloat.scanf"/>
 								<option id="com.crt.advproject.link.toram.197694604" superClass="com.crt.advproject.link.toram"/>
-								<option id="com.crt.advproject.link.memory.heapAndStack.style.1500780799" superClass="com.crt.advproject.link.memory.heapAndStack.style"/>
+								<option defaultValue="com.crt.advproject.heapAndStack.mcuXpressoStyle" id="com.crt.advproject.link.memory.heapAndStack.style.1500780799" superClass="com.crt.advproject.link.memory.heapAndStack.style" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.stackOffset.1660505381" superClass="com.crt.advproject.link.stackOffset"/>
 								<option id="com.crt.advproject.link.gcc.multicore.empty.473157007" superClass="com.crt.advproject.link.gcc.multicore.empty"/>
 								<option id="com.crt.advproject.link.config.1333886922" superClass="com.crt.advproject.link.config"/>
