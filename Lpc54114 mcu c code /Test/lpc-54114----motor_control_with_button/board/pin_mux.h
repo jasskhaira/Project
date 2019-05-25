@@ -25,26 +25,94 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
-#define PIO010_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO010_FUNC_ALT0 0x00u        /*!<@brief Selects pin function.: Alternative connection 0. */
-#define PIO029_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO029_FUNC_ALT2 0x02u        /*!<@brief Selects pin function.: Alternative connection 2. */
-#define PIO08_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO08_FUNC_ALT0 0x00u         /*!<@brief Selects pin function.: Alternative connection 0. */
-#define PIO09_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO09_FUNC_ALT0 0x00u         /*!<@brief Selects pin function.: Alternative connection 0. */
-#define PIO112_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO112_FUNC_ALT0 0x00u        /*!<@brief Selects pin function.: Alternative connection 0. */
-#define PIO113_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO113_FUNC_ALT0 0x00u        /*!<@brief Selects pin function.: Alternative connection 0. */
-#define PIO114_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO114_FUNC_ALT3 0x03u        /*!<@brief Selects pin function.: Alternative connection 3. */
-#define PIO115_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO115_FUNC_ALT2 0x02u        /*!<@brief Selects pin function.: Alternative connection 2. */
-#define PIO116_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO116_FUNC_ALT0 0x00u        /*!<@brief Selects pin function.: Alternative connection 0. */
-#define PIO11_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO11_FUNC_ALT3 0x03u         /*!<@brief Selects pin function.: Alternative connection 3. */
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO010_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO010_FUNC_ALT0 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO029_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 2. */
+#define PIO029_FUNC_ALT2 0x02u
+/*!
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Inactive.
+ * Inactive (no pull-down/pull-up resistor enabled).
+ */
+#define PIO029_MODE_INACTIVE 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO08_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO08_FUNC_ALT0 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO09_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO09_FUNC_ALT0 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO112_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO112_FUNC_ALT0 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO113_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO113_FUNC_ALT0 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO114_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 3. */
+#define PIO114_FUNC_ALT3 0x03u
+/*!
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Inactive.
+ * Inactive (no pull-down/pull-up resistor enabled).
+ */
+#define PIO114_MODE_INACTIVE 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO115_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 2. */
+#define PIO115_FUNC_ALT2 0x02u
+/*!
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Inactive.
+ * Inactive (no pull-down/pull-up resistor enabled).
+ */
+#define PIO115_MODE_INACTIVE 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO116_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO116_FUNC_ALT0 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO11_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 3. */
+#define PIO11_FUNC_ALT3 0x03u
+/*!
+ * @brief
+ * Selects function mode (on-chip pull-up/pull-down resistor control).
+ * : Inactive.
+ * Inactive (no pull-down/pull-up resistor enabled).
+ */
+#define PIO11_MODE_INACTIVE 0x00u
 
 /*! @name SCT0_OUT7 (number 57), J2[1]/P1_14-SCTO7
   @{ */
