@@ -59,23 +59,14 @@ int main(void) {
 		    uint32_t event_left1,event_left2,event_right1,event_right2;
 		    uint32_t sctimerClock;
 
-
-
-
-
-
-
-
-
-
-  	/* Init board hardware. */
+	/* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-    /* enable clock for GPIO*/
+    /* enable clock for GPIO*
        CLOCK_EnableClock(kCLOCK_Gpio0);
        CLOCK_EnableClock(kCLOCK_Gpio1);
 
@@ -88,7 +79,7 @@ int main(void) {
      GPIO_PinInit(GPIO, BOARD_right_motor_speeddn_PORT, BOARD_right_motor_speeddn_PIN, &right_motor_speeddn);
 
      GPIO_PinInit(GPIO, BOARD_left_motor_dir_PORT, BOARD_left_motor_dir_PIN, &left_motor_dir);
-     GPIO_PinInit(GPIO, BOARD_right_motor_dir_PORT, BOARD_right_motor_dir_PIN, &right_motor_dir);
+     GPIO_PinInit(GPIO, BOARD_right_motor_dir_PORT, BOARD_right_motor_dir_PIN, &right_motor_dir);*/
 
 
     sctimerClock = SCTIMER_CLK_FREQ;
@@ -128,11 +119,7 @@ int main(void) {
 
         SCTIMER_StartTimer(SCT0, kSCTIMER_Counter_L);
 
-
-
-
-
-    /* Force the counter to be placed into memory. */
+        /* Force the counter to be placed into memory. */
 
     /* Enter an infinite loop, just incrementing a counter. */
     while(1) {
