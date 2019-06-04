@@ -1,0 +1,37 @@
+
+int8_t init(uint32_t arg [optional])
+
+init() should be called before your program communicates with Pixy. init() returns an error value (<0) if it fails and 0 (PIXY_RESULT_OK) if it succeeds.
+
+
+int8_t getVersion()
+getVersion() queries and receives the firmware and hardware version of Pixy2., which is put in the version member variable. It returns an error value (<0) if it fails and 0 (PIXY_RESULT_OK) if it succeeds. It is called automatically as part of init().
+
+
+int8_t setCameraBrightness(uint8_t brightness)
+setCameraBrightness() sets the relative exposure level of Pixy2's image sensor. Higher values result in a brighter (more exposed) image. It returns an error value (<0) if it fails and 0 (PIXY_RESULT_OK) if it succeeds.
+
+
+
+
+int8_t setLED(uint8_t r, uint8_t g, uint8_t b)
+setLED() sets Pixy2's RGB LED value. The three arguments sets the brightness of the red, green and blue sections of the LED. It will override Pixy2's own setting of the RGB LED. It returns an error value (<0) if it fails and 0 (PIXY_RESULT_OK) if it succeeds.
+
+
+
+int8_t setLamp(uint8_t upper, uint8_t lower)
+setLamp() turns on/off Pixy2's integrated light source. The upper argument controls the two white LEDs along the top edge of Pixy2's PCB. The lower argument sets the RGB LED, causing it to turn on all three color channels at full brightness, resulting in white light. Both arguments are binary, zero or non-zero. It returns an error value (<0) if it fails and 0 (PIXY_RESULT_OK) if it succeeds.
+
+void print()
+Calling this prints the version information to the console.
+
+Pixy2CCC ccc
+This is an instance of the Color Connected Components object associated with the color_connected_components program.
+
+
+
+
+
+
+
+
