@@ -32,7 +32,6 @@
  * @file    freeRtos - main.c
  * @brief   Application entry point.
  */
-#include <stdio.h>
 #include "board.h"
 #include "peripherals.h"
 #include "pin_mux.h"
@@ -42,6 +41,13 @@
 /* TODO: insert other include files here. */
 
 #include "fsl_ctimer.h"
+/* FreeRTOS kernel includes. */
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
+#include "fsl_device_registers.h"
+
 
 /* TODO: insert other definitions and declarations here. */
 
@@ -59,14 +65,45 @@
 #define CTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_AsyncApbClk)
 
 
+static void hello_task(void *pvParameters)
+{
+	while(1){
+
+		 PRINTF("Hello world.\r\n");
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR_1, 10);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR_2, 50);
+	vTaskSuspend(NULL);
+	}
+}
+
+
+void MotorsSetup()
+{
+	ctimer_config_t config;
+
+	CTIMER_GetDefaultConfig(&config);
+
+
+	    CTIMER_Init(CTIMER, &config);
+
+
+	    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR_1,0,24000U,CTIMER_CLK_FREQ,false);
+	    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR_2,0,24000U,CTIMER_CLK_FREQ,false);
+	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR_1,0,24000U,CTIMER_CLK_FREQ,false);
+	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR_2,0,24000U,CTIMER_CLK_FREQ,false);
+	    CTIMER_StartTimer(CTIMER);
+}
+#define hello_task_PRIORITY (configMAX_PRIORITIES - 1)
+
 /*
  * @brief   Application entry point.
  */
 int main(void) {
 
-	ctimer_config_t config;
-	uint32_t srcClock_Hz;
-    uint32_t timerClock;
+
+	SYSCON->ASYNCAPBCTRL = 1;
+	CLOCK_AttachClk(kFRO12M_to_ASYNC_APB);
+
 
 
   	/* Init board hardware. */
@@ -75,25 +112,16 @@ int main(void) {
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
-
-    srcClock_Hz = CTIMER_CLK_FREQ;
-
-    CTIMER_GetDefaultConfig(&config);
-
-    CTIMER_Init(CTIMER, &config);
-
-    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR_1,50,24000U,srcClock_Hz,false);
-
-    CTIMER_StartTimer(CTIMER);
+    MotorsSetup();
 
 
-    PRINTF("Hello World\n");
-
-    /* Force the counter to be placed into memory. */
-    volatile static int i = 0 ;
-    /* Enter an infinite loop, just incrementing a counter. */
-    while(1) {
-        i++ ;
-    }
-    return 0 ;
+    if (xTaskCreate(hello_task, "Hello_task", configMINIMAL_STACK_SIZE + 10, NULL, hello_task_PRIORITY, NULL) != pdPASS)
+       {
+           PRINTF("Task creation failed!.\r\n");
+           while (1)
+               ;
+       }
+    vTaskStartScheduler();
+       for (;;)
+           ;
 }

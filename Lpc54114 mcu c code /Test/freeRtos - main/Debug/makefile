@@ -39,7 +39,7 @@ all: freeRtos\ -\ main.axf
 freeRtos\ -\ main.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"/home/jass/Git_data/Project/Lpc54114 mcu c code /Test/freeRtos - main/libs" -Xlinker -Map="freeRtos - main.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T freeRtos_-_main_Debug.ld -o "freeRtos - main.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"/home/jass/Project/Lpc54114 mcu c code /Test/freeRtos - main/libs" -Xlinker -Map="freeRtos - main.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T freeRtos_-_main_Debug.ld -o "freeRtos - main.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

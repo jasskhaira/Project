@@ -9,7 +9,16 @@ source/freeRtos\ -\ main.d: ../source/freeRtos\ -\ main.c \
  ../board/clock_config.h ../device/LPC54114_cm4.h \
  ../utilities/fsl_debug_console.h \
  ../component/serial_manager/serial_manager.h \
- ../component/serial_manager/serial_port_uart.h ../drivers/fsl_ctimer.h
+ ../component/serial_manager/serial_port_uart.h ../drivers/fsl_ctimer.h \
+ ../amazon-freertos/include/FreeRTOS.h ../source/FreeRTOSConfig.h \
+ ../amazon-freertos/include/projdefs.h \
+ ../amazon-freertos/include/portable.h \
+ ../amazon-freertos/include/deprecated_definitions.h \
+ ../amazon-freertos/FreeRTOS/portable/portmacro.h \
+ ../amazon-freertos/include/mpu_wrappers.h \
+ ../amazon-freertos/include/task.h ../amazon-freertos/include/list.h \
+ ../amazon-freertos/include/queue.h ../amazon-freertos/include/timers.h \
+ ../amazon-freertos/include/task.h
 
 ../board/board.h:
 
@@ -58,3 +67,27 @@ source/freeRtos\ -\ main.d: ../source/freeRtos\ -\ main.c \
 ../component/serial_manager/serial_port_uart.h:
 
 ../drivers/fsl_ctimer.h:
+
+../amazon-freertos/include/FreeRTOS.h:
+
+../source/FreeRTOSConfig.h:
+
+../amazon-freertos/include/projdefs.h:
+
+../amazon-freertos/include/portable.h:
+
+../amazon-freertos/include/deprecated_definitions.h:
+
+../amazon-freertos/FreeRTOS/portable/portmacro.h:
+
+../amazon-freertos/include/mpu_wrappers.h:
+
+../amazon-freertos/include/task.h:
+
+../amazon-freertos/include/list.h:
+
+../amazon-freertos/include/queue.h:
+
+../amazon-freertos/include/timers.h:
+
+../amazon-freertos/include/task.h:
