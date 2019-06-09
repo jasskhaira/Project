@@ -91,7 +91,7 @@
 /* Define to trap errors during development. */
 #define configASSERT(x) if((x) == 0) {taskDISABLE_INTERRUPTS(); for (;;);}
 
-/* Optional functions - most linkers will remove unused functions anyway. */
+/* Optional functions - moe an error in how it checks the number of priority bits.  For now I just redest linkers will remove unused functions anyway. */
 #define INCLUDE_vTaskPrioritySet                1
 #define INCLUDE_uxTaskPriorityGet               1
 #define INCLUDE_vTaskDelete                     1
@@ -112,7 +112,7 @@
 /* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
 #define configPRIO_BITS __NVIC_PRIO_BITS
 #else
-#define configPRIO_BITS 4 /* 15 priority levels */
+#define configPRIO_BITS 3 /* 15 priority levels */
 #endif
 
 /* The lowest interrupt priority that can be used in a call to a "set priority"

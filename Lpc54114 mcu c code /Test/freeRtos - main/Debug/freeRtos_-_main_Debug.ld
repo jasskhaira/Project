@@ -6,7 +6,7 @@
  * Generated linker script file for LPC54114J256
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v10.3.1 [Build 2233] [2019-02-20] on Jun 6, 2019 3:03:17 PM
+ * MCUXpresso IDE v10.3.1 [Build 2233] [2019-02-20] on Jun 9, 2019 3:00:14 PM
  */
 
 INCLUDE "freeRtos_-_main_Debug_library.ld"
@@ -54,14 +54,14 @@ SECTIONS
 
         *(.after_vectors*)
 
-    } > PROGRAM_FLASH
+    } > MFlash256
 
     .text : ALIGN(4)
     {
        *(.text*)
        *(.rodata .rodata.* .constdata .constdata.*)
        . = ALIGN(4);
-    } > PROGRAM_FLASH
+    } > MFlash256
     /*
      * for exception handling/unwind - some Newlib functions (in common
      * with C++ and STDC++) use this. 
@@ -69,66 +69,66 @@ SECTIONS
     .ARM.extab : ALIGN(4) 
     {
         *(.ARM.extab* .gnu.linkonce.armextab.*)
-    } > PROGRAM_FLASH
+    } > MFlash256
 
     __exidx_start = .;
 
     .ARM.exidx : ALIGN(4)
     {
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-    } > PROGRAM_FLASH
+    } > MFlash256
     __exidx_end = .;
  
     _etext = .;
         
-    /* DATA section for SRAM0 */
+    /* DATA section for Ram1_64 */
 
     .data_RAM2 : ALIGN(4)
     {
         FILL(0xff)
         PROVIDE(__start_data_RAM2 = .) ;
         *(.ramfunc.$RAM2)
-        *(.ramfunc.$SRAM0)
+        *(.ramfunc.$Ram1_64)
         *(.data.$RAM2*)
-        *(.data.$SRAM0*)
+        *(.data.$Ram1_64*)
         . = ALIGN(4) ;
         PROVIDE(__end_data_RAM2 = .) ;
-     } > SRAM0 AT>PROGRAM_FLASH
-    /* DATA section for SRAMX */
+     } > Ram1_64 AT>MFlash256
+    /* DATA section for Ram2_32 */
 
     .data_RAM3 : ALIGN(4)
     {
         FILL(0xff)
         PROVIDE(__start_data_RAM3 = .) ;
         *(.ramfunc.$RAM3)
-        *(.ramfunc.$SRAMX)
+        *(.ramfunc.$Ram2_32)
         *(.data.$RAM3*)
-        *(.data.$SRAMX*)
+        *(.data.$Ram2_32*)
         . = ALIGN(4) ;
         PROVIDE(__end_data_RAM3 = .) ;
-     } > SRAMX AT>PROGRAM_FLASH
-    /* DATA section for SRAM2 */
+     } > Ram2_32 AT>MFlash256
+    /* DATA section for RamX_32 */
 
     .data_RAM4 : ALIGN(4)
     {
         FILL(0xff)
         PROVIDE(__start_data_RAM4 = .) ;
         *(.ramfunc.$RAM4)
-        *(.ramfunc.$SRAM2)
+        *(.ramfunc.$RamX_32)
         *(.data.$RAM4*)
-        *(.data.$SRAM2*)
+        *(.data.$RamX_32*)
         . = ALIGN(4) ;
         PROVIDE(__end_data_RAM4 = .) ;
-     } > SRAM2 AT>PROGRAM_FLASH
+     } > RamX_32 AT>MFlash256
     /* MAIN DATA SECTION */
     .uninit_RESERVED : ALIGN(4)
     {
         KEEP(*(.bss.$RESERVED*))
         . = ALIGN(4) ;
         _end_uninit_RESERVED = .;
-    } > SRAM1
+    } > Ram0_64
 
-    /* Main DATA section (SRAM1) */
+    /* Main DATA section (Ram0_64) */
     .data : ALIGN(4)
     {
        FILL(0xff)
@@ -138,37 +138,37 @@ SECTIONS
        *(.data*)
        . = ALIGN(4) ;
        _edata = . ;
-    } > SRAM1 AT>PROGRAM_FLASH
+    } > Ram0_64 AT>MFlash256
 
-    /* BSS section for SRAM0 */
+    /* BSS section for Ram1_64 */
     .bss_RAM2 : ALIGN(4)
     {
        PROVIDE(__start_bss_RAM2 = .) ;
        *(.bss.$RAM2*)
-       *(.bss.$SRAM0*)
+       *(.bss.$Ram1_64*)
        . = ALIGN (. != 0 ? 4 : 1) ; /* avoid empty segment */
        PROVIDE(__end_bss_RAM2 = .) ;
-    } > SRAM0 
+    } > Ram1_64 
 
-    /* BSS section for SRAMX */
+    /* BSS section for Ram2_32 */
     .bss_RAM3 : ALIGN(4)
     {
        PROVIDE(__start_bss_RAM3 = .) ;
        *(.bss.$RAM3*)
-       *(.bss.$SRAMX*)
+       *(.bss.$Ram2_32*)
        . = ALIGN (. != 0 ? 4 : 1) ; /* avoid empty segment */
        PROVIDE(__end_bss_RAM3 = .) ;
-    } > SRAMX 
+    } > Ram2_32 
 
-    /* BSS section for SRAM2 */
+    /* BSS section for RamX_32 */
     .bss_RAM4 : ALIGN(4)
     {
        PROVIDE(__start_bss_RAM4 = .) ;
        *(.bss.$RAM4*)
-       *(.bss.$SRAM2*)
+       *(.bss.$RamX_32*)
        . = ALIGN (. != 0 ? 4 : 1) ; /* avoid empty segment */
        PROVIDE(__end_bss_RAM4 = .) ;
-    } > SRAM2 
+    } > RamX_32 
 
     /* MAIN BSS SECTION */
     .bss : ALIGN(4)
@@ -179,31 +179,31 @@ SECTIONS
         . = ALIGN(4) ;
         _ebss = .;
         PROVIDE(end = .);
-    } > SRAM1
+    } > Ram0_64
 
-    /* NOINIT section for SRAM0 */
+    /* NOINIT section for Ram1_64 */
     .noinit_RAM2 (NOLOAD) : ALIGN(4)
     {
        *(.noinit.$RAM2*)
-       *(.noinit.$SRAM0*)
+       *(.noinit.$Ram1_64*)
        . = ALIGN(4) ;
-    } > SRAM0 
+    } > Ram1_64 
 
-    /* NOINIT section for SRAMX */
+    /* NOINIT section for Ram2_32 */
     .noinit_RAM3 (NOLOAD) : ALIGN(4)
     {
        *(.noinit.$RAM3*)
-       *(.noinit.$SRAMX*)
+       *(.noinit.$Ram2_32*)
        . = ALIGN(4) ;
-    } > SRAMX 
+    } > Ram2_32 
 
-    /* NOINIT section for SRAM2 */
+    /* NOINIT section for RamX_32 */
     .noinit_RAM4 (NOLOAD) : ALIGN(4)
     {
        *(.noinit.$RAM4*)
-       *(.noinit.$SRAM2*)
+       *(.noinit.$RamX_32*)
        . = ALIGN(4) ;
-    } > SRAM2 
+    } > RamX_32 
 
     /* DEFAULT NOINIT SECTION */
     .noinit (NOLOAD): ALIGN(4)
@@ -212,40 +212,20 @@ SECTIONS
         *(.noinit*) 
          . = ALIGN(4) ;
         _end_noinit = .;
-    } > SRAM1
-
-    /* Reserve and place Heap within memory map */
-    _HeapSize = 0x1000;
-    .heap :  ALIGN(4)
-    {
-        _pvHeapStart = .;
-        . += _HeapSize;
-        . = ALIGN(4);
-        _pvHeapLimit = .;
-    } > SRAM1
-
-     _StackSize = 0x1000;
-     /* Reserve space in memory for Stack */
-    .heap2stackfill  :
-    {
-        . += _StackSize;
-    } > SRAM1
-    /* Locate actual Stack in memory map */
-    .stack ORIGIN(SRAM1) + LENGTH(SRAM1) - _StackSize - 0:  ALIGN(4)
-    {
-        _vStackBase = .;
-        . = ALIGN(4);
-        _vStackTop = . + _StackSize;
-    } > SRAM1
+    } > Ram0_64
+    PROVIDE(_pvHeapStart = DEFINED(__user_heap_base) ? __user_heap_base : .);
+    PROVIDE(_vStackTop = DEFINED(__user_stack_top) ? __user_stack_top : __top_Ram0_64 - 0);
 
     /* ## Create checksum value (used in startup) ## */
     PROVIDE(__valid_user_code_checksum = 0 - 
                                          (_vStackTop 
                                          + (ResetISR + 1) 
-                                         + (( DEFINED(NMI_Handler) ? NMI_Handler : M0_NMI_Handler ) + 1) 
-                                         + (( DEFINED(HardFault_Handler) ? HardFault_Handler : M0_HardFault_Handler ) + 1) 
-                                         )
-           );
+                                         + (NMI_Handler + 1) 
+                                         + (HardFault_Handler + 1) 
+                                         + (( DEFINED(MemManage_Handler) ? MemManage_Handler : 0 ) + 1)   /* MemManage_Handler may not be defined */
+                                         + (( DEFINED(BusFault_Handler) ? BusFault_Handler : 0 ) + 1)     /* BusFault_Handler may not be defined */
+                                         + (( DEFINED(UsageFault_Handler) ? UsageFault_Handler : 0 ) + 1) /* UsageFault_Handler may not be defined */
+                                         ) );
 
     /* Provide basic symbols giving location and size of main text
      * block, including initial values of RW data sections. Note that

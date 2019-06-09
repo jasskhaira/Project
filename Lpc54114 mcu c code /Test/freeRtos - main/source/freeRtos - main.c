@@ -52,8 +52,8 @@
 
 /* TODO: insert other definitions and declarations here.
 
-
-#define CTIMER CTIMER1		/* Timer 1
+*/
+#define CTIMER CTIMER1		// Timer 1
 #define LEFT_MOTOR_1 kCTIMER_Match_0		//J2[9]
 #define LEFT_MOTOR_2 kCTIMER_Match_1		//J2[7]
 #define RIGHT_MOTOR_1 kCTIMER_Match_3		//J2[16]
@@ -62,23 +62,23 @@
 
 
 
-/* Match output 1
+// Match output 1
 #define CTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_AsyncApbClk)
 
-*/
+
 static void hello_task(void *pvParameters)
 {
 	while(1){
 
 		 PRINTF("Hello world.\r\n");
-	//CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR_1, 10);
-	//CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR_2, 50);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR_1, 10);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR_2, 50);
 	vTaskSuspend(NULL);
 	}
 }
 
 
-/*void MotorsSetup()
+void MotorsSetup()
 {
 	ctimer_config_t config;
 
@@ -93,7 +93,7 @@ static void hello_task(void *pvParameters)
 	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR_1,0,24000U,CTIMER_CLK_FREQ,false);
 	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR_2,0,24000U,CTIMER_CLK_FREQ,false);
 	    CTIMER_StartTimer(CTIMER);
-}*/
+}
 
 
 /*
@@ -102,9 +102,8 @@ static void hello_task(void *pvParameters)
 int main(void) {
 
 
-	//SYSCON->ASYNCAPBCTRL = 1;
-	//CLOCK_AttachClk(kFRO12M_to_ASYNC_APB);
-	  CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);
+	SYSCON->ASYNCAPBCTRL = 1;
+	CLOCK_AttachClk(kFRO12M_to_ASYNC_APB);
 
 
   	/* Init board hardware. */
@@ -114,7 +113,7 @@ int main(void) {
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
-    //MotorsSetup();
+    MotorsSetup();
 
 
     if (xTaskCreate(hello_task, "Hello_task", configMINIMAL_STACK_SIZE + 10, NULL, 0, NULL) != pdPASS)
