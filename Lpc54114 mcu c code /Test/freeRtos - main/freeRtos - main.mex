@@ -581,13 +581,12 @@
                      </feature>
                   </dependency>
                </dependencies>
-               <clock_sources>
-                  <clock_source id="SYSCON.fro_hf.outFreq" value="96 MHz" locked="false" enabled="false"/>
-               </clock_sources>
+               <clock_sources/>
                <clock_outputs>
-                  <clock_output id="System_clock.outFreq" value="96 MHz" locked="false" accuracy=""/>
+                  <clock_output id="System_clock.outFreq" value="12 MHz" locked="true" accuracy="0.001"/>
                </clock_outputs>
                <clock_settings>
+                  <setting id="SYSCON.AHBCLKDIV.scale" value="4" locked="false"/>
                   <setting id="SYSCON.MAINCLKSELA.sel" value="SYSCON.fro_hf" locked="false"/>
                </clock_settings>
                <called_from_default_init>true</called_from_default_init>

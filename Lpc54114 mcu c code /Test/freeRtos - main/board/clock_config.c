@@ -143,11 +143,10 @@ void BOARD_BootClockRUN(void)
 name: BOARD_BootClockHSRUN
 called_from_default_init: true
 outputs:
-- {id: System_clock.outFreq, value: 96 MHz}
+- {id: System_clock.outFreq, value: 12 MHz, locked: true, accuracy: '0.001'}
 settings:
+- {id: SYSCON.AHBCLKDIV.scale, value: '4'}
 - {id: SYSCON.MAINCLKSELA.sel, value: SYSCON.fro_hf}
-sources:
-- {id: SYSCON.fro_hf.outFreq, value: 96 MHz}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 
@@ -166,13 +165,13 @@ void BOARD_BootClockHSRUN(void)
     CLOCK_SetupFROClocking(12000000U);                    /*!< Set up FRO to the 12 MHz, just for sure */
     CLOCK_AttachClk(kFRO12M_to_MAIN_CLK);                  /*!< Switch to FRO 12MHz first to ensure we can change voltage without accidentally
                                                                 being below the voltage for current speed */
-    POWER_SetVoltageForFreq(96000000U);             /*!< Set voltage for the one of the fastest clock outputs: System clock output */
-    CLOCK_SetFLASHAccessCyclesForFreq(96000000U);   /*!< Set FLASH wait states for core */
+    POWER_SetVoltageForFreq(12000000U);             /*!< Set voltage for the one of the fastest clock outputs: System clock output */
+    CLOCK_SetFLASHAccessCyclesForFreq(12000000U);   /*!< Set FLASH wait states for core */
 
-    CLOCK_SetupFROClocking(96000000U);              /*!< Set up high frequency FRO output to selected frequency */
+    CLOCK_SetupFROClocking(48000000U);              /*!< Set up high frequency FRO output to selected frequency */
 
     /*!< Set up dividers */
-    CLOCK_SetClkDiv(kCLOCK_DivAhbClk, 1U, false);                  /*!< Set AHBCLKDIV divider to value 1 */
+    CLOCK_SetClkDiv(kCLOCK_DivAhbClk, 4U, false);                  /*!< Set AHBCLKDIV divider to value 4 */
 
     /*!< Set up clock selectors - Attach clocks to the peripheries */
     CLOCK_AttachClk(kFRO_HF_to_MAIN_CLK);                  /*!< Switch MAIN_CLK to FRO_HF */
