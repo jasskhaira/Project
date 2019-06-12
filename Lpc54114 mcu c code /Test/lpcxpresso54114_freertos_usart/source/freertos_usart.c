@@ -101,7 +101,7 @@ static void uart_task(void *pvParameters)
         vTaskSuspend(NULL);
     }
 
-    /* Receive user input and send it back to terminal. */
+    /* Receive user input and send it nhnynytnback to terminal. */
     do
     {
         error = USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);

@@ -29,14 +29,13 @@ static void uart_task(void *pvParameters);
 const char *to_send = "FreeRTOS USART driver example!\r\n";
 const char *send_buffer_overrun = "\r\nRing buffer overrun!\r\n";
 uint8_t background_buffer[32];
-uint8_t recv_buffer[4];
+uint8_t recv_buffer[1];
 
 usart_rtos_handle_t handle;
 struct _usart_handle t_handle;
 
 struct rtos_usart_config usart_config = {
-		.base = DEMO_USART,
-		.srcclk = BOARD_DEBUG_UART_CLK_FREQ,
+
 		.baudrate = 115200,
     .parity = kUSART_ParityDisabled,
     .stopbits = kUSART_OneStopBit,
@@ -55,7 +54,7 @@ int main(void) {
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
 
-    USART_RTOS_Init(&handle, &t_handle, &usart_config);
+
 
     if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, uart_task_PRIORITY, NULL) != pdPASS)
       {
@@ -71,11 +70,25 @@ int main(void) {
 
 static void uart_task(void *pvParameters)
 {
+	 size_t n;
+	usart_config.base=DEMO_USART;
+	usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
+
+	 NVIC_SetPriority(DEMO_USART_IRQn, USART_NVIC_PRIO);
+
+	    if (0 > USART_RTOS_Init(&handle, &t_handle, &usart_config))
+	    {
+	        vTaskSuspend(NULL);
+	    }
 
 	 if (0 > USART_RTOS_Send(&handle, (uint8_t *)to_send, strlen(to_send)))
 	    {
 	        vTaskSuspend(NULL);
 	    }
+	while(1){
+	 USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);
+	 PRINTF("OUTPUT IS %c\r\n",recv_buffer[0]);
+	}
 	 vTaskSuspend(NULL);
 
 }
