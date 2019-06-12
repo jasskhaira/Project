@@ -9,6 +9,7 @@
 #include "fsl_usart.h"
 /* TODO: insert other include files here. */
 
+
 /* TODO: insert other definitions and declarations here. */
 #define DEMO_USART USART0
 #define DEMO_USART_IRQHandler FLEXCOMM0_IRQHandler
