@@ -26,7 +26,7 @@ void print()
 Calling this prints the version information to the console.
 
 Pixy2CCC ccc
-This is an instance of the Color Connected Components object associated with the color_connected_components program.
+This is an instance of the Color Connected Components object associated with the color_connected_component program.
 
 
 
