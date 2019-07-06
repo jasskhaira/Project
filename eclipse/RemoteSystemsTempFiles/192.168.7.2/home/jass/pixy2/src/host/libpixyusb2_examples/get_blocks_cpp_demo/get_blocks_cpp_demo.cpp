@@ -19,8 +19,10 @@
 #include<fcntl.h>
 #include<unistd.h>
 #include<termios.h>   // using the termios.h library
+#include"Uart.h"
 
 Pixy2        pixy;
+Uart		Uart1;
 static bool  run_flag = true;
 
 
@@ -55,36 +57,9 @@ void  get_blocks()
 
 int main()
 {
+	Uart1.Init(Uart01,9600);
+	Uart1.send("ddxss");
   int  Result;
-int file, count;
-
-  if ((file = open("/dev/ttyO1", O_RDWR | O_NOCTTY | O_NDELAY))<0){
-      perror("UART: Failed to open the file.\n");
-      return -1;
-   }
-
- struct termios options;               //The termios structure is vital
-   tcgetattr(file, &options);            //Sets the parameters associated with file
-  // Catch CTRL+C (SIGINT) signals //
-  signal (SIGINT, handle_SIGINT);
-  options.c_cflag = B9600 | CS8 | CREAD | CLOCAL;
-   options.c_iflag = IGNPAR | ICRNL;    //ignore partity errors, CR -> newline
-   tcflush(file, TCIFLUSH);             //discard file information not transmitted
-   tcsetattr(file, TCSANOW, &options);  //changes occur immmediately
-
-   unsigned char transmit[18] = "Hello BeagleBone!";  //the string to send
-
-   if ((count = write(file, &transmit,18))<0){        //send the string
-      perror("Failed to write to the output\n");
-      return -1;
-   }
-
-   usleep(100000);
-
-
-
-
-
   printf ("=============================================================\n");
   printf ("= PIXY2 Get Blocks Demo                                     =\n");
   printf ("=============================================================\n");
