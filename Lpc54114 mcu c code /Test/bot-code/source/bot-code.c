@@ -100,14 +100,48 @@ void Move(uint8_t speed)
 }
 
 
-void Turn_SlowLeft(){}
-void Turn_SlowRight(){}
-void Turn_Left(){}
-void Turn_Right(){}
+void Turn_SlowLeft()
+{
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+
+
+		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+
+}
+void Turn_SlowRight()
+{
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+
+
+		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+}
+void Turn_Left()
+{
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+
+
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+}
+void Turn_Right()
+{
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+
+
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+
+}
 
 /* Api is used to stop the robot */
 
-void stop(){
+void Stop(){
 	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 0);
 	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
 
@@ -118,11 +152,56 @@ void stop(){
 
 
 
-void Reverse(){}
+void Reverse(){
 
-static void Uart_task(void *pvParameters);
-static void Drive_task(void *pvParameters);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
 
+
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+
+}
+
+static void Uart_task(void *pvParameters)
+{
+while(1)
+{
+
+
+}
+
+
+
+}
+
+
+
+static void Drive_task(void *pvParameters)
+{
+
+	while(1){
+if(1)
+{
+	Move(20);
+}
+else if(1)
+{
+	Turn_Left();
+}
+else if(1)
+{
+	Turn_Right();
+}
+else if(1)
+{
+	Stop();
+}
+else if(1)
+{
+	 Reverse();
+}
+}}
 
 int main(void) {
 
