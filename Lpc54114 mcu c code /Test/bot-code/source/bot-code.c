@@ -185,6 +185,7 @@ static void Uart_task(void *pvParameters)
 		{
 			send=recv_buffer[0];
 			xQueueSend(queue1,&send,1000);
+			printf("data is send %s",send);
 		}
 
 
@@ -208,24 +209,32 @@ static void Drive_task(void *pvParameters)
 if(recv=='M')
 {
 	Move(80);
+	printf("moving");
 }
 else if(recv=='L')
 {
 	Turn_Left();
+	printf("left");
 }
 else if(recv=='R')
 {
 	Turn_Right();
+	printf("right");
 }
 else if(recv=='S')
 {
 	Stop();
+	printf("stop");
 }
 else if(recv=='B')
 {
 	 Reverse();
+	 printf("reverse");
 }
-}}
+
+printf("data is recived %s",recv);
+
+	}}
 
 int main(void) {
 
