@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include "board.h"
 #include "peripherals.h"
@@ -22,6 +21,9 @@
 #include "queue.h"
 #include "timers.h"
 #include "fsl_device_registers.h"
+
+
+
 
 /* Usart includes. */
 #include "fsl_usart_freertos.h"
@@ -53,10 +55,8 @@
  * @brief   Application entry point.
  */
 
-const char *to_send;
-const char *send_buffer_overrun;
 uint8_t background_buffer[32];
-uint8_t recv_buffer[10];
+uint8_t recv_buffer[1];
 
 usart_rtos_handle_t handle;
 struct _usart_handle t_handle;
@@ -69,7 +69,7 @@ struct rtos_usart_config usart_config = {
     .buffer_size = sizeof(background_buffer),
 };
 
-
+xQueueHandle queue1= NULL;
 
 void MotorsSetup()
 {
@@ -88,6 +88,8 @@ void MotorsSetup()
 	    CTIMER_StartTimer(CTIMER);
 }
 
+
+
 void Move(uint8_t speed)
 {
 	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
@@ -102,40 +104,40 @@ void Move(uint8_t speed)
 
 void Turn_SlowLeft()
 {
-	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 75);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
 
 
 		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 75);
 
 }
 void Turn_SlowRight()
 {
-	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 75);
 	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
 
 
 		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 75);
 }
 void Turn_Left()
 {
-	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 100);
 	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
 
 
 	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 100);
 }
 void Turn_Right()
 {
-	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 100);
 	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
 
 
 	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 100);
 
 }
 
@@ -154,19 +156,38 @@ void Stop(){
 
 void Reverse(){
 
-	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
-	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 0);
+	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 100);
 
 
-	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 100);
+	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 0);
 
 }
 
 static void Uart_task(void *pvParameters)
 {
-while(1)
+	char send;
+
+	 size_t n;
+	 usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
+	 usart_config.base = DEMO_USART;
+
+	if (0 > USART_RTOS_Init(&handle, &t_handle, &usart_config))
+			       {
+			           vTaskSuspend(NULL);
+			       }
+
+
+	while(1)
 {
+		if(USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n)>1)
+		{
+			send=recv_buffer[0];
+			xQueueSend(queue1,&send,1000);
+		}
+
+
 
 
 }
@@ -180,24 +201,27 @@ while(1)
 static void Drive_task(void *pvParameters)
 {
 
+	char recv;
+
 	while(1){
-if(1)
+		xQueueReceive(queue1,&recv,1000);
+if(recv=='M')
 {
-	Move(20);
+	Move(80);
 }
-else if(1)
+else if(recv=='L')
 {
 	Turn_Left();
 }
-else if(1)
+else if(recv=='R')
 {
 	Turn_Right();
 }
-else if(1)
+else if(recv=='S')
 {
 	Stop();
 }
-else if(1)
+else if(recv=='B')
 {
 	 Reverse();
 }
@@ -213,16 +237,16 @@ int main(void) {
     /* Init FSL debug console. */
     BOARD_InitDebugConsole();
     MotorsSetup();
+    xQueueCreate(2,sizeof(char));
 
-
-    if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, uart_task_PRIORITY, NULL) != pdPASS)
+    if (xTaskCreate(Uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL,1, NULL) != pdPASS)
        {
            PRINTF("Task creation failed!.\r\n");
            while (1)
                ;
        }
 
-    if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL, uart_task_PRIORITY, NULL) != pdPASS)
+    if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL, 2, NULL) != pdPASS)
           {
               PRINTF("Task creation failed!.\r\n");
               while (1)

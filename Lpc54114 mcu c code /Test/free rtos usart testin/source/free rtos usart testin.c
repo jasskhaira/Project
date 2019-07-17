@@ -32,6 +32,8 @@
  * @file    free rtos usart testin.c
  * @brief   Application entry point.
  */
+
+
 #include <stdio.h>
 #include "board.h"
 #include "peripherals.h"
@@ -72,7 +74,7 @@ static void uart_task(void *pvParameters);
 const char *to_send = "FreeRTOS USART driver example!\r\n";
 const char *send_buffer_overrun = "\r\nRing buffer overrun!\r\n";
 uint8_t background_buffer[32];
-uint8_t recv_buffer[4];
+uint8_t recv_buffer[1];
 
 usart_rtos_handle_t handle;
 struct _usart_handle t_handle;
@@ -115,6 +117,7 @@ int main(void) {
    static void uart_task(void *pvParameters)
    {
        int error;
+       char d;
        size_t n;
        usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
        usart_config.base = DEMO_USART;
@@ -147,7 +150,12 @@ int main(void) {
            }
            if (n > 0)
            {
-               /* send back the received data */
+        	   d=recv_buffer[0];
+        	   printf("%s",d);
+        	   if(d =='j')
+        	   printf("%s",recv_buffer);
+
+        	 /* send back the received data */
 
                USART_RTOS_Send(&handle, (uint8_t *)recv_buffer, n);
            }
