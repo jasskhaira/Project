@@ -48,7 +48,7 @@
 #define DEMO_USART USART0
 #define DEMO_USART_IRQHandler FLEXCOMM0_IRQHandler
 #define DEMO_USART_IRQn FLEXCOMM0_IRQn
-
+#define USART_NVIC_PRIO 5
 
 
 /*
@@ -74,6 +74,14 @@ xQueueHandle queue1= NULL;
 void MotorsSetup()
 {
 	ctimer_config_t config;
+	    uint32_t srcClock_Hz;
+	    uint32_t timerClock;
+
+	    CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);
+	    SYSCON->ASYNCAPBCTRL = 1;
+
+	    CLOCK_AttachClk(kFRO12M_to_ASYNC_APB);
+	    srcClock_Hz = CTIMER_CLK_FREQ;
 
 	CTIMER_GetDefaultConfig(&config);
 
@@ -167,35 +175,57 @@ void Reverse(){
 
 static void Uart_task(void *pvParameters)
 {
-	char send;
-
+	char send,d;
+	 int error;
 	 size_t n;
 	 usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
 	 usart_config.base = DEMO_USART;
 
+	 NVIC_SetPriority(DEMO_USART_IRQn, USART_NVIC_PRIO);
 	if (0 > USART_RTOS_Init(&handle, &t_handle, &usart_config))
 			       {
-			           vTaskSuspend(NULL);
+			          // vTaskSuspend(NULL);
 			       }
 
 
-	while(1)
-{
-		if(USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n)>1)
-		{
+ /*        USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);
+         printf("%s\n",recv_buffer[0]);
+         printf("%s",recv_buffer[1]);
+         if(n>0)
+         {
 			send=recv_buffer[0];
 			xQueueSend(queue1,&send,1000);
 			printf("data is send %s",send);
+		} */
+	       do
+	       {
+	          // error = USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);
+	          /* if (error == kStatus_USART_RxRingBufferOverrun)
+	           {
+	               /* Notify about hardware buffer overrun
+	               if (kStatus_Success !=
+	                   USART_RTOS_Send(&handle, (uint8_t *)send_buffer_overrun, strlen(send_buffer_overrun)))
+	               {
+	                   vTaskSuspend(NULL);
+	               }
+	           }*/
+	           if (n > 0)
+	           {
+	        	   d=recv_buffer[0];
+	        	   printf("%s",d);
+	        	   if(d =='M')
+	        	   printf("%s",recv_buffer);
+
+	        	 /* send back the received data */
+
+	               USART_RTOS_Send(&handle, (uint8_t *)recv_buffer, n);
+
+	           }
+	           vTaskDelay(1000);
+	       } while (kStatus_Success == error);
+
 		}
 
-
-
-
-}
-
-
-
-}
 
 
 
@@ -205,35 +235,36 @@ static void Drive_task(void *pvParameters)
 	char recv;
 
 	while(1){
-		xQueueReceive(queue1,&recv,1000);
-if(recv=='M')
-{
-	Move(80);
-	printf("moving");
-}
-else if(recv=='L')
-{
-	Turn_Left();
-	printf("left");
-}
-else if(recv=='R')
-{
-	Turn_Right();
-	printf("right");
-}
-else if(recv=='S')
-{
-	Stop();
-	printf("stop");
-}
-else if(recv=='B')
-{
-	 Reverse();
-	 printf("reverse");
-}
+		xQueueReceive(queue1,&recv,10);
+		if(recv=='M')
+		{
+			Move(80);
+			printf("moving");
+		}
+		else if(recv=='L')
+		{
+			Turn_Left();
+			printf("left");
+		}
+		else if(recv=='R')
+		{
+			Turn_Right();
+			printf("right");
+		}
+		else if(recv=='S')
+		{
+			Stop();
+			printf("stop");
+		}
+		else if(recv=='B')
+		{
+			 Reverse();
+			 printf("reverse");
+		}
 
-printf("data is recived %s",recv);
+		printf("data is recived %s",recv);
 
+		vTaskDelay(1000);
 	}}
 
 int main(void) {
@@ -246,16 +277,16 @@ int main(void) {
     /* Init FSL debug console. */
     BOARD_InitDebugConsole();
     MotorsSetup();
-    xQueueCreate(2,sizeof(char));
+    queue1=xQueueCreate(1,sizeof(char));
 
-    if (xTaskCreate(Uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL,1, NULL) != pdPASS)
+    if (xTaskCreate(Uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
        {
            PRINTF("Task creation failed!.\r\n");
            while (1)
                ;
        }
 
-    if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL, 2, NULL) != pdPASS)
+    if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL,  1, NULL) != pdPASS)
           {
               PRINTF("Task creation failed!.\r\n");
               while (1)

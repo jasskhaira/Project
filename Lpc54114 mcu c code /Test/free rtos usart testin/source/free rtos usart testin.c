@@ -68,6 +68,18 @@
  ******************************************************************************/
 static void uart_task(void *pvParameters);
 
+
+/*static void Drive_task(void *pvParameters)
+{
+	while(1)
+	{
+		vTaskDelay(1000);
+
+	}
+
+}*/
+
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
@@ -100,16 +112,27 @@ int main(void) {
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
-    if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, uart_task_PRIORITY, NULL) != pdPASS)
+    if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, 2, NULL) != pdPASS)
        {
            PRINTF("Task creation failed!.\r\n");
            while (1)
                ;
        }
+
+  /*  if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL,  2, NULL) != pdPASS)
+           {
+               PRINTF("Task creation failed!.\r\n");
+               while (1)
+                   ;
+           }
+*/
+
        vTaskStartScheduler();
        for (;;)
            ;
    }
+
+
 
    /*!
     * @brief Task responsible for loopback.
@@ -117,7 +140,7 @@ int main(void) {
    static void uart_task(void *pvParameters)
    {
        int error;
-       char d;
+       uint8_t d;
        size_t n;
        usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
        usart_config.base = DEMO_USART;
@@ -152,7 +175,7 @@ int main(void) {
            {
         	   d=recv_buffer[0];
         	   printf("%s",d);
-        	   if(d =='j')
+        	   if(d =='M')
         	   printf("%s",recv_buffer);
 
         	 /* send back the received data */
