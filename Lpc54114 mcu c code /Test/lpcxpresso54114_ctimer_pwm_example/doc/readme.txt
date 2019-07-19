@@ -2,6 +2,14 @@ Overview
 ========
 The CTimer Example project is to demonstrate usage of the KSDK ctimer driver.
 In this example, CTimer is used to generate a PWM signal.
+
+Toolchain supported
+===================
+- IAR embedded Workbench  8.32.3
+- Keil MDK  5.27
+- MCUXpresso  11.0.0
+- GCC ARM Embedded  8.2.1
+
 Hardware requirements
 =====================
 - Mini/micro USB cable
@@ -30,11 +38,6 @@ The log below shows example output of the CTimer simple PWM demo in the terminal
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 CTimer example to generate a PWM signal
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Toolchain supported
-===================
-- IAR embedded Workbench  8.32.1
-- Keil MDK  5.26
-- MCUXpresso 10.3.0
-- GCC ARM Embedded  7.3.1
+Customization options
+=====================
 

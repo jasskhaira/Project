@@ -153,6 +153,7 @@
                     1U << BOARD_LED_BLUE_GPIO_PIN) /*!< Toggle on target LED_BLUE */
 
 #define BOARD_CODEC_I2C_BASEADDR I2C4
+#define BOARD_CODEC_I2C_INSTANCE 4U
 #define BOARD_CODEC_I2C_CLOCK_FREQ 12000000
 
 #if defined(__cplusplus)

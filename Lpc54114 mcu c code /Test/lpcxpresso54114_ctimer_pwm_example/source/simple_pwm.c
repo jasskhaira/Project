@@ -2,7 +2,7 @@
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -21,16 +21,16 @@
  ******************************************************************************/
 #define CTIMER CTIMER0                 /* Timer 0 */
 #define CTIMER_MAT_OUT kCTIMER_Match_1 /* Match output 1 */
-#define CTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_AsyncApbClk)
+#define CTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_BusClk)
 
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
 
 /*******************************************************************************
-* Variables
-******************************************************************************/
-volatile uint32_t g_pwmPeriod = 0U;
+ * Variables
+ ******************************************************************************/
+volatile uint32_t g_pwmPeriod   = 0U;
 volatile uint32_t g_pulsePeriod = 0U;
 
 /*******************************************************************************
@@ -61,7 +61,7 @@ int main(void)
     ctimer_config_t config;
     uint32_t srcClock_Hz;
     uint32_t timerClock;
-    
+
     /* Init hardware*/
     /* attach 12 MHz clock to FLEXCOMM0 (debug console) */
     CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);

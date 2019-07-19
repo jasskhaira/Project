@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config chipVendor="NXP" id="config.gdb.stub">
+<config chipVendor="" id="config.gdb.stub">
    <parameters>
       <xi:include xmlns:xs="http://www.w3.org/2001/XMLSchema"
                   xmlns:fn="http://www.w3.org/2005/xpath-functions"

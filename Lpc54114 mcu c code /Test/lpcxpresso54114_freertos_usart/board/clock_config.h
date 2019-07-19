@@ -14,10 +14,9 @@
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define BOARD_XTAL0_CLK_HZ                         12000000U  /*!< Board xtal0 frequency in Hz */
-#define BOARD_XTAL32K_CLK_HZ                          32768U  /*!< Board xtal32K frequency in Hz */
+#define BOARD_XTAL0_CLK_HZ 12000000U /*!< Board xtal0 frequency in Hz */
+#define BOARD_XTAL32K_CLK_HZ 32768U  /*!< Board xtal32K frequency in Hz */
 #define BOARD_BootClockRUN BOARD_BootClockFROHF48M
-
 
 /*******************************************************************************
  ********************* Configuration BOARD_BootClockFRO12M ***********************
@@ -25,7 +24,7 @@
 /*******************************************************************************
  * Definitions for BOARD_BootClockFRO12M configuration
  ******************************************************************************/
-#define BOARD_BOOTCLOCKFRO12M_CORE_CLOCK             12000000U  /*!< Core clock frequency: 12000000Hz */
+#define BOARD_BOOTCLOCKFRO12M_CORE_CLOCK 12000000U /*!< Core clock frequency: 12000000Hz */
 
 /*******************************************************************************
  * API for BOARD_BootClockFRO12M configuration
@@ -50,7 +49,7 @@ void BOARD_BootClockFRO12M(void);
 /*******************************************************************************
  * Definitions for BOARD_BootClockFROHF48M configuration
  ******************************************************************************/
-#define BOARD_BOOTCLOCKFROHF48M_CORE_CLOCK              48000000U  /*!< Core clock frequency: 48000000Hz */
+#define BOARD_BOOTCLOCKFROHF48M_CORE_CLOCK 48000000U /*!< Core clock frequency: 48000000Hz */
 
 /*******************************************************************************
  * API for BOARD_BootClockFROHF48M configuration
@@ -75,7 +74,7 @@ void BOARD_BootClockFROHF48M(void);
 /*******************************************************************************
  * Definitions for BOARD_BootClockFROHF96M configuration
  ******************************************************************************/
-#define BOARD_BOOTCLOCKFROHF96M_CORE_CLOCK            96000000U  /*!< Core clock frequency: 96000000Hz */
+#define BOARD_BOOTCLOCKFROHF96M_CORE_CLOCK 96000000U /*!< Core clock frequency: 96000000Hz */
 
 /*******************************************************************************
  * API for BOARD_BootClockFROHF96M configuration
@@ -95,4 +94,3 @@ void BOARD_BootClockFROHF96M(void);
 #endif /* __cplusplus*/
 
 #endif /* _CLOCK_CONFIG_H_ */
-

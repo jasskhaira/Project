@@ -4,7 +4,7 @@
 // Version : 161214
 //*****************************************************************************
 //
-// Copyright(C) NXP Semiconductors, 2016
+// Copyright 2016, NXP
 // All rights reserved.
 //
 // Software that is described herein is for illustrative purposes only

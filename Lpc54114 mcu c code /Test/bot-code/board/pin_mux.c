@@ -7,11 +7,11 @@
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Pins v5.0
+product: Pins v6.0
 processor: LPC54114J256
 package_id: LPC54114J256BD64
 mcu_data: ksdk2_0
-processor_version: 5.0.1
+processor_version: 6.0.1
 board: LPCXpresso54114
 pin_labels:
 - {pin_num: '3', pin_signal: PIO0_25/FC4_RTS_SCL_SSEL1/FC6_CTS_SDA_SSEL0/CTIMER0_CAP2/CTIMER1_CAP1, label: 'J1[1]/JS4[1]/U10[7]/P0_25-FC4_SCLX', identifier: FC4_SCLX}

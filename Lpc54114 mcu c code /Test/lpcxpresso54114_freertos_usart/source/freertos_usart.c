@@ -2,7 +2,7 @@
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
  * Copyright 2016-2017 NXP
  * All rights reserved.
- * 
+ *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
@@ -39,7 +39,7 @@ static void uart_task(void *pvParameters);
 /*******************************************************************************
  * Code
  ******************************************************************************/
-const char *to_send = "FreeRTOS USART driver example!\r\n";
+const char *to_send             = "FreeRTOS USART driver example!\r\n";
 const char *send_buffer_overrun = "\r\nRing buffer overrun!\r\n";
 uint8_t background_buffer[32];
 uint8_t recv_buffer[4];
@@ -48,10 +48,10 @@ usart_rtos_handle_t handle;
 struct _usart_handle t_handle;
 
 struct rtos_usart_config usart_config = {
-    .baudrate = 115200,
-    .parity = kUSART_ParityDisabled,
-    .stopbits = kUSART_OneStopBit,
-    .buffer = background_buffer,
+    .baudrate    = 115200,
+    .parity      = kUSART_ParityDisabled,
+    .stopbits    = kUSART_OneStopBit,
+    .buffer      = background_buffer,
     .buffer_size = sizeof(background_buffer),
 };
 
@@ -84,9 +84,9 @@ int main(void)
 static void uart_task(void *pvParameters)
 {
     int error;
-    size_t n;
+    size_t n            = 0;
     usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
-    usart_config.base = DEMO_USART;
+    usart_config.base   = DEMO_USART;
 
     NVIC_SetPriority(DEMO_USART_IRQn, USART_NVIC_PRIO);
 
@@ -101,7 +101,7 @@ static void uart_task(void *pvParameters)
         vTaskSuspend(NULL);
     }
 
-    /* Receive user input and send it nhnynytnback to terminal. */
+    /* Receive user input and send it back to terminal. */
     do
     {
         error = USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);

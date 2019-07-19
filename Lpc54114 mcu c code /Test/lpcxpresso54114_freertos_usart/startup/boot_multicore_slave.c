@@ -7,7 +7,7 @@
 //
 //*****************************************************************************
 //
-// Copyright(C) NXP Semiconductors, 2014-15
+// Copyright 2014-2015, NXP
 // All rights reserved.
 //
 // Software that is described herein is for illustrative purposes only

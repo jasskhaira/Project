@@ -4,7 +4,7 @@
 // Header for functions used for booting of slave core in multicore system
 //*****************************************************************************
 //
-// Copyright(C) NXP Semiconductors, 2014
+// Copyright 2014, NXP
 // All rights reserved.
 //
 // Software that is described herein is for illustrative purposes only
