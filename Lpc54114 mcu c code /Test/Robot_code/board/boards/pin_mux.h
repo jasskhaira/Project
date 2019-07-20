@@ -34,22 +34,6 @@ void BOARD_InitBootPins(void);
 #define PIO14_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
 #define PIO14_FUNC_ALT6 0x06u         /*!<@brief Selects pin function.: Alternative connection 6. */
 
-/*! @name CTIMER0_MAT3 (number 43), J2[15]/P0_8-FC2_RXD_SDA_MOSI
-  @{ */
-/* @} */
-
-/*! @name CTIMER0_MAT1 (number 18), J2[18]/J9[10]/P1_4-ADC7-PDM1_CLK-FC7_RTS-FC3_TXD
-  @{ */
-/* @} */
-
-/*! @name CTIMER0_MAT0 (number 7), J1[19]/P1_16-CT32B0_MAT0-GYRO_INT1
-  @{ */
-/* @} */
-
-/*! @name CTIMER0_MAT2 (number 41), J1[16]/P0_7-FC6_SCK
-  @{ */
-/* @} */
-
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *

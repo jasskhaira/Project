@@ -17,20 +17,20 @@
 #include "fsl_usart_freertos.h"
 #include "fsl_usart.h"
 
-
+#include <stdbool.h>
 #include "fsl_ctimer.h"
 /* TODO: insert other definitions and declarations here. */
 
 
-#define CTIMER CTIMER0		// Timer 1
+#define CTIMER CTIMER0		// Timer 0
 #define CTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_AsyncApbClk)
 
-#define LEFT_MOTOR1 kCTIMER_Match_0		//J2[9]
-#define LEFT_MOTOR2 kCTIMER_Match_2		//J2[7]
+#define LEFT_MOTOR1 kCTIMER_Match_3		//J2[15]
+#define LEFT_MOTOR2 kCTIMER_Match_1		//J2[18]
 
 
-#define RIGHT_MOTOR1 kCTIMER_Match_3		//J2[16]
-#define RIGHT_MOTOR2 kCTIMER_Match_1
+#define RIGHT_MOTOR1 kCTIMER_Match_2		//J1[16]
+#define RIGHT_MOTOR2 kCTIMER_Match_0		//J1[19]
 
 
 
@@ -52,15 +52,15 @@ static void Drive_task(void *pvParameters);
 
 
 void MotorsSetup();
-void Move(uint8_t speed);
+void Move();
 void Turn_SlowLeft();
 void Turn_SlowRight();
 void Turn_Left();
 void Turn_Right();
 void Stop();
 void Reverse();
-const char *to_send             = "FreeRTOS USART driver example!\r\n";
-const char *send_buffer_overrun = "\r\nRing buffer overrun!\r\n";
+
+
 uint8_t background_buffer[32];
 uint8_t recv_buffer[1];
 
@@ -88,7 +88,14 @@ int main(void) {
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
     BOARD_InitDebugConsole();
-    MotorsSetup();
+
+
+   MotorsSetup();
+
+
+
+
+
     queue1=xQueueCreate(1,sizeof(char));
     if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, 2, NULL) != pdPASS)
       {
@@ -145,8 +152,9 @@ int main(void) {
 	  		xQueueReceive(queue1,&recv,10);
 	  		if(recv=='M')
 	  		{
-	  			Move(80);
+	  			Move();
 	  			printf("moving");
+	  			recv='-';
 	  		}
 	  		else if(recv=='L')
 	  		{
@@ -177,47 +185,35 @@ int main(void) {
 
 
 
-
-
-
-
-
-
-
-
-
   void MotorsSetup()
   {
-  		ctimer_config_t config;
+		ctimer_config_t config;
+		 uint32_t srcClock_Hz;
+		 srcClock_Hz = CLOCK_GetFreq(kCLOCK_BusClk);
 
 
 
-  	    SYSCON->ASYNCAPBCTRL = 1;
-
-  	    //CLOCK_AttachClk(kFRO12M_to_ASYNC_APB);
-
-  	CTIMER_GetDefaultConfig(&config);
+	    CTIMER_GetDefaultConfig(&config);
 
 
-  	    CTIMER_Init(CTIMER, &config);
+	    CTIMER_Init(CTIMER, &config);
 
-
-  	    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR1,0,24000U,CTIMER_CLK_FREQ,false);
-  	    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR2,0,24000U,CTIMER_CLK_FREQ,false);
-  	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR1,0,24000U,CTIMER_CLK_FREQ,false);
-  	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR2,0,24000U,CTIMER_CLK_FREQ,false);
-  	    CTIMER_StartTimer(CTIMER);
+	    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR1,0,20000,srcClock_Hz,NULL);
+	    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR2,0,20000,srcClock_Hz,NULL);
+	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR1,0,20000,srcClock_Hz,NULL);
+	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR2,0,20000,srcClock_Hz,NULL);
+	    CTIMER_StartTimer(CTIMER);
   }
 
 
-  void Move(uint8_t speed)
+  void Move()
   {
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, speed);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 80);
   	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
 
 
   	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, speed);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 80);
 
   }
 

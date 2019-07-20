@@ -31,7 +31,7 @@
                <pin_label pin_num="4" pin_signal="PIO0_26/FC4_CTS_SDA_SSEL0/CTIMER0_CAP3" label="J1[3]/JS5[1]/U10[5]/P0_26-FC4_SDAX" identifier="FC4_SDAX"/>
                <pin_label pin_num="5" pin_signal="USB0_DP" label="J5[3]/U7[2]/USB_DP" identifier="USB_DP"/>
                <pin_label pin_num="6" pin_signal="USB0_DM" label="J5[2]/U7[3]/USB_DM" identifier="USB_DM"/>
-               <pin_label pin_num="7" pin_signal="PIO1_16/PDM0_DATA/CTIMER0_MAT0/CTIMER0_CAP0/FC7_RTS_SCL_SSEL1" label="J1[19]/P1_16-CT32B0_MAT0-GYRO_INT1" identifier="left_motor1;Left_motor1"/>
+               <pin_label pin_num="7" pin_signal="PIO1_16/PDM0_DATA/CTIMER0_MAT0/CTIMER0_CAP0/FC7_RTS_SCL_SSEL1" label="J1[19]/P1_16-CT32B0_MAT0-GYRO_INT1" identifier="left_motor1;Left_motor1;Right_motor1;Right_motor2"/>
                <pin_label pin_num="8" pin_signal="VDD8" label="VDD_LPC5411x_IC"/>
                <pin_label pin_num="24" pin_signal="VDD24" label="VDD_LPC5411x_IC"/>
                <pin_label pin_num="34" pin_signal="VDD34" label="VDD_LPC5411x_IC"/>
@@ -50,7 +50,7 @@
                <pin_label pin_num="15" pin_signal="PIO1_1/SWO/SCT0_OUT4/FC5_SSEL2/FC4_TXD_SCL_MISO/ADC0_4" label="J1[15]/P1_1-FC5_SSEL2"/>
                <pin_label pin_num="16" pin_signal="PIO1_2/MCLK/FC7_SSEL3/SCT0_OUT5/FC5_SSEL3/FC4_RXD_SDA_MOSI/ADC0_5" label="J9[7]/JS8[1]/U5[1]/P1_2-FC5_SSEL3" identifier="SPI_FLASH_CS"/>
                <pin_label pin_num="17" pin_signal="PIO1_3/FC7_SSEL2/SCT0_OUT6/FC3_SCK/CTIMER0_CAP1/USB0_UP_LED/ADC0_6" label="J2[20]/P1_3-FC7_SSEL2-CT32B0_CAP1"/>
-               <pin_label pin_num="18" pin_signal="PIO1_4/PDM1_CLK/FC7_RTS_SCL_SSEL1/SCT0_OUT7/FC3_TXD_SCL_MISO/CTIMER0_MAT1/ADC0_7" label="J2[18]/J9[10]/P1_4-ADC7-PDM1_CLK-FC7_RTS-FC3_TXD" identifier="Right_motor2"/>
+               <pin_label pin_num="18" pin_signal="PIO1_4/PDM1_CLK/FC7_RTS_SCL_SSEL1/SCT0_OUT7/FC3_TXD_SCL_MISO/CTIMER0_MAT1/ADC0_7" label="J2[18]/J9[10]/P1_4-ADC7-PDM1_CLK-FC7_RTS-FC3_TXD" identifier="Right_motor2;Left_motor2"/>
                <pin_label pin_num="19" pin_signal="PIO1_5/PDM1_DATA/FC7_CTS_SDA_SSEL0/CTIMER1_CAP0/CTIMER1_MAT3/USB0_FRAME/ADC0_8" label="J2[16]/J9[12]/P1_5-ADC8-PDM1_DAT-FC7_CTS"/>
                <pin_label pin_num="20" pin_signal="VSSA" label="GND"/>
                <pin_label pin_num="26" pin_signal="PIO1_6/FC7_SCK/CTIMER1_CAP2/CTIMER1_MAT2/USB0_VBUS/ADC0_9" label="J1[14]/J5[1]/JP10[2]/P1_6-FC7_SCK-USB_VBUS" identifier="USB_VBUS"/>
@@ -67,9 +67,9 @@
                <pin_label pin_num="38" pin_signal="PIO0_4/FC0_SCK/FC3_SSEL2/CTIMER0_CAP2" label="J4[7]/U9[12]/SW3/BRIDGE_T_INTR-ISP1" identifier="SW3;BRIDGE_T_INTR"/>
                <pin_label pin_num="39" pin_signal="PIO0_5/FC6_RXD_SDA_MOSI_DATA/SCT0_OUT6/CTIMER0_MAT0" label="J1[20]/P0_5-FC6_RXD_SDA_MOSI_DATA"/>
                <pin_label pin_num="40" pin_signal="PIO0_6/FC6_TXD_SCL_MISO_WS/CTIMER0_MAT1/UTICK_CAP0" label="J1[18]/P0_6-FC6_TXD_SCL_MISO_FRAME"/>
-               <pin_label pin_num="41" pin_signal="PIO0_7/FC6_SCK/SCT0_OUT0/CTIMER0_MAT2/CTIMER0_CAP2" label="J1[16]/P0_7-FC6_SCK" identifier="left_motor2;Left_motor2"/>
+               <pin_label pin_num="41" pin_signal="PIO0_7/FC6_SCK/SCT0_OUT0/CTIMER0_MAT2/CTIMER0_CAP2" label="J1[16]/P0_7-FC6_SCK" identifier="left_motor2;Left_motor2;Right_motor1"/>
                <pin_label pin_num="42" pin_signal="PIO1_11/FC6_RTS_SCL_SSEL1/CTIMER1_CAP0/FC4_SCK/USB0_VBUS" label="J2[19]/P1_11-FC6_RTS_SSEL1-MAG_DRDY"/>
-               <pin_label pin_num="43" pin_signal="PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3" label="J2[15]/P0_8-FC2_RXD_SDA_MOSI" identifier="Right_motor1"/>
+               <pin_label pin_num="43" pin_signal="PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3" label="J2[15]/P0_8-FC2_RXD_SDA_MOSI" identifier="Right_motor1;Left_motor1"/>
                <pin_label pin_num="44" pin_signal="PIO0_9/FC2_TXD_SCL_MISO/SCT0_OUT2/CTIMER3_CAP0/FC3_CTS_SDA_SSEL0" label="J2[13]/P0_9-FC2_TXD_SCL_MISO"/>
                <pin_label pin_num="45" pin_signal="PIO0_10/FC2_SCK/SCT0_OUT3/CTIMER3_MAT0" label="J2[11]/P0_10-FC2_SCK-CT32B3_MAT0"/>
                <pin_label pin_num="46" pin_signal="PIO0_11/FC3_SCK/FC6_RXD_SDA_MOSI_DATA/CTIMER2_MAT1" label="J4[4]/U9[13]/BRIDGE_T_SCK" identifier="BRIDGE_T_SCK"/>
@@ -115,16 +115,8 @@
                <pins>
                   <pin peripheral="CTIMER0" signal="MATCH, 3" pin_num="43" pin_signal="PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3"/>
                   <pin peripheral="CTIMER0" signal="MATCH, 1" pin_num="18" pin_signal="PIO1_4/PDM1_CLK/FC7_RTS_SCL_SSEL1/SCT0_OUT7/FC3_TXD_SCL_MISO/CTIMER0_MAT1/ADC0_7"/>
-                  <pin peripheral="CTIMER0" signal="MATCH, 0" pin_num="7" pin_signal="PIO1_16/PDM0_DATA/CTIMER0_MAT0/CTIMER0_CAP0/FC7_RTS_SCL_SSEL1">
-                     <pin_features>
-                        <pin_feature name="identifier" value="Left_motor1"/>
-                     </pin_features>
-                  </pin>
-                  <pin peripheral="CTIMER0" signal="MATCH, 2" pin_num="41" pin_signal="PIO0_7/FC6_SCK/SCT0_OUT0/CTIMER0_MAT2/CTIMER0_CAP2">
-                     <pin_features>
-                        <pin_feature name="identifier" value="Left_motor2"/>
-                     </pin_features>
-                  </pin>
+                  <pin peripheral="CTIMER0" signal="MATCH, 0" pin_num="7" pin_signal="PIO1_16/PDM0_DATA/CTIMER0_MAT0/CTIMER0_CAP0/FC7_RTS_SCL_SSEL1"/>
+                  <pin peripheral="CTIMER0" signal="MATCH, 2" pin_num="41" pin_signal="PIO0_7/FC6_SCK/SCT0_OUT0/CTIMER0_MAT2/CTIMER0_CAP2"/>
                </pins>
             </function>
             <function name="BOARD_InitLink2MCUPins">
