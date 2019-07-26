@@ -106,10 +106,10 @@ void BOARD_InitBootPins(void)
 BOARD_InitPins_cm4:
 - options: {callFromInitBoot: 'true', prefix: BOARD_, coreID: cm4, enableClock: 'true'}
 - pin_list:
-  - {pin_num: '43', peripheral: CTIMER0, signal: 'MATCH, 3', pin_signal: PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3}
-  - {pin_num: '18', peripheral: CTIMER0, signal: 'MATCH, 1', pin_signal: PIO1_4/PDM1_CLK/FC7_RTS_SCL_SSEL1/SCT0_OUT7/FC3_TXD_SCL_MISO/CTIMER0_MAT1/ADC0_7}
-  - {pin_num: '7', peripheral: CTIMER0, signal: 'MATCH, 0', pin_signal: PIO1_16/PDM0_DATA/CTIMER0_MAT0/CTIMER0_CAP0/FC7_RTS_SCL_SSEL1}
-  - {pin_num: '41', peripheral: CTIMER0, signal: 'MATCH, 2', pin_signal: PIO0_7/FC6_SCK/SCT0_OUT0/CTIMER0_MAT2/CTIMER0_CAP2}
+  - {pin_num: '54', peripheral: CTIMER1, signal: 'MATCH, 1', pin_signal: PIO1_13/FC5_TXD_SCL_MISO/CTIMER1_MAT1/FC7_RXD_SDA_MOSI_DATA}
+  - {pin_num: '51', peripheral: CTIMER1, signal: 'MATCH, 0', pin_signal: PIO1_12/FC5_RXD_SDA_MOSI/CTIMER1_MAT0/FC7_SCK/UTICK_CAP2}
+  - {pin_num: '28', peripheral: CTIMER1, signal: 'MATCH, 3', pin_signal: PIO1_8/FC7_TXD_SCL_MISO_WS/CTIMER1_MAT3/CTIMER1_CAP3/ADC0_11}
+  - {pin_num: '27', peripheral: CTIMER1, signal: 'MATCH, 2', pin_signal: PIO1_7/FC7_RXD_SDA_MOSI_DATA/CTIMER1_MAT2/CTIMER1_CAP2/ADC0_10}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -126,53 +126,53 @@ void BOARD_InitPins_cm4(void)
     /* Enables the clock for the IOCON block. 0 = Disable; 1 = Enable.: 0x01u */
     CLOCK_EnableClock(kCLOCK_Iocon);
 
-    IOCON->PIO[0][7] = ((IOCON->PIO[0][7] &
-                         /* Mask bits to zero which are setting */
-                         (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
-
-                        /* Selects pin function.
-                         * : PORT07 (pin 41) is configured as CTIMER0_MAT2. */
-                        | IOCON_PIO_FUNC(PIO07_FUNC_ALT3)
-
-                        /* Select Analog/Digital mode.
-                         * : Digital mode. */
-                        | IOCON_PIO_DIGIMODE(PIO07_DIGIMODE_DIGITAL));
-
-    IOCON->PIO[0][8] = ((IOCON->PIO[0][8] &
-                         /* Mask bits to zero which are setting */
-                         (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
-
-                        /* Selects pin function.
-                         * : PORT08 (pin 43) is configured as CTIMER0_MAT3. */
-                        | IOCON_PIO_FUNC(PIO08_FUNC_ALT3)
-
-                        /* Select Analog/Digital mode.
-                         * : Digital mode. */
-                        | IOCON_PIO_DIGIMODE(PIO08_DIGIMODE_DIGITAL));
-
-    IOCON->PIO[1][16] = ((IOCON->PIO[1][16] &
+    IOCON->PIO[1][12] = ((IOCON->PIO[1][12] &
                           /* Mask bits to zero which are setting */
                           (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
 
                          /* Selects pin function.
-                          * : PORT116 (pin 7) is configured as CTIMER0_MAT0. */
-                         | IOCON_PIO_FUNC(PIO116_FUNC_ALT2)
+                          * : PORT112 (pin 51) is configured as CTIMER1_MAT0. */
+                         | IOCON_PIO_FUNC(PIO112_FUNC_ALT3)
 
                          /* Select Analog/Digital mode.
                           * : Digital mode. */
-                         | IOCON_PIO_DIGIMODE(PIO116_DIGIMODE_DIGITAL));
+                         | IOCON_PIO_DIGIMODE(PIO112_DIGIMODE_DIGITAL));
 
-    IOCON->PIO[1][4] = ((IOCON->PIO[1][4] &
+    IOCON->PIO[1][13] = ((IOCON->PIO[1][13] &
+                          /* Mask bits to zero which are setting */
+                          (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                         /* Selects pin function.
+                          * : PORT113 (pin 54) is configured as CTIMER1_MAT1. */
+                         | IOCON_PIO_FUNC(PIO113_FUNC_ALT3)
+
+                         /* Select Analog/Digital mode.
+                          * : Digital mode. */
+                         | IOCON_PIO_DIGIMODE(PIO113_DIGIMODE_DIGITAL));
+
+    IOCON->PIO[1][7] = ((IOCON->PIO[1][7] &
                          /* Mask bits to zero which are setting */
                          (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
 
                         /* Selects pin function.
-                         * : PORT14 (pin 18) is configured as CTIMER0_MAT1. */
-                        | IOCON_PIO_FUNC(PIO14_FUNC_ALT6)
+                         * : PORT17 (pin 27) is configured as CTIMER1_MAT2. */
+                        | IOCON_PIO_FUNC(PIO17_FUNC_ALT3)
 
                         /* Select Analog/Digital mode.
                          * : Digital mode. */
-                        | IOCON_PIO_DIGIMODE(PIO14_DIGIMODE_DIGITAL));
+                        | IOCON_PIO_DIGIMODE(PIO17_DIGIMODE_DIGITAL));
+
+    IOCON->PIO[1][8] = ((IOCON->PIO[1][8] &
+                         /* Mask bits to zero which are setting */
+                         (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                        /* Selects pin function.
+                         * : PORT18 (pin 28) is configured as CTIMER1_MAT3. */
+                        | IOCON_PIO_FUNC(PIO18_FUNC_ALT3)
+
+                        /* Select Analog/Digital mode.
+                         * : Digital mode. */
+                        | IOCON_PIO_DIGIMODE(PIO18_DIGIMODE_DIGITAL));
 }
 
 /* clang-format off */

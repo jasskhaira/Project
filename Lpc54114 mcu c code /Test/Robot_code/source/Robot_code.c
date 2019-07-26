@@ -22,15 +22,15 @@
 /* TODO: insert other definitions and declarations here. */
 
 
-#define CTIMER CTIMER0		// Timer 0
+#define CTIMER CTIMER1		// Timer 0
 #define CTIMER_CLK_FREQ CLOCK_GetFreq(kCLOCK_AsyncApbClk)
 
-#define LEFT_MOTOR1 kCTIMER_Match_3		//J2[15]
-#define LEFT_MOTOR2 kCTIMER_Match_1		//J2[18]
+#define LM1 kCTIMER_Match_3		//J2[15]
+#define LM2 kCTIMER_Match_1		//J2[3]
 
 
-#define RIGHT_MOTOR1 kCTIMER_Match_2		//J1[16]
-#define RIGHT_MOTOR2 kCTIMER_Match_0		//J1[19]
+#define RM1 kCTIMER_Match_2		//J1[16]
+#define RM2 kCTIMER_Match_0		//J1[19]
 
 
 
@@ -82,6 +82,11 @@ xQueueHandle queue1= NULL;
  */
 int main(void) {
 
+
+
+	CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);
+	SYSCON->ASYNCAPBCTRL = 1;
+	CLOCK_AttachClk(kFRO12M_to_ASYNC_APB);
   	/* Init board hardware. */
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
@@ -90,10 +95,32 @@ int main(void) {
     BOARD_InitDebugConsole();
 
 
-   MotorsSetup();
+  // MotorsSetup();
+
+    ctimer_config_t config;
+    		 uint32_t srcClock_Hz;
+    		 srcClock_Hz = CLOCK_GetFreq(kCLOCK_BusClk);
 
 
 
+    	    CTIMER_GetDefaultConfig(&config);
+
+
+    	    CTIMER_Init(CTIMER, &config);
+
+    	    CTIMER_SetupPwm(CTIMER,LM1,50,20000,srcClock_Hz,NULL);
+    	    CTIMER_SetupPwm(CTIMER,LM2,50,20000,srcClock_Hz,NULL);
+    	    CTIMER_SetupPwm(CTIMER,RM1,50,20000,srcClock_Hz,NULL);
+    	    CTIMER_SetupPwm(CTIMER,RM2,50,20000,srcClock_Hz,NULL);
+    	    CTIMER_StartTimer(CTIMER);
+
+
+    	  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1,80);
+    	  	CTIMER_UpdatePwmDutycycle(CTIMER, LM2,80);
+    	  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1,100);
+
+    	  	CTIMER_UpdatePwmDutycycle(CTIMER, RM1,50);
+    	  	CTIMER_UpdatePwmDutycycle(CTIMER, RM2,80);
 
 
     queue1=xQueueCreate(1,sizeof(char));
@@ -153,33 +180,39 @@ int main(void) {
 	  		if(recv=='M')
 	  		{
 	  			Move();
-	  			printf("moving");
-	  			recv='-';
+	  			printf("moving\n");
+	  			recv='n';
 	  		}
 	  		else if(recv=='L')
 	  		{
 	  			Turn_Left();
-	  			printf("left");
+	  			printf("left\n");
+	  			recv='n';
 	  		}
 	  		else if(recv=='R')
 	  		{
 	  			Turn_Right();
-	  			printf("right");
+	  			printf("right\n");
+	  			recv='n';
 	  		}
 	  		else if(recv=='S')
 	  		{
+
 	  			Stop();
 	  			printf("stop");
+	  			recv='n';
+
 	  		}
 	  		else if(recv=='B')
 	  		{
 	  			 Reverse();
-	  			 printf("reverse");
+	  			 printf("reverse\n");
+	  			recv='n';
 	  		}
 
-	  		printf("data is recived %s",recv);
 
-	  		vTaskDelay(100);
+
+
 	  	}
   }
 
@@ -198,86 +231,86 @@ int main(void) {
 
 	    CTIMER_Init(CTIMER, &config);
 
-	    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR1,0,20000,srcClock_Hz,NULL);
-	    CTIMER_SetupPwm(CTIMER,LEFT_MOTOR2,0,20000,srcClock_Hz,NULL);
-	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR1,0,20000,srcClock_Hz,NULL);
-	    CTIMER_SetupPwm(CTIMER,RIGHT_MOTOR2,0,20000,srcClock_Hz,NULL);
+	    CTIMER_SetupPwm(CTIMER,LM1,0,20000,srcClock_Hz,NULL);
+	    CTIMER_SetupPwm(CTIMER,LM2,0,20000,srcClock_Hz,NULL);
+	    CTIMER_SetupPwm(CTIMER,RM1,0,20000,srcClock_Hz,NULL);
+	    CTIMER_SetupPwm(CTIMER,RM2,0,20000,srcClock_Hz,NULL);
 	    CTIMER_StartTimer(CTIMER);
   }
 
 
   void Move()
   {
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 80);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 80);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM2, 0);
 
 
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 80);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM1, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM2, 80);
 
   }
 
 
   void Turn_SlowLeft()
   {
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 75);
-  		CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 75);
+  		CTIMER_UpdatePwmDutycycle(CTIMER, LM2, 0);
 
 
-  		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-  		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 75);
+  		CTIMER_UpdatePwmDutycycle(CTIMER, RM1, 0);
+  		CTIMER_UpdatePwmDutycycle(CTIMER, RM2, 75);
 
   }
   void Turn_SlowRight()
   {
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 75);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 75);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM2, 0);
 
 
-  		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-  		CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 75);
+  		CTIMER_UpdatePwmDutycycle(CTIMER, RM1, 0);
+  		CTIMER_UpdatePwmDutycycle(CTIMER, RM2, 75);
   }
   void Turn_Left()
   {
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 100);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 100);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM2, 0);
 
 
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 100);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM1, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM2, 0);
   }
   void Turn_Right()
   {
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 100);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM2, 0);
 
 
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 100);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM1, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM2, 100);
 
   }
 
   /* Api is used to stop the robot */
 
   void Stop(){
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 0);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM2, 0);
 
 
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 0);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM1, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM2, 0);
   }
 
 
 
   void Reverse(){
 
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR1, 0);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, LEFT_MOTOR2, 100);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, LM2, 100);
 
 
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR1, 100);
-  	CTIMER_UpdatePwmDutycycle(CTIMER, RIGHT_MOTOR2, 0);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM1, 100);
+  	CTIMER_UpdatePwmDutycycle(CTIMER, RM2, 0);
 
   }
 

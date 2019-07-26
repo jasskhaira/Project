@@ -39,7 +39,7 @@ static void uart_task(void *pvParameters);
 /*******************************************************************************
  * Code
  ******************************************************************************/
-const char *to_send             = "FreeRTOS USART driver example!\r\n";
+const char *to_send             = "F \r\n";
 const char *send_buffer_overrun = "\r\nRing buffer overrun!\r\n";
 uint8_t background_buffer[32];
 uint8_t recv_buffer[4];

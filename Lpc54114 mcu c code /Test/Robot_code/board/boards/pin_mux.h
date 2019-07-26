@@ -25,14 +25,14 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
-#define PIO07_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO07_FUNC_ALT3 0x03u         /*!<@brief Selects pin function.: Alternative connection 3. */
-#define PIO08_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO08_FUNC_ALT3 0x03u         /*!<@brief Selects pin function.: Alternative connection 3. */
-#define PIO116_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO116_FUNC_ALT2 0x02u        /*!<@brief Selects pin function.: Alternative connection 2. */
-#define PIO14_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
-#define PIO14_FUNC_ALT6 0x06u         /*!<@brief Selects pin function.: Alternative connection 6. */
+#define PIO112_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
+#define PIO112_FUNC_ALT3 0x03u        /*!<@brief Selects pin function.: Alternative connection 3. */
+#define PIO113_DIGIMODE_DIGITAL 0x01u /*!<@brief Select Analog/Digital mode.: Digital mode. */
+#define PIO113_FUNC_ALT3 0x03u        /*!<@brief Selects pin function.: Alternative connection 3. */
+#define PIO17_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
+#define PIO17_FUNC_ALT3 0x03u         /*!<@brief Selects pin function.: Alternative connection 3. */
+#define PIO18_DIGIMODE_DIGITAL 0x01u  /*!<@brief Select Analog/Digital mode.: Digital mode. */
+#define PIO18_FUNC_ALT3 0x03u         /*!<@brief Selects pin function.: Alternative connection 3. */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

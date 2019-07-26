@@ -45,7 +45,7 @@ public:
 
    // Set up the communications options:
    //   9600 baud, 8-bit, enable receiver, no modem control lines
-   options.c_cflag = baudrate | CS8 | CREAD | CLOCAL;
+   options.c_cflag = B115200 | CS8 | CREAD | CLOCAL;
    options.c_iflag = IGNPAR | ICRNL;    //ignore partity errors, CR -> newline
    tcflush(file, TCIFLUSH);             //discard file information not transmitted
    tcsetattr(file, TCSANOW, &options);  //changes occur immmediately
@@ -57,7 +57,7 @@ public:
 
  int send(char p[])
  {
-	 printf("%d",strlen(p));
+	// printf("%d",strlen(p));
 	if ((count = write(file,p,strlen(p)))<0){        //send the string
 	       perror("Failed to write to the output\n");
 	       return -1;
@@ -70,16 +70,25 @@ public:
  //-----------Api is used to recieve data-----------------------------
 
 
-  int recieve(char *receive)
+  int recieve(unsigned char *receive)
   {
-	   if ((count = read(file, (void*)receive, 100))<0){   //receive the data
+	  //memset(&receive,0,sizeof(char));
+
+	/* if ((count = read(file,(void*)receive,10))<0){   //receive the data
 	      perror("Failed to read from the input\n");
 	      return -1;
 	   }
-	   if (count==0) printf("There was no data available to read!\n");
+	   if (count==0)
+		   printf("There was no data available to read!\n");
 	   else {
 	      printf("The following was read in [%d]: %s\n",count,receive);
-	   }
+	   }*/
+
+	  if(read(file,&receive,100)>0)
+	  {
+		printf("data = %s\n",receive);
+
+	  }
 
 	return 1;
  }
