@@ -29,9 +29,9 @@
 #define RM1 kCTIMER_Match_0			//  J2[17]
 
 
-#define DEMO_USART USART0
-#define DEMO_USART_IRQHandler FLEXCOMM0_IRQHandler
-#define DEMO_USART_IRQn FLEXCOMM0_IRQn
+#define DEMO_USART USART5
+#define DEMO_USART_IRQHandler FLEXCOMM5_IRQHandler
+#define DEMO_USART_IRQn FLEXCOMM5_IRQn
 
 
 /* Task priorities. */
@@ -251,6 +251,7 @@ static void uart_task(void *pvParameters)
 
  	CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 80);
  	CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
+
 
  }
 

@@ -40,6 +40,18 @@ void BOARD_InitBootPins(void);
 #define PIO015_MODE_INACTIVE 0x00u
 /*!
  * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO018_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 1. */
+#define PIO018_FUNC_ALT1 0x01u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO020_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 1. */
+#define PIO020_FUNC_ALT1 0x01u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
 #define PIO07_DIGIMODE_DIGITAL 0x01u
 /*!
  * @brief Selects pin function.: Alternative connection 3. */

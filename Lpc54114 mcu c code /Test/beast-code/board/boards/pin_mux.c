@@ -110,6 +110,8 @@ BOARD_InitPins_cm4:
   - {pin_num: '41', peripheral: CTIMER0, signal: 'MATCH, 2', pin_signal: PIO0_7/FC6_SCK/SCT0_OUT0/CTIMER0_MAT2/CTIMER0_CAP2}
   - {pin_num: '51', peripheral: CTIMER1, signal: 'MATCH, 0', pin_signal: PIO1_12/FC5_RXD_SDA_MOSI/CTIMER1_MAT0/FC7_SCK/UTICK_CAP2}
   - {pin_num: '18', peripheral: CTIMER0, signal: 'MATCH, 1', pin_signal: PIO1_4/PDM1_CLK/FC7_RTS_SCL_SSEL1/SCT0_OUT7/FC3_TXD_SCL_MISO/CTIMER0_MAT1/ADC0_7}
+  - {pin_num: '60', peripheral: FLEXCOMM5, signal: RXD_SDA_MOSI, pin_signal: PIO0_20/FC5_RXD_SDA_MOSI/FC0_SCK/CTIMER3_CAP0, identifier: ''}
+  - {pin_num: '58', peripheral: FLEXCOMM5, signal: TXD_SCL_MISO, pin_signal: PIO0_18/FC5_TXD_SCL_MISO/SCT0_OUT0/CTIMER0_MAT0, identifier: ''}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -142,6 +144,30 @@ void BOARD_InitPins_cm4(void)
                          /* Select Analog/Digital mode.
                           * : Digital mode. */
                          | IOCON_PIO_DIGIMODE(PIO015_DIGIMODE_DIGITAL));
+
+    IOCON->PIO[0][18] = ((IOCON->PIO[0][18] &
+                          /* Mask bits to zero which are setting */
+                          (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                         /* Selects pin function.
+                          * : PORT018 (pin 58) is configured as FC5_TXD_SCL_MISO. */
+                         | IOCON_PIO_FUNC(PIO018_FUNC_ALT1)
+
+                         /* Select Analog/Digital mode.
+                          * : Digital mode. */
+                         | IOCON_PIO_DIGIMODE(PIO018_DIGIMODE_DIGITAL));
+
+    IOCON->PIO[0][20] = ((IOCON->PIO[0][20] &
+                          /* Mask bits to zero which are setting */
+                          (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                         /* Selects pin function.
+                          * : PORT020 (pin 60) is configured as FC5_RXD_SDA_MOSI. */
+                         | IOCON_PIO_FUNC(PIO020_FUNC_ALT1)
+
+                         /* Select Analog/Digital mode.
+                          * : Digital mode. */
+                         | IOCON_PIO_DIGIMODE(PIO020_DIGIMODE_DIGITAL));
 
     IOCON->PIO[0][7] = ((IOCON->PIO[0][7] &
                          /* Mask bits to zero which are setting */
