@@ -40,10 +40,10 @@ void BOARD_InitBootPins(void);
 #define PIO015_MODE_INACTIVE 0x00u
 /*!
  * @brief Select Analog/Digital mode.: Digital mode. */
-#define PIO031_DIGIMODE_DIGITAL 0x01u
+#define PIO021_DIGIMODE_DIGITAL 0x01u
 /*!
  * @brief Selects pin function.: Alternative connection 0. */
-#define PIO031_FUNC_ALT0 0x00u
+#define PIO021_FUNC_ALT0 0x00u
 /*!
  * @brief Select Analog/Digital mode.: Digital mode. */
 #define PIO111_DIGIMODE_DIGITAL 0x01u
@@ -58,11 +58,11 @@ void BOARD_InitBootPins(void);
 #define BOARD_trig_PIN 11U   /*!<@brief 1U pin index: 11 */
                              /* @} */
 
-/*! @name PIO0_31 (number 13), J2[17]/J3[2]/P1[7]/U3[4]/SW2/P0_31-PDM0_CLK-ISP0_EN
+/*! @name PIO0_21 (number 61), J2[2]/P0_21-CLKOUT-SPIFI_CLK
   @{ */
 #define BOARD_echo_GPIO GPIO /*!<@brief GPIO device name: GPIO */
 #define BOARD_echo_PORT 0U   /*!<@brief PORT device name: 0U */
-#define BOARD_echo_PIN 31U   /*!<@brief 0U pin index: 31 */
+#define BOARD_echo_PIN 21U   /*!<@brief 0U pin index: 21 */
                              /* @} */
 
 /*!

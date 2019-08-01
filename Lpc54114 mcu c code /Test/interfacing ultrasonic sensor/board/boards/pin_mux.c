@@ -75,7 +75,7 @@ pin_labels:
 - {pin_num: '58', pin_signal: PIO0_18/FC5_TXD_SCL_MISO/SCT0_OUT0/CTIMER0_MAT0, label: 'J1[11]/U5[2]/P0_18-FC5_TXD_SCL_MISO', identifier: SPI_FLASH_MISO}
 - {pin_num: '59', pin_signal: PIO0_19/FC5_SCK/SCT0_OUT1/CTIMER0_MAT1, label: 'J1[9]/J2[8]/U5[6]/P0_19-FC5_SCK-SPIFI_CSn', identifier: SPI_FLASH_SCK}
 - {pin_num: '60', pin_signal: PIO0_20/FC5_RXD_SDA_MOSI/FC0_SCK/CTIMER3_CAP0, label: 'J1[13]/U5[5]/P0_20-FC5_RXD_SDA_MOSI', identifier: SPI_FLASH_MOSI}
-- {pin_num: '61', pin_signal: PIO0_21/CLKOUT/FC0_TXD_SCL_MISO/CTIMER3_MAT0, label: 'J2[2]/P0_21-CLKOUT-SPIFI_CLK'}
+- {pin_num: '61', pin_signal: PIO0_21/CLKOUT/FC0_TXD_SCL_MISO/CTIMER3_MAT0, label: 'J2[2]/P0_21-CLKOUT-SPIFI_CLK', identifier: echo}
 - {pin_num: '62', pin_signal: PIO1_15/PDM0_CLK/SCT0_OUT5/CTIMER1_CAP3/FC7_CTS_SDA_SSEL0, label: 'J1[17]/P1_15-SCTO5-FC7_CTS'}
 - {pin_num: '63', pin_signal: PIO0_22/CLKIN/FC0_RXD_SDA_MOSI/CTIMER3_MAT3, label: 'J4[8]/P0_22-BRIDGE_GPIO', identifier: BRIDGE_GPIO}
 - {pin_num: '64', pin_signal: RESET, label: 'J3[1]/J8[9]/J8[10]/JP7[1]/JS9[1]/JS12[1]/JS29/D4[1]/U4[8]/U5[7]/U10[22]/SW4/nRESET_TRGT', identifier: RESET}
@@ -107,8 +107,7 @@ BOARD_InitPins_cm4:
 - pin_list:
   - {pin_num: '50', peripheral: SWD, signal: SWO, pin_signal: PIO0_15/FC3_RTS_SCL_SSEL1/SWO/CTIMER2_MAT2/FC4_SCK, identifier: '', mode: inactive}
   - {pin_num: '42', peripheral: GPIO, signal: 'PIO1, 11', pin_signal: PIO1_11/FC6_RTS_SCL_SSEL1/CTIMER1_CAP0/FC4_SCK/USB0_VBUS, direction: OUTPUT}
-  - {pin_num: '13', peripheral: GPIO, signal: 'PIO0, 31', pin_signal: PIO0_31/PDM0_CLK/FC2_CTS_SDA_SSEL0/CTIMER2_CAP2/CTIMER0_CAP3/CTIMER0_MAT3/ADC0_2, identifier: echo,
-    direction: INPUT}
+  - {pin_num: '61', peripheral: GPIO, signal: 'PIO0, 21', pin_signal: PIO0_21/CLKOUT/FC0_TXD_SCL_MISO/CTIMER3_MAT0, direction: INPUT}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -133,7 +132,7 @@ void BOARD_InitPins_cm4(void)
         .pinDirection = kGPIO_DigitalInput,
         .outputLogic = 0U
     };
-    /* Initialize GPIO functionality on pin PIO0_31 (pin 13)  */
+    /* Initialize GPIO functionality on pin PIO0_21 (pin 61)  */
     GPIO_PinInit(BOARD_echo_GPIO, BOARD_echo_PORT, BOARD_echo_PIN, &echo_config);
 
     gpio_pin_config_t trig_config = {
@@ -160,17 +159,17 @@ void BOARD_InitPins_cm4(void)
                           * : Digital mode. */
                          | IOCON_PIO_DIGIMODE(PIO015_DIGIMODE_DIGITAL));
 
-    IOCON->PIO[0][31] = ((IOCON->PIO[0][31] &
+    IOCON->PIO[0][21] = ((IOCON->PIO[0][21] &
                           /* Mask bits to zero which are setting */
                           (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
 
                          /* Selects pin function.
-                          * : PORT031 (pin 13) is configured as PIO0_31. */
-                         | IOCON_PIO_FUNC(PIO031_FUNC_ALT0)
+                          * : PORT021 (pin 61) is configured as PIO0_21. */
+                         | IOCON_PIO_FUNC(PIO021_FUNC_ALT0)
 
                          /* Select Analog/Digital mode.
                           * : Digital mode. */
-                         | IOCON_PIO_DIGIMODE(PIO031_DIGIMODE_DIGITAL));
+                         | IOCON_PIO_DIGIMODE(PIO021_DIGIMODE_DIGITAL));
 
     IOCON->PIO[1][11] = ((IOCON->PIO[1][11] &
                           /* Mask bits to zero which are setting */
