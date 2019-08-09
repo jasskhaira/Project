@@ -20,6 +20,7 @@
 
 #define CTIMER CTIMER0
 
+
 /* TODO: insert other definitions and declarations here. */
 
 /*
@@ -29,8 +30,8 @@
 
 
 
-static void Ultrasonic_Task(void *pvParameters);
-
+static void Front_Ultrasonic_Task(void *pvParameters);
+static void Rear_Ultrasonic_Task(void *pvParameters);
 
 
 
@@ -43,77 +44,61 @@ int main(void) {
     BOARD_InitBootPeripherals();
   	/* Init FSL debug console. */
 
-
-    portFLOAT Distance=0.0;
-        portFLOAT TP=0.0;
-        portFLOAT md0=0.0;
-
-        printf("md0=%f\n",md0);
-        printf("Distance=%f\n",Distance);
-        printf("TP=%f\n",TP);
-
-
     ctimer_config_t config;
 
 	 CTIMER_GetDefaultConfig(&config);
 
-	// config.prescale=((96000000/1000000)-1);
+
 	 CTIMER_Init(CTIMER, &config);
-	 if (xTaskCreate(Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
+	 CTIMER_Init(CTIMER1, &config);
+	 if (xTaskCreate(Front_Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
 	                {
 	                    PRINTF("Task creation failed!.\r\n");
 	                    while (1)
 	                        ;
 	                }
 
+	 if (xTaskCreate(Rear_Ultrasonic_Task, "Ultrasonic_Task2", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
+		                {
+		                    PRINTF("Task creation failed!.\r\n");
+		                    while (1)
+		                        ;
+		                }
+
+
+
 	 vTaskStartScheduler();
-	         for (;;)
-	             ;
+	         for (;;);
 
 
 }
 
 
-static void Ultrasonic_Task(void *pvParameters)
+static void Front_Ultrasonic_Task(void *pvParameters)
 {
-	portFLOAT Distance=0.0;
-	    portFLOAT TP=0.0;
-	    portFLOAT md0=0.0;
 
-	    printf("md0=%f\n",md0);
-	    printf("Distance=%f\n",Distance);
-	    printf("TP=%f\n",TP);
-
+	float Front_time,Front_distance;
 
     while(1)
 
 
 	{
-		GPIO_PinWrite(BOARD_trig_GPIO,BOARD_trig_PORT,BOARD_trig_PIN,1);
+		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,1);
 		vTaskDelay(10);
-		GPIO_PinWrite(BOARD_trig_GPIO,BOARD_trig_PORT,BOARD_trig_PIN,0);
+		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,0);
 
-		while(GPIO_PinRead(BOARD_echo_GPIO,BOARD_echo_PORT,BOARD_echo_PIN)==0);
+		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==0);
 
 		CTIMER_StartTimer(CTIMER);
 
-		while(GPIO_PinRead(BOARD_echo_GPIO,BOARD_echo_PORT,BOARD_echo_PIN)==1);
+		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==1);
 		CTIMER_StopTimer(CTIMER);
 
-		TP= CTIMER_GetTimerCountValue(CTIMER);
+		Front_time= CTIMER_GetTimerCountValue(CTIMER);
 
-		printf("tp1 = %d\n",TP);
+		Front_distance =(0.0343*(Front_time/96))/2;
 
-
-		md0=TP/96;
-
-
-		printf("tp2 = %f\n",md0);
-
-
-		Distance =(0.0343*md0)/2;
-
-		printf("Distance = %lf\n",Distance);
+		printf("Front Distance = %lf\n",Front_distance);
 
 		CTIMER_Reset(CTIMER);
 
@@ -121,4 +106,39 @@ static void Ultrasonic_Task(void *pvParameters)
 	}
 
 }
+
+
+static void Rear_Ultrasonic_Task(void *pvParameters)
+{
+	float Rear_time,Rear_distance;
+
+
+    while(1)
+
+
+	{
+		GPIO_PinWrite(BOARD_Rear_trig_GPIO,BOARD_Rear_trig_PORT,BOARD_Rear_trig_PIN,1);
+		vTaskDelay(10);
+		GPIO_PinWrite(BOARD_Rear_trig_GPIO,BOARD_Rear_trig_PORT,BOARD_Rear_trig_PIN,0);
+
+		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==0);
+
+		CTIMER_StartTimer(CTIMER1);
+
+		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==1);
+		CTIMER_StopTimer(CTIMER1);
+
+		Rear_time= CTIMER_GetTimerCountValue(CTIMER1);
+		Rear_time=Rear_time/96;
+		Rear_distance =(0.0343*Rear_time)/2;
+
+		printf("Rear Distance = %lf\n",Rear_distance);
+
+		CTIMER_Reset(CTIMER1);
+
+
+	}
+
+}
+
 

@@ -44,7 +44,7 @@ pin_labels:
 - {pin_num: '19', pin_signal: PIO1_5/PDM1_DATA/FC7_CTS_SDA_SSEL0/CTIMER1_CAP0/CTIMER1_MAT3/USB0_FRAME/ADC0_8, label: 'J2[16]/J9[12]/P1_5-ADC8-PDM1_DAT-FC7_CTS'}
 - {pin_num: '20', pin_signal: VSSA, label: GND}
 - {pin_num: '26', pin_signal: PIO1_6/FC7_SCK/CTIMER1_CAP2/CTIMER1_MAT2/USB0_VBUS/ADC0_9, label: 'J1[14]/J5[1]/JP10[2]/P1_6-FC7_SCK-USB_VBUS', identifier: USB_VBUS}
-- {pin_num: '27', pin_signal: PIO1_7/FC7_RXD_SDA_MOSI_DATA/CTIMER1_MAT2/CTIMER1_CAP2/ADC0_10, label: 'J1[10]/P1_7-FC7_RXD_SDA_MOSI_DATA'}
+- {pin_num: '27', pin_signal: PIO1_7/FC7_RXD_SDA_MOSI_DATA/CTIMER1_MAT2/CTIMER1_CAP2/ADC0_10, label: 'J1[10]/P1_7-FC7_RXD_SDA_MOSI_DATA', identifier: front_trig;Front_trig}
 - {pin_num: '28', pin_signal: PIO1_8/FC7_TXD_SCL_MISO_WS/CTIMER1_MAT3/CTIMER1_CAP3/ADC0_11, label: 'J1[12]/J9[6]/P1_8-ADC11-FC7_TXD_SCL_MISO_FRAME'}
 - {pin_num: '29', pin_signal: PIO1_9/FC3_RXD_SDA_MOSI/CTIMER0_CAP2/USB0_UP_LED, label: 'J9[5]/D2[3]/P1_9-BLUE_LED', identifier: LED_BLUE}
 - {pin_num: '30', pin_signal: PIO1_10/FC6_TXD_SCL_MISO_WS/SCT0_OUT4/FC1_SCK/USB0_FRAME, label: 'J9[8]/D2[4]/P1_10-SCT4-LED_GREEN', identifier: LED_GREEN}
@@ -58,7 +58,7 @@ pin_labels:
 - {pin_num: '39', pin_signal: PIO0_5/FC6_RXD_SDA_MOSI_DATA/SCT0_OUT6/CTIMER0_MAT0, label: 'J1[20]/P0_5-FC6_RXD_SDA_MOSI_DATA'}
 - {pin_num: '40', pin_signal: PIO0_6/FC6_TXD_SCL_MISO_WS/CTIMER0_MAT1/UTICK_CAP0, label: 'J1[18]/P0_6-FC6_TXD_SCL_MISO_FRAME'}
 - {pin_num: '41', pin_signal: PIO0_7/FC6_SCK/SCT0_OUT0/CTIMER0_MAT2/CTIMER0_CAP2, label: 'J1[16]/P0_7-FC6_SCK'}
-- {pin_num: '42', pin_signal: PIO1_11/FC6_RTS_SCL_SSEL1/CTIMER1_CAP0/FC4_SCK/USB0_VBUS, label: 'J2[19]/P1_11-FC6_RTS_SSEL1-MAG_DRDY', identifier: trig}
+- {pin_num: '42', pin_signal: PIO1_11/FC6_RTS_SCL_SSEL1/CTIMER1_CAP0/FC4_SCK/USB0_VBUS, label: 'J2[19]/P1_11-FC6_RTS_SSEL1-MAG_DRDY', identifier: trig;rear_trig;Rear_trig}
 - {pin_num: '43', pin_signal: PIO0_8/FC2_RXD_SDA_MOSI/SCT0_OUT1/CTIMER0_MAT3, label: 'J2[15]/P0_8-FC2_RXD_SDA_MOSI'}
 - {pin_num: '44', pin_signal: PIO0_9/FC2_TXD_SCL_MISO/SCT0_OUT2/CTIMER3_CAP0/FC3_CTS_SDA_SSEL0, label: 'J2[13]/P0_9-FC2_TXD_SCL_MISO'}
 - {pin_num: '45', pin_signal: PIO0_10/FC2_SCK/SCT0_OUT3/CTIMER3_MAT0, label: 'J2[11]/P0_10-FC2_SCK-CT32B3_MAT0'}
@@ -74,9 +74,9 @@ pin_labels:
 - {pin_num: '57', pin_signal: PIO1_14/FC2_RXD_SDA_MOSI/SCT0_OUT7/FC7_TXD_SCL_MISO_WS, label: 'J2[1]/P1_14-SCTO7'}
 - {pin_num: '58', pin_signal: PIO0_18/FC5_TXD_SCL_MISO/SCT0_OUT0/CTIMER0_MAT0, label: 'J1[11]/U5[2]/P0_18-FC5_TXD_SCL_MISO', identifier: SPI_FLASH_MISO}
 - {pin_num: '59', pin_signal: PIO0_19/FC5_SCK/SCT0_OUT1/CTIMER0_MAT1, label: 'J1[9]/J2[8]/U5[6]/P0_19-FC5_SCK-SPIFI_CSn', identifier: SPI_FLASH_SCK}
-- {pin_num: '60', pin_signal: PIO0_20/FC5_RXD_SDA_MOSI/FC0_SCK/CTIMER3_CAP0, label: 'J1[13]/U5[5]/P0_20-FC5_RXD_SDA_MOSI', identifier: SPI_FLASH_MOSI}
+- {pin_num: '60', pin_signal: PIO0_20/FC5_RXD_SDA_MOSI/FC0_SCK/CTIMER3_CAP0, label: 'J1[13]/U5[5]/P0_20-FC5_RXD_SDA_MOSI', identifier: SPI_FLASH_MOSI;front_echo;Front_echo}
 - {pin_num: '61', pin_signal: PIO0_21/CLKOUT/FC0_TXD_SCL_MISO/CTIMER3_MAT0, label: 'J2[2]/P0_21-CLKOUT-SPIFI_CLK', identifier: echo}
-- {pin_num: '62', pin_signal: PIO1_15/PDM0_CLK/SCT0_OUT5/CTIMER1_CAP3/FC7_CTS_SDA_SSEL0, label: 'J1[17]/P1_15-SCTO5-FC7_CTS'}
+- {pin_num: '62', pin_signal: PIO1_15/PDM0_CLK/SCT0_OUT5/CTIMER1_CAP3/FC7_CTS_SDA_SSEL0, label: 'J1[17]/P1_15-SCTO5-FC7_CTS', identifier: rear_echo;Rear_echo}
 - {pin_num: '63', pin_signal: PIO0_22/CLKIN/FC0_RXD_SDA_MOSI/CTIMER3_MAT3, label: 'J4[8]/P0_22-BRIDGE_GPIO', identifier: BRIDGE_GPIO}
 - {pin_num: '64', pin_signal: RESET, label: 'J3[1]/J8[9]/J8[10]/JP7[1]/JS9[1]/JS12[1]/JS29/D4[1]/U4[8]/U5[7]/U10[22]/SW4/nRESET_TRGT', identifier: RESET}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
@@ -106,8 +106,10 @@ BOARD_InitPins_cm4:
 - options: {callFromInitBoot: 'true', prefix: BOARD_, coreID: cm4, enableClock: 'true'}
 - pin_list:
   - {pin_num: '50', peripheral: SWD, signal: SWO, pin_signal: PIO0_15/FC3_RTS_SCL_SSEL1/SWO/CTIMER2_MAT2/FC4_SCK, identifier: '', mode: inactive}
-  - {pin_num: '61', peripheral: GPIO, signal: 'PIO0, 21', pin_signal: PIO0_21/CLKOUT/FC0_TXD_SCL_MISO/CTIMER3_MAT0, direction: INPUT}
-  - {pin_num: '42', peripheral: GPIO, signal: 'PIO1, 11', pin_signal: PIO1_11/FC6_RTS_SCL_SSEL1/CTIMER1_CAP0/FC4_SCK/USB0_VBUS, direction: OUTPUT}
+  - {pin_num: '27', peripheral: GPIO, signal: 'PIO1, 7', pin_signal: PIO1_7/FC7_RXD_SDA_MOSI_DATA/CTIMER1_MAT2/CTIMER1_CAP2/ADC0_10, identifier: Front_trig, direction: OUTPUT}
+  - {pin_num: '60', peripheral: GPIO, signal: 'PIO0, 20', pin_signal: PIO0_20/FC5_RXD_SDA_MOSI/FC0_SCK/CTIMER3_CAP0, identifier: Front_echo, direction: INPUT}
+  - {pin_num: '42', peripheral: GPIO, signal: 'PIO1, 11', pin_signal: PIO1_11/FC6_RTS_SCL_SSEL1/CTIMER1_CAP0/FC4_SCK/USB0_VBUS, identifier: Rear_trig, direction: OUTPUT}
+  - {pin_num: '62', peripheral: GPIO, signal: 'PIO1, 15', pin_signal: PIO1_15/PDM0_CLK/SCT0_OUT5/CTIMER1_CAP3/FC7_CTS_SDA_SSEL0, identifier: Rear_echo, direction: INPUT}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 /* clang-format on */
@@ -128,19 +130,33 @@ void BOARD_InitPins_cm4(void)
     /* Enables the clock for the GPIO1 module */
     CLOCK_EnableClock(kCLOCK_Gpio1);
 
-    gpio_pin_config_t echo_config = {
+    gpio_pin_config_t Front_echo_config = {
         .pinDirection = kGPIO_DigitalInput,
         .outputLogic = 0U
     };
-    /* Initialize GPIO functionality on pin PIO0_21 (pin 61)  */
-    GPIO_PinInit(BOARD_echo_GPIO, BOARD_echo_PORT, BOARD_echo_PIN, &echo_config);
+    /* Initialize GPIO functionality on pin PIO0_20 (pin 60)  */
+    GPIO_PinInit(BOARD_Front_echo_GPIO, BOARD_Front_echo_PORT, BOARD_Front_echo_PIN, &Front_echo_config);
 
-    gpio_pin_config_t trig_config = {
+    gpio_pin_config_t Front_trig_config = {
+        .pinDirection = kGPIO_DigitalOutput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PIO1_7 (pin 27)  */
+    GPIO_PinInit(BOARD_Front_trig_GPIO, BOARD_Front_trig_PORT, BOARD_Front_trig_PIN, &Front_trig_config);
+
+    gpio_pin_config_t Rear_trig_config = {
         .pinDirection = kGPIO_DigitalOutput,
         .outputLogic = 0U
     };
     /* Initialize GPIO functionality on pin PIO1_11 (pin 42)  */
-    GPIO_PinInit(BOARD_trig_GPIO, BOARD_trig_PORT, BOARD_trig_PIN, &trig_config);
+    GPIO_PinInit(BOARD_Rear_trig_GPIO, BOARD_Rear_trig_PORT, BOARD_Rear_trig_PIN, &Rear_trig_config);
+
+    gpio_pin_config_t Rear_echo_config = {
+        .pinDirection = kGPIO_DigitalInput,
+        .outputLogic = 0U
+    };
+    /* Initialize GPIO functionality on pin PIO1_15 (pin 62)  */
+    GPIO_PinInit(BOARD_Rear_echo_GPIO, BOARD_Rear_echo_PORT, BOARD_Rear_echo_PIN, &Rear_echo_config);
 
     IOCON->PIO[0][15] = ((IOCON->PIO[0][15] &
                           /* Mask bits to zero which are setting */
@@ -159,17 +175,17 @@ void BOARD_InitPins_cm4(void)
                           * : Digital mode. */
                          | IOCON_PIO_DIGIMODE(PIO015_DIGIMODE_DIGITAL));
 
-    IOCON->PIO[0][21] = ((IOCON->PIO[0][21] &
+    IOCON->PIO[0][20] = ((IOCON->PIO[0][20] &
                           /* Mask bits to zero which are setting */
                           (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
 
                          /* Selects pin function.
-                          * : PORT021 (pin 61) is configured as PIO0_21. */
-                         | IOCON_PIO_FUNC(PIO021_FUNC_ALT0)
+                          * : PORT020 (pin 60) is configured as PIO0_20. */
+                         | IOCON_PIO_FUNC(PIO020_FUNC_ALT0)
 
                          /* Select Analog/Digital mode.
                           * : Digital mode. */
-                         | IOCON_PIO_DIGIMODE(PIO021_DIGIMODE_DIGITAL));
+                         | IOCON_PIO_DIGIMODE(PIO020_DIGIMODE_DIGITAL));
 
     IOCON->PIO[1][11] = ((IOCON->PIO[1][11] &
                           /* Mask bits to zero which are setting */
@@ -182,6 +198,30 @@ void BOARD_InitPins_cm4(void)
                          /* Select Analog/Digital mode.
                           * : Digital mode. */
                          | IOCON_PIO_DIGIMODE(PIO111_DIGIMODE_DIGITAL));
+
+    IOCON->PIO[1][15] = ((IOCON->PIO[1][15] &
+                          /* Mask bits to zero which are setting */
+                          (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                         /* Selects pin function.
+                          * : PORT115 (pin 62) is configured as PIO1_15. */
+                         | IOCON_PIO_FUNC(PIO115_FUNC_ALT0)
+
+                         /* Select Analog/Digital mode.
+                          * : Digital mode. */
+                         | IOCON_PIO_DIGIMODE(PIO115_DIGIMODE_DIGITAL));
+
+    IOCON->PIO[1][7] = ((IOCON->PIO[1][7] &
+                         /* Mask bits to zero which are setting */
+                         (~(IOCON_PIO_FUNC_MASK | IOCON_PIO_DIGIMODE_MASK)))
+
+                        /* Selects pin function.
+                         * : PORT17 (pin 27) is configured as PIO1_7. */
+                        | IOCON_PIO_FUNC(PIO17_FUNC_ALT0)
+
+                        /* Select Analog/Digital mode.
+                         * : Digital mode. */
+                        | IOCON_PIO_DIGIMODE(PIO17_DIGIMODE_DIGITAL));
 }
 
 /* clang-format off */
@@ -479,7 +519,7 @@ BOARD_InitSPI_FLASHPins:
 - pin_list:
   - {pin_num: '58', peripheral: FLEXCOMM5, signal: TXD_SCL_MISO, pin_signal: PIO0_18/FC5_TXD_SCL_MISO/SCT0_OUT0/CTIMER0_MAT0}
   - {pin_num: '59', peripheral: FLEXCOMM5, signal: SCK, pin_signal: PIO0_19/FC5_SCK/SCT0_OUT1/CTIMER0_MAT1}
-  - {pin_num: '60', peripheral: FLEXCOMM5, signal: RXD_SDA_MOSI, pin_signal: PIO0_20/FC5_RXD_SDA_MOSI/FC0_SCK/CTIMER3_CAP0}
+  - {pin_num: '60', peripheral: FLEXCOMM5, signal: RXD_SDA_MOSI, pin_signal: PIO0_20/FC5_RXD_SDA_MOSI/FC0_SCK/CTIMER3_CAP0, identifier: SPI_FLASH_MOSI}
   - {pin_num: '16', peripheral: FLEXCOMM5, signal: SSEL3, pin_signal: PIO1_2/MCLK/FC7_SSEL3/SCT0_OUT5/FC5_SSEL3/FC4_RXD_SDA_MOSI/ADC0_5}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */

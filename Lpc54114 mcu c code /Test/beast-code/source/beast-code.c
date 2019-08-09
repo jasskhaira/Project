@@ -29,9 +29,9 @@
 #define RM1 kCTIMER_Match_0			//  J2[17]
 
 
-#define DEMO_USART USART5
-#define DEMO_USART_IRQHandler FLEXCOMM5_IRQHandler
-#define DEMO_USART_IRQn FLEXCOMM5_IRQn
+#define DEMO_USART USART0
+#define DEMO_USART_IRQHandler FLEXCOMM0_IRQHandler
+#define DEMO_USART_IRQn FLEXCOMM0_IRQn
 
 
 /* Task priorities. */
@@ -74,39 +74,11 @@ int main(void)
 
 	CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);
 	SYSCON->ASYNCAPBCTRL = 1;
-	//CLOCK_AttachClk(kFRO12M_to_ASYNC_APB);
-
-	// ctimer_config_t config;
-	// uint32_t srcClock_Hz;
 
 
     BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
-
-
-   // srcClock_Hz = CLOCK_GetFreq(kCLOCK_BusClk);
-
-  //  CTIMER_GetDefaultConfig(&config);
-    //CTIMER_Init(CTIMER, &config);
-   // CTIMER_Init(CTIMER1, &config);
-   // CTIMER_SetupPwm(CTIMER,LM0,50,20000,srcClock_Hz,0);
-   // CTIMER_SetupPwm(CTIMER,LM1,50,20000,srcClock_Hz,0);
-
-
-
-   // CTIMER_SetupPwm(CTIMER,RM0,50,20000,srcClock_Hz,0);
-   // CTIMER_SetupPwm(CTIMER1,RM1,50,20000,srcClock_Hz,0);
-
-    //CTIMER_StartTimer(CTIMER);
-    //CTIMER_StartTimer(CTIMER1);
-
-
-   // CTIMER_UpdatePwmDutycycle(CTIMER,LM0,75);
-   // CTIMER_UpdatePwmDutycycle(CTIMER,LM1,75);
-
-    //CTIMER_UpdatePwmDutycycle(CTIMER,RM0,75);
-    //CTIMER_UpdatePwmDutycycle(CTIMER1,RM1,75);
 
     MotorsSetup();
 
