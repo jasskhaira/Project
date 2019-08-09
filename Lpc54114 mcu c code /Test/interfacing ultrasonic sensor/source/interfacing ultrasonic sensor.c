@@ -30,7 +30,8 @@
 
 
 
-static void Front_Ultrasonic_Task(void *pvParameters);
+
+//static void Front_Ultrasonic_Task(void *pvParameters);
 static void Rear_Ultrasonic_Task(void *pvParameters);
 
 
@@ -51,13 +52,13 @@ int main(void) {
 
 	 CTIMER_Init(CTIMER, &config);
 	 CTIMER_Init(CTIMER1, &config);
-	 if (xTaskCreate(Front_Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
+	/* if (xTaskCreate(Front_Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
 	                {
 	                    PRINTF("Task creation failed!.\r\n");
 	                    while (1)
 	                        ;
 	                }
-
+*/
 	 if (xTaskCreate(Rear_Ultrasonic_Task, "Ultrasonic_Task2", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
 		                {
 		                    PRINTF("Task creation failed!.\r\n");
@@ -72,7 +73,7 @@ int main(void) {
 
 
 }
-
+/*
 
 static void Front_Ultrasonic_Task(void *pvParameters)
 {
@@ -107,10 +108,11 @@ static void Front_Ultrasonic_Task(void *pvParameters)
 
 }
 
+*/
 
 static void Rear_Ultrasonic_Task(void *pvParameters)
 {
-	float Rear_time,Rear_distance;
+	float Rear_time,Rear_distance,Front_time,Front_distance;
 
 
     while(1)
@@ -135,6 +137,25 @@ static void Rear_Ultrasonic_Task(void *pvParameters)
 		printf("Rear Distance = %lf\n",Rear_distance);
 
 		CTIMER_Reset(CTIMER1);
+
+		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,1);
+		vTaskDelay(10);
+		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,0);
+
+		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==0);
+
+		CTIMER_StartTimer(CTIMER);
+
+		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==1);
+		CTIMER_StopTimer(CTIMER);
+
+		Front_time= CTIMER_GetTimerCountValue(CTIMER);
+
+		Front_distance =(0.0343*(Front_time/96))/2;
+
+		printf("Front Distance = %lf\n",Front_distance);
+
+		CTIMER_Reset(CTIMER);
 
 
 	}

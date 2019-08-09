@@ -48,8 +48,8 @@ void BOARD_InitBootPins(void);
  * @brief Select Analog/Digital mode.: Digital mode. */
 #define PIO020_DIGIMODE_DIGITAL 0x01u
 /*!
- * @brief Selects pin function.: Alternative connection 1. */
-#define PIO020_FUNC_ALT1 0x01u
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO020_FUNC_ALT0 0x00u
 /*!
  * @brief Select Analog/Digital mode.: Digital mode. */
 #define PIO07_DIGIMODE_DIGITAL 0x01u
@@ -58,10 +58,22 @@ void BOARD_InitBootPins(void);
 #define PIO07_FUNC_ALT3 0x03u
 /*!
  * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO111_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO111_FUNC_ALT0 0x00u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
 #define PIO112_DIGIMODE_DIGITAL 0x01u
 /*!
  * @brief Selects pin function.: Alternative connection 3. */
 #define PIO112_FUNC_ALT3 0x03u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO115_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO115_FUNC_ALT0 0x00u
 /*!
  * @brief Select Analog/Digital mode.: Digital mode. */
 #define PIO116_DIGIMODE_DIGITAL 0x01u
@@ -74,6 +86,40 @@ void BOARD_InitBootPins(void);
 /*!
  * @brief Selects pin function.: Alternative connection 6. */
 #define PIO14_FUNC_ALT6 0x06u
+/*!
+ * @brief Select Analog/Digital mode.: Digital mode. */
+#define PIO17_DIGIMODE_DIGITAL 0x01u
+/*!
+ * @brief Selects pin function.: Alternative connection 0. */
+#define PIO17_FUNC_ALT0 0x00u
+
+/*! @name PIO1_7 (number 27), J1[10]/P1_7-FC7_RXD_SDA_MOSI_DATA
+  @{ */
+#define BOARD_Front_trig_GPIO GPIO /*!<@brief GPIO device name: GPIO */
+#define BOARD_Front_trig_PORT 1U   /*!<@brief PORT device name: 1U */
+#define BOARD_Front_trig_PIN 7U    /*!<@brief 1U pin index: 7 */
+                                   /* @} */
+
+/*! @name PIO0_20 (number 60), J1[13]/U5[5]/P0_20-FC5_RXD_SDA_MOSI
+  @{ */
+#define BOARD_Front_echo_GPIO GPIO /*!<@brief GPIO device name: GPIO */
+#define BOARD_Front_echo_PORT 0U   /*!<@brief PORT device name: 0U */
+#define BOARD_Front_echo_PIN 20U   /*!<@brief 0U pin index: 20 */
+                                   /* @} */
+
+/*! @name PIO1_11 (number 42), J2[19]/P1_11-FC6_RTS_SSEL1-MAG_DRDY
+  @{ */
+#define BOARD_Rear_trig_GPIO GPIO /*!<@brief GPIO device name: GPIO */
+#define BOARD_Rear_trig_PORT 1U   /*!<@brief PORT device name: 1U */
+#define BOARD_Rear_trig_PIN 11U   /*!<@brief 1U pin index: 11 */
+                                  /* @} */
+
+/*! @name PIO1_15 (number 62), J1[17]/P1_15-SCTO5-FC7_CTS
+  @{ */
+#define BOARD_Rear_echo_GPIO GPIO /*!<@brief GPIO device name: GPIO */
+#define BOARD_Rear_echo_PORT 1U   /*!<@brief PORT device name: 1U */
+#define BOARD_Rear_echo_PIN 15U   /*!<@brief 1U pin index: 15 */
+                                  /* @} */
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

@@ -40,6 +40,9 @@
 
 static void uart_task(void *pvParameters);
 static void Drive_task(void *pvParameters);
+static void Ultrasonic_Task(void *pvParameters);
+
+
 
 void MotorsSetup();
 void Move();
@@ -99,6 +102,14 @@ int main(void)
                     while (1)
                         ;
                 }
+
+    if (xTaskCreate(Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
+    		                {
+    		                    PRINTF("Task creation failed!.\r\n");
+    		                    while (1)
+    		                        ;
+    		                }
+
 
          vTaskStartScheduler();
          for (;;)
@@ -189,6 +200,61 @@ static void uart_task(void *pvParameters)
 
 
 	  	}
+ }
+
+
+
+
+ static void Ultrasonic_Task(void *pvParameters)
+ {
+ 	float Rear_time,Rear_distance,Front_time,Front_distance;
+
+
+     while(1)
+
+
+ 	{
+ 		GPIO_PinWrite(BOARD_Rear_trig_GPIO,BOARD_Rear_trig_PORT,BOARD_Rear_trig_PIN,1);
+ 		vTaskDelay(10);
+ 		GPIO_PinWrite(BOARD_Rear_trig_GPIO,BOARD_Rear_trig_PORT,BOARD_Rear_trig_PIN,0);
+
+ 		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==0);
+
+ 		CTIMER_StartTimer(CTIMER2);
+
+ 		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==1);
+ 		CTIMER_StopTimer(CTIMER1);
+
+ 		Rear_time= CTIMER_GetTimerCountValue(CTIMER1);
+ 		Rear_time=Rear_time/96;
+ 		Rear_distance =(0.0343*Rear_time)/2;
+
+ 		printf("Rear Distance = %lf\n",Rear_distance);
+
+ 		CTIMER_Reset(CTIMER2);
+
+ 		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,1);
+ 		vTaskDelay(10);
+ 		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,0);
+
+ 		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==0);
+
+ 		CTIMER_StartTimer(CTIMER3);
+
+ 		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==1);
+ 		CTIMER_StopTimer(CTIMER);
+
+ 		Front_time= CTIMER_GetTimerCountValue(CTIMER);
+
+ 		Front_distance =(0.0343*(Front_time/96))/2;
+
+ 		printf("Front Distance = %lf\n",Front_distance);
+
+ 		CTIMER_Reset(CTIMER3);
+
+
+ 	}
+
  }
 
 
