@@ -87,10 +87,11 @@ public:
 	  if(read(file,&receive,100)>0)
 	  {
 		printf("data = %s\n",receive);
+		return 1;
 
 	  }
 
-	return 1;
+	return 0;
  }
 private:
  int file, count;

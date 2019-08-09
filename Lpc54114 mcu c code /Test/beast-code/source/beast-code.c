@@ -83,6 +83,7 @@ int main(void)
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
 
+
     MotorsSetup();
 
     queue1=xQueueCreate(1,sizeof(char));
@@ -220,18 +221,19 @@ static void uart_task(void *pvParameters)
 
  		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==0);
 
- 		CTIMER_StartTimer(CTIMER2);
+ 		CTIMER_StartTimer(CTIMER3);
 
  		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==1);
- 		CTIMER_StopTimer(CTIMER1);
+ 		CTIMER_StopTimer(CTIMER3);
 
- 		Rear_time= CTIMER_GetTimerCountValue(CTIMER1);
+ 		Rear_time= CTIMER_GetTimerCountValue(CTIMER3);
  		Rear_time=Rear_time/96;
  		Rear_distance =(0.0343*Rear_time)/2;
 
- 		printf("Rear Distance = %lf\n",Rear_distance);
+ 		//vTaskDelay(1000);
+ 		//printf("Rear Distance = %lf\n",Rear_distance);
 
- 		CTIMER_Reset(CTIMER2);
+ 		CTIMER_Reset(CTIMER3);
 
  		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,1);
  		vTaskDelay(10);
@@ -239,19 +241,30 @@ static void uart_task(void *pvParameters)
 
  		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==0);
 
- 		CTIMER_StartTimer(CTIMER3);
+ 		CTIMER_StartTimer(CTIMER2);
 
  		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==1);
- 		CTIMER_StopTimer(CTIMER);
+ 		CTIMER_StopTimer(CTIMER2);
 
- 		Front_time= CTIMER_GetTimerCountValue(CTIMER);
+ 		Front_time= CTIMER_GetTimerCountValue(CTIMER2);
 
  		Front_distance =(0.0343*(Front_time/96))/2;
 
- 		printf("Front Distance = %lf\n",Front_distance);
+ 		//vTaskDelay(1000);
+ 		//printf("Front Distance = %lf\n",Front_distance);
 
- 		CTIMER_Reset(CTIMER3);
+ 		CTIMER_Reset(CTIMER2);
 
+ 		if(Front_distance<5)
+ 		{
+
+
+ 		}
+ 		if(Rear_distance<5)
+ 		{
+
+
+ 		}
 
  	}
 
@@ -261,34 +274,35 @@ static void uart_task(void *pvParameters)
 
  void MotorsSetup()
  {
-		ctimer_config_t config;
-		 uint32_t srcClock_Hz;
-		 srcClock_Hz = CLOCK_GetFreq(kCLOCK_BusClk);
+			ctimer_config_t config;
+			uint32_t srcClock_Hz;
+			srcClock_Hz = CLOCK_GetFreq(kCLOCK_BusClk);
 
 
 
-	    CTIMER_GetDefaultConfig(&config);
+			CTIMER_GetDefaultConfig(&config);
 
 
-	    CTIMER_Init(CTIMER, &config);
-	    CTIMER_Init(CTIMER1, &config);
-	    CTIMER_SetupPwm(CTIMER,LM0,0,20000,srcClock_Hz,NULL);
-	    CTIMER_SetupPwm(CTIMER,LM1,0,20000,srcClock_Hz,NULL);
-	    CTIMER_SetupPwm(CTIMER,RM0,0,20000,srcClock_Hz,NULL);
-	    CTIMER_SetupPwm(CTIMER1,RM1,0,20000,srcClock_Hz,NULL);
-	    CTIMER_StartTimer(CTIMER);
-	    CTIMER_StartTimer(CTIMER1);
+			CTIMER_Init(CTIMER, &config);
+			CTIMER_Init(CTIMER1, &config);
+			CTIMER_Init(CTIMER2, &config);
+			CTIMER_Init(CTIMER3, &config);
+
+			CTIMER_SetupPwm(CTIMER,LM0,0,20000,srcClock_Hz,NULL);
+			CTIMER_SetupPwm(CTIMER,LM1,0,20000,srcClock_Hz,NULL);
+			CTIMER_SetupPwm(CTIMER,RM0,0,20000,srcClock_Hz,NULL);
+			CTIMER_SetupPwm(CTIMER1,RM1,0,20000,srcClock_Hz,NULL);
+			CTIMER_StartTimer(CTIMER);
+			CTIMER_StartTimer(CTIMER1);
  }
 
 
  void Move()
  {
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 80);
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-
-
- 	CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 80);
- 	CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 80);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 80);
+		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
 
 
  }
@@ -296,64 +310,62 @@ static void uart_task(void *pvParameters)
 
  void Turn_SlowLeft()
  {
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 75);
+	 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 75);
  		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-
-
  		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
  		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 75);
 
  }
+
+
  void Turn_SlowRight()
  {
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 40);
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-
-
- 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 40);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
  		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 40);
  }
+
+
  void Turn_Left()
  {
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-
-
- 	CTIMER_UpdatePwmDutycycle(CTIMER, RM0,100);
- 	CTIMER_UpdatePwmDutycycle(CTIMER1, RM1,0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0,100);
+		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1,0);
  }
+
+
+
  void Turn_Right()
+
  {
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 100);
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-
-
- 	CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
- 	CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 100);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
 
  }
 
  /* Api is used to stop the robot */
 
- void Stop(){
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0,0);
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM1,0);
-
-
- 	CTIMER_UpdatePwmDutycycle(CTIMER, RM0,0);
- 	CTIMER_UpdatePwmDutycycle(CTIMER1,RM1,0);
+ void Stop()
+ {
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0,0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM1,0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0,0);
+		CTIMER_UpdatePwmDutycycle(CTIMER1,RM1,0);
  }
 
 
 
- void Reverse(){
+ void Reverse()
+ {
 
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 100);
-
-
- 	CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
- 	CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 100);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 100);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 100);
 
  }
 
