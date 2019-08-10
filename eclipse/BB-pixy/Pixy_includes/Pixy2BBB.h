@@ -24,7 +24,7 @@ class Link2SPI
 {
 private:
 	// Choose SPI device from Beaglebone Black
-	const char *spi = "/dev/spidev2.0";
+	const char *spi = "/dev/spidev1.0";
 	uint8_t spiMode = 3, wordSize = 8;
 	uint32_t spiSpeed = 15000000;
 	int file = -1;

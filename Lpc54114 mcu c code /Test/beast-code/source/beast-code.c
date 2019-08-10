@@ -69,6 +69,9 @@ struct rtos_usart_config usart_config = {
 };
 
 xQueueHandle queue1= NULL;
+TaskHandle_t Uart_Task_Handle=NULL;
+TaskHandle_t Ultrasonic_Task_Handle=NULL;
+TaskHandle_t Drive_task_Handle=NULL;
 
 
 int main(void)
@@ -89,7 +92,7 @@ int main(void)
     queue1=xQueueCreate(1,sizeof(char));
 
 
-    if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, 2, NULL) != pdPASS)
+    if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, 2,&Uart_Task_Handle) != pdPASS)
          {
              PRINTF("Task creation failed!.\r\n");
              while (1)
@@ -97,14 +100,14 @@ int main(void)
          }
 
 
-    if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
+    if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL,2,&Ultrasonic_Task_Handle) != pdPASS)
                 {
                     PRINTF("Task creation failed!.\r\n");
                     while (1)
                         ;
                 }
 
-    if (xTaskCreate(Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,2, NULL) != pdPASS)
+    if (xTaskCreate(Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,2,&Drive_task_Handle) != pdPASS)
     		                {
     		                    PRINTF("Task creation failed!.\r\n");
     		                    while (1)
@@ -209,6 +212,7 @@ static void uart_task(void *pvParameters)
  static void Ultrasonic_Task(void *pvParameters)
  {
  	float Rear_time,Rear_distance,Front_time,Front_distance;
+ 	int spnd_stat;
 
 
      while(1)
@@ -255,16 +259,6 @@ static void uart_task(void *pvParameters)
 
  		CTIMER_Reset(CTIMER2);
 
- 		if(Front_distance<5)
- 		{
-
-
- 		}
- 		if(Rear_distance<5)
- 		{
-
-
- 		}
 
  	}
 
