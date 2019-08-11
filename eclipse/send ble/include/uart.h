@@ -77,8 +77,10 @@ public:
 
 	 if (read(file,receivebuff,2)>0)
 	 {
-		 return receivebuff[0];
+
+
 	   }
+	 return receivebuff[0];
 
  }
 

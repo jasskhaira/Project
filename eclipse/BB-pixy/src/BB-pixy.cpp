@@ -31,7 +31,7 @@ unsigned int newarea;
 int i=0;
 uint16_t blocks;
 
-unsigned char bt_data[100];
+unsigned char bt_data;
 
 
 int getpixydata()
@@ -94,18 +94,31 @@ int track(int tsig)
 int main()
 {
 
+	Uart lpc_link;
+	Uart Bluetooth;
 	pixy.init();
 
 	pixy.setLamp(1,1);
 
-	lpc_link.Init(Uart04,115200);
+	lpc_link.Init(UART04,115200);
+	Bluetooth.Init(UART01,9600);
 
 	while(1)
 	{
 
+		bt_data=Bluetooth.recieve();
+
+		if(bt_data=='g')
+		{
 		getpixydata();
 		track(1);
+		}
 
+		else if(bt_data=='S')
+		{
+			pixy.setLamp(0,0);
+			lpc_link.send("S");
+		}
 	}
 return 0;
 }

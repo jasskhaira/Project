@@ -22,12 +22,20 @@ int main(){
    tcsetattr(file, TCSANOW, &options);  //changes occur immmediately
 
 
-   unsigned char receive[100];
-   while (1){
+   unsigned char receive[0];
+   unsigned char rec;
+   while (1)
+   {
 
         //declare a buffer for receiving data
-   if(read(file, (void*)receive, 100)>0){
+   if((count=read(file,receive,2))>0)
+   {
       printf("The following was read in [%d]: %s\n",count,receive);
+      rec=receive[0];
+      if(rec=='M')
+      {
+      printf("data,%c\n",rec);
+      }
    }
 
    }

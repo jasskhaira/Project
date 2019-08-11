@@ -52,6 +52,8 @@ void Turn_Left();
 void Turn_Right();
 void Stop();
 void Reverse();
+float Front_Obstarcle();
+float Rear_Obstarcle();
 
 uint8_t background_buffer[32];
 uint8_t recv_buffer[1];
@@ -211,53 +213,17 @@ static void uart_task(void *pvParameters)
 
  static void Ultrasonic_Task(void *pvParameters)
  {
- 	float Rear_time,Rear_distance,Front_time,Front_distance;
- 	int spnd_stat;
+ 	float Front_obs,Rear_obs;
 
 
      while(1)
 
 
  	{
- 		GPIO_PinWrite(BOARD_Rear_trig_GPIO,BOARD_Rear_trig_PORT,BOARD_Rear_trig_PIN,1);
- 		vTaskDelay(10);
- 		GPIO_PinWrite(BOARD_Rear_trig_GPIO,BOARD_Rear_trig_PORT,BOARD_Rear_trig_PIN,0);
+       	 Front_obs=Front_Obstarcle();
+    	 Rear_obs=Rear_Obstarcle();
 
- 		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==0);
 
- 		CTIMER_StartTimer(CTIMER3);
-
- 		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==1);
- 		CTIMER_StopTimer(CTIMER3);
-
- 		Rear_time= CTIMER_GetTimerCountValue(CTIMER3);
- 		Rear_time=Rear_time/96;
- 		Rear_distance =(0.0343*Rear_time)/2;
-
- 		//vTaskDelay(1000);
- 		//printf("Rear Distance = %lf\n",Rear_distance);
-
- 		CTIMER_Reset(CTIMER3);
-
- 		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,1);
- 		vTaskDelay(10);
- 		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,0);
-
- 		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==0);
-
- 		CTIMER_StartTimer(CTIMER2);
-
- 		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==1);
- 		CTIMER_StopTimer(CTIMER2);
-
- 		Front_time= CTIMER_GetTimerCountValue(CTIMER2);
-
- 		Front_distance =(0.0343*(Front_time/96))/2;
-
- 		//vTaskDelay(1000);
- 		//printf("Front Distance = %lf\n",Front_distance);
-
- 		CTIMER_Reset(CTIMER2);
 
 
  	}
@@ -363,4 +329,52 @@ static void uart_task(void *pvParameters)
 
  }
 
+ float Front_Obstarcle()
+ {
 
+	 	float Front_time,Front_distance;
+		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,1);
+		vTaskDelay(10);
+		GPIO_PinWrite(BOARD_Front_trig_GPIO,BOARD_Front_trig_PORT,BOARD_Front_trig_PIN,0);
+
+		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==0);
+
+		CTIMER_StartTimer(CTIMER2);
+
+		while(GPIO_PinRead(BOARD_Front_echo_GPIO,BOARD_Front_echo_PORT,BOARD_Front_echo_PIN)==1);
+		CTIMER_StopTimer(CTIMER2);
+
+		Front_time= CTIMER_GetTimerCountValue(CTIMER2);
+
+		Front_distance =(0.0343*(Front_time/96))/2;
+
+		CTIMER_Reset(CTIMER2);
+
+		return Front_distance;
+
+ }
+
+
+ float Rear_Obstarcle()
+ {		float Rear_time,Rear_distance;
+
+		GPIO_PinWrite(BOARD_Rear_trig_GPIO,BOARD_Rear_trig_PORT,BOARD_Rear_trig_PIN,1);
+		vTaskDelay(10);
+		GPIO_PinWrite(BOARD_Rear_trig_GPIO,BOARD_Rear_trig_PORT,BOARD_Rear_trig_PIN,0);
+
+		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==0);
+
+		CTIMER_StartTimer(CTIMER3);
+
+		while(GPIO_PinRead(BOARD_Rear_echo_GPIO,BOARD_Rear_echo_PORT,BOARD_Rear_echo_PIN)==1);
+		CTIMER_StopTimer(CTIMER3);
+
+		Rear_time= CTIMER_GetTimerCountValue(CTIMER3);
+		Rear_time=Rear_time/96;
+		Rear_distance =(0.0343*Rear_time)/2;
+
+		CTIMER_Reset(CTIMER3);
+
+
+		return Rear_distance;
+ }

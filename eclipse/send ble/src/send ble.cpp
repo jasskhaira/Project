@@ -1,37 +1,27 @@
 
-
 #include<stdio.h>
-#include<fcntl.h>
-#include<unistd.h>
-#include<termios.h>   // using the termios.h library
+#include"uart.h"   // using the termios.h library
+
+Uart Bluetooth;
 
 int main(){
-   int file, count;
 
-   if ((file = open("/dev/ttyO4", O_RDWR | O_NOCTTY | O_NDELAY))<0){
-      perror("UART: Failed to open the file.\n");
-      return -1;
-   }
-   struct termios options;               //The termios structure is vital
-   tcgetattr(file, &options);            //Sets the parameters associated with file
+	Bluetooth.Init(UART04,9600);
+	Bluetooth.send("HELLO");
+	unsigned char data;
+	while(1)
+	{
+		//printf("sending\n");
+		//Bluetooth.send("H");
+		//usleep(1000);
 
-   // Set up the communications options:
-   //   9600 baud, 8-bit, enable receiver, no modem control lines
-   options.c_cflag = B115200 | CS8 | CREAD | CLOCAL;
-   options.c_iflag = IGNPAR | ICRNL;    //ignore partity errors, CR -> newline
-   tcflush(file, TCIFLUSH);             //discard file information not transmitted
-   tcsetattr(file, TCSANOW, &options);  //changes occur immmediately
+		data=Bluetooth.recieve();
 
-   unsigned char transmit[6]="hello";
-
-
-if ((count = write(file, &transmit,5))<0){        //send the string
-      perror("Failed to write to the output\n");
-      return -1;
-   }
-
-
-
-   close(file);
-   return 0;
+			if (data=='m')
+		{
+			printf("data%c\n",data);
+			data='k';
+		}}
 }
+
+
