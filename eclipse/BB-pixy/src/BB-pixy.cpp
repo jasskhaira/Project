@@ -30,8 +30,10 @@ unsigned int area;
 unsigned int newarea;
 int i=0;
 uint16_t blocks;
+int mySig,Sig_Status=0,Mode_Status=0;
 
-unsigned char bt_data;
+unsigned char bt_data,Mode,Color;
+
 
 
 int getpixydata()
@@ -103,22 +105,67 @@ int main()
 	lpc_link.Init(UART04,115200);
 	Bluetooth.Init(UART01,9600);
 
-	while(1)
+
+begining:
+	Mode_Status=0;
+	Sig_Status=0;
+	Bluetooth.send("Welcome\n");
+	usleep(10);
+	Bluetooth.send("Please Select the mode \n");
+	usleep(10);
+	Bluetooth.send("A for automatic and M for manual \n");
+	usleep(10);
+
+	while(Mode_Status==0)
 	{
+		while(Bluetooth.recieve(&Mode)!=1);
 
-		bt_data=Bluetooth.recieve();
-
-		if(bt_data=='g')
+		if(Mode=='A')
 		{
-		getpixydata();
-		track(1);
-		}
+			Bluetooth.send("Please Select the color to track \n");
+			usleep(10);
+			Bluetooth.send("Options- R for Red \n o for Orange");
+			usleep(10);
 
-		else if(bt_data=='S')
-		{
-			pixy.setLamp(0,0);
-			lpc_link.send("S");
-		}
+			while(Sig_Status==0)
+			{
+				while(Bluetooth.recieve(&Color)!=1);
+				switch (Color)
+				{
+				case 'R':	mySig=1;
+							Sig_Status=1;
+							break;
+
+				case 'Q':	goto begining;
+							break;
+
+
+				default: 	Bluetooth.send("Enter a valid argument");
+							Sig_Status=0;
+							break;
+
+					}
+				}
+			}
+
+			else if(Mode=='Q')
+			{
+				goto begining;
+			}
+
+			else
+			{
+				Bluetooth.send("Please Choose an valid option \n");
+			}
 	}
+
+	while(Mode=='A')
+	{
+		Bluetooth.recieve(&Mode);
+		getpixydata();
+		track(mySig);
+	}
+
+
 return 0;
 }

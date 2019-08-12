@@ -72,15 +72,15 @@ public:
 
 
 
- unsigned char recieve()
+int recieve(unsigned char *d)
   {
 
 	 if (read(file,receivebuff,2)>0)
 	 {
-
-
+		 *d=receivebuff[0];
+		 return 1;
 	   }
-	 return receivebuff[0];
+	 return 0;
 
  }
 

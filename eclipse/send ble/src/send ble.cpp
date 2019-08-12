@@ -15,12 +15,12 @@ int main(){
 		//Bluetooth.send("H");
 		//usleep(1000);
 
-		data=Bluetooth.recieve();
+		Bluetooth.recieve(&data);
 
 			if (data=='m')
 		{
 			printf("data%c\n",data);
-			data='k';
+			//data='k';
 		}}
 }
 
