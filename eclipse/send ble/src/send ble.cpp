@@ -6,7 +6,7 @@ Uart Bluetooth;
 
 int main(){
 
-	Bluetooth.Init(UART04,9600);
+	Bluetooth.Init(UART01,9600);
 	Bluetooth.send("HELLO");
 	unsigned char data;
 	while(1)

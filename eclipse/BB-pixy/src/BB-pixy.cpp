@@ -110,60 +110,69 @@ begining:
 	Mode_Status=0;
 	Sig_Status=0;
 	Bluetooth.send("Welcome\n");
-	usleep(10);
+	usleep(10000);
 	Bluetooth.send("Please Select the mode \n");
-	usleep(10);
+	usleep(10000);
 	Bluetooth.send("A for automatic and M for manual \n");
-	usleep(10);
-
+	usleep(10000);
+	pixy.setLamp(0,0);
 	while(Mode_Status==0)
 	{
 		while(Bluetooth.recieve(&Mode)!=1);
-
 		if(Mode=='A')
 		{
 			Bluetooth.send("Please Select the color to track \n");
-			usleep(10);
-			Bluetooth.send("Options- R for Red \n o for Orange");
-			usleep(10);
+			usleep(10000);
+			Bluetooth.send("Options- R for Red \n o for Orange\n");
+			usleep(10000);
 
 			while(Sig_Status==0)
 			{
 				while(Bluetooth.recieve(&Color)!=1);
-				switch (Color)
+				if(Color=='R')
 				{
-				case 'R':	mySig=1;
-							Sig_Status=1;
-							break;
+					mySig=1;
+					Sig_Status=1;
+				}
 
-				case 'Q':	goto begining;
-							break;
-
-
-				default: 	Bluetooth.send("Enter a valid argument");
-							Sig_Status=0;
-							break;
-
-					}
+				else if(Color=='Q')
+				{
+					goto begining;
+				}
+				else
+				{
+					Bluetooth.send("Enter a valid argument\n");
+					//Sig_Status=0;
 				}
 			}
 
-			else if(Mode=='Q')
+		}
+
+
+		else if(Mode=='Q')
 			{
 				goto begining;
 			}
 
-			else
+		else
 			{
 				Bluetooth.send("Please Choose an valid option \n");
 			}
+
+
 	}
 
+
+	Bluetooth.send("Tracking \n");
 	while(Mode=='A')
 	{
 		Bluetooth.recieve(&Mode);
 		getpixydata();
 		track(mySig);
+		if(Mode=='Q')
+		{
+			goto begining;
+		}
 	}
 
 

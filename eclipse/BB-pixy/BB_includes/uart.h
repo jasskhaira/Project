@@ -19,7 +19,7 @@
 #include<string.h>
 using namespace std;
 
-
+#define UART00 "/dev/ttyO0"
 #define UART01 "/dev/ttyO1"
 #define UART02 "/dev/ttyO2"
 #define UART03 "/dev/ttyO3"
@@ -46,7 +46,7 @@ public:
 
    // Set up the communications options:
    //   9600 baud, 8-bit, enable receiver, no modem control lines
-   options.c_cflag = B9600 | CS8 | CREAD | CLOCAL;
+   options.c_cflag = baudrate | CS8 | CREAD | CLOCAL;
    options.c_iflag = IGNPAR | ICRNL;    //ignore partity errors, CR -> newline
    tcflush(file, TCIFLUSH);             //discard file information not transmitted
    tcsetattr(file, TCSANOW, &options);  //changes occur immmediately
