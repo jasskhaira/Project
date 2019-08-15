@@ -39,10 +39,12 @@ static void uart_task(void *pvParameters);
 /*******************************************************************************
  * Code
  ******************************************************************************/
-const char *to_send             = "F \r\n";
+const char *to_send             = "FreeRTOS USART driver example!\r\n";
 const char *send_buffer_overrun = "\r\nRing buffer overrun!\r\n";
 uint8_t background_buffer[32];
-uint8_t recv_buffer[4];
+uint8_t r0,recv_buffer[1];
+
+
 
 usart_rtos_handle_t handle;
 struct _usart_handle t_handle;
@@ -103,10 +105,17 @@ static void uart_task(void *pvParameters)
 
     /* Receive user input and send it back to terminal. */
     do
-    {
+    { r0='B';
         error = USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);
+       // printf("%c\n",recv_buffer);
+        r0=recv_buffer[0];
+       // printf("%c\n",r0);
+
+
         if (error == kStatus_USART_RxRingBufferOverrun)
         {
+
+        	//memset(background_buffer, 0,32);
             /* Notify about hardware buffer overrun */
             if (kStatus_Success !=
                 USART_RTOS_Send(&handle, (uint8_t *)send_buffer_overrun, strlen(send_buffer_overrun)))
@@ -120,7 +129,7 @@ static void uart_task(void *pvParameters)
             USART_RTOS_Send(&handle, (uint8_t *)recv_buffer, n);
         }
     } while (kStatus_Success == error);
-
+    printf("or");
     USART_RTOS_Deinit(&handle);
     vTaskSuspend(NULL);
 }

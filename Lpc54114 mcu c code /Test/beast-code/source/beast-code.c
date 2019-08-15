@@ -55,7 +55,7 @@ void Reverse();
 float Front_Obstarcle();
 float Rear_Obstarcle();
 
-uint8_t background_buffer[32];
+uint8_t background_buffer[100];
 uint8_t recv_buffer[1];
 
 usart_rtos_handle_t handle;
@@ -63,7 +63,7 @@ struct _usart_handle t_handle;
 
 
 struct rtos_usart_config usart_config = {
-    .baudrate    = 115200,
+    .baudrate    = 9600,
     .parity      = kUSART_ParityDisabled,
     .stopbits    = kUSART_OneStopBit,
     .buffer      = background_buffer,
@@ -91,7 +91,7 @@ int main(void)
 
     MotorsSetup();
 
-    queue1=xQueueCreate(1,sizeof(char));
+    queue1=xQueueCreate(1,sizeof(uint8_t));
 
 
     if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, 2,&Uart_Task_Handle) != pdPASS)
@@ -128,7 +128,9 @@ int main(void)
 
 static void uart_task(void *pvParameters)
  {
-     char send;
+
+	int error;
+	uint8_t send;
      size_t n            = 0;
      usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
      usart_config.base   = DEMO_USART;
@@ -140,10 +142,18 @@ static void uart_task(void *pvParameters)
      /* Receive user input and send it back to terminal. */
      while(1)
      {
-         USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);
+         error=USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);
+         //printf("%c",recv_buffer);
+         if (error == kStatus_USART_RxRingBufferOverrun)
+                {
+        	 printf("Buffer overrun");
+
+                }
+
          if (n > 0)
          {
        		send=recv_buffer[0];
+       		//printf("%c",recv_buffer);
        		xQueueSend(queue1,&send,10);
          }
      }
@@ -154,52 +164,54 @@ static void uart_task(void *pvParameters)
 
  static void Drive_task(void *pvParameters)
  {
-	  char recv;
+	 uint8_t recv;
 
 	  	while(1){
 	  		xQueueReceive(queue1,&recv,10);
 	  		if(recv=='M')
 	  		{
 	  			Move();
-	  			printf("moving\n");
+	  			//printf("moving\n");
 	  			recv='n';
 	  		}
 	  		else if(recv=='L')
 	  		{
 	  			Turn_Left();
-	  			printf("left\n");
+	  			//printf("left\n");
 	  			recv='n';
 	  		}
 	  		else if(recv=='R')
 	  		{
 	  			Turn_Right();
-	  			printf("right\n");
+	  			//printf("right\n");
 	  			recv='n';
 	  		}
 	  		else if(recv=='S')
 	  		{
 	  			Stop();
-	  			printf("stop");
+	  			//printf("stop");
 	  			recv='n';
 
 	  		}
 	  		else if(recv=='B')
 	  		{
+	  			Stop();
+	  			vTaskDelay(10);
 	  			 Reverse();
-	  			 printf("reverse\n");
+	  			// printf("reverse\n");
 	  			recv='n';
 	  		}
 
 	  		else if(recv=='A')
 	  		{
 	  			Turn_SlowLeft();
-	  			 printf("reverse\n");
+	  			// printf("reverse\n");
 	  			 recv='n';
 	  			  		}
 	  		else if(recv=='B')
 	  		{
 	  			Turn_SlowRight();
-	 			 printf("reverse\n");
+	 			// printf("reverse\n");
 	  			 recv='n';
 	  		}
 
@@ -222,6 +234,38 @@ static void uart_task(void *pvParameters)
  	{
        	 Front_obs=Front_Obstarcle();
     	 Rear_obs=Rear_Obstarcle();
+    	 if(Front_obs<8)
+    	 {	Stop();
+    		 vTaskSuspend(Uart_Task_Handle);
+    		 //vTaskSuspend(Drive_task_Handle);
+
+    		 Reverse();
+    		 vTaskDelay(100);
+    		 Turn_Left();
+    		 vTaskDelay(100);
+    		 Turn_Right();
+    		 vTaskDelay(100);
+    		 Stop();
+    		 vTaskResume(Uart_Task_Handle);
+    		// vTaskResume(Drive_task_Handle);
+    		}
+
+    	 if(Rear_obs<8)
+    	 {	Stop();
+    		 vTaskSuspend(Uart_Task_Handle);
+    		 //vTaskSuspend(Drive_task_Handle);
+
+    		 Move();
+    		 vTaskDelay(100);
+    		 Turn_Left();
+    		 vTaskDelay(100);
+    		 Turn_Right();
+    		 vTaskDelay(100);
+    		 Stop();
+    		 vTaskResume(Uart_Task_Handle);
+    		// vTaskResume(Drive_task_Handle);
+    		}
+
 
 
 
@@ -260,9 +304,9 @@ static void uart_task(void *pvParameters)
 
  void Move()
  {
-		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 80);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 90);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 80);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 90);
 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
 
 
@@ -271,10 +315,10 @@ static void uart_task(void *pvParameters)
 
  void Turn_SlowLeft()
  {
-	 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 75);
+	 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 40);
  		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
  		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
- 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 75);
+ 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 40);
 
  }
 
@@ -292,7 +336,7 @@ static void uart_task(void *pvParameters)
  {
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER, RM0,100);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0,90);
 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1,0);
  }
 
@@ -301,7 +345,7 @@ static void uart_task(void *pvParameters)
  void Turn_Right()
 
  {
-		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 100);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 90);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
@@ -322,11 +366,10 @@ static void uart_task(void *pvParameters)
 
  void Reverse()
  {
-
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 100);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 90);
 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 100);
+		CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 90);
 
  }
 

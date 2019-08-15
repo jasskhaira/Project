@@ -4,24 +4,35 @@
 
 Uart Bluetooth;
 
-int main(){
 
-	Bluetooth.Init(UART01,9600);
-	Bluetooth.send("HELLO");
+int main()
+{
+
+	Bluetooth.Init(UART04,115200);
+	//Bluetooth.send("HELLO");
 	unsigned char data;
-	while(1)
-	{
-		//printf("sending\n");
-		//Bluetooth.send("H");
-		//usleep(1000);
 
-		Bluetooth.recieve(&data);
 
-			if (data=='m')
-		{
-			printf("data%c\n",data);
-			//data='k';
-		}}
+while(1){
+		Bluetooth.send("L");
+		printf("L\n");
+		usleep(600000);
+		Bluetooth.send("R");
+		printf("R\n");
+		usleep(600000);
+		Bluetooth.send("B");
+		printf("B\n");
+		usleep(1000000);
+		Bluetooth.send("M");
+		printf("M\n");
+		usleep(1000000);
+		Bluetooth.send("S");
+		printf("S\n");
+		usleep(1000000);
+		//Bluetooth.send("L");
+		//usleep(300000);
+		//usleep(10000000);
+		printf("sending\n");
 }
-
+}
 
