@@ -54,6 +54,7 @@ void Stop();
 void Reverse();
 float Front_Obstarcle();
 float Rear_Obstarcle();
+void Search();
 
 uint8_t background_buffer[100];
 uint8_t recv_buffer[1];
@@ -202,24 +203,29 @@ static void uart_task(void *pvParameters)
 	  			recv='n';
 	  		}
 
-	  		else if(recv=='A')
+	  		else if(recv=='l')
 	  		{
 	  			Turn_SlowLeft();
 	  			// printf("reverse\n");
 	  			 recv='n';
 	  			  		}
-	  		else if(recv=='B')
+	  		else if(recv=='r')
 	  		{
 	  			Turn_SlowRight();
 	 			// printf("reverse\n");
 	  			 recv='n';
 	  		}
-
+	  		else if(recv=='F')
+	  		{
+	  		Search();
+	  		vTaskDelay(100);
+	  		Move();
+	  		vTaskDelay(800);
 
 
 	  	}
  }
-
+ }
 
 
 
@@ -373,6 +379,14 @@ static void uart_task(void *pvParameters)
 
  }
 
+ void Search()
+ {
+	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
+	 CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 60);
+	 CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 60);
+	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 0);
+
+ }
  float Front_Obstarcle()
  {
 

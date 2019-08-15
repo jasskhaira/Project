@@ -32,7 +32,7 @@ int i=0;
 //uint16_t blocks;
 int mySig,Sig_Status=0,Mode_Status=0;
 int p;
-unsigned char bt_data,Mode='n',Color='n',Manual_inst,j;
+unsigned char bt_data,Mode='n',Color='n',Manual_inst,j,Track_Mode=1,Find;
 
 
 
@@ -40,64 +40,70 @@ int Track(char tsig)
 {
 
 	   pixy.ccc.getBlocks();  //receive data from pixy
-	  if(pixy.ccc.numBlocks)
-	  {
-		  sig = pixy.ccc.blocks[i].m_signature;    //get object's signature
-		  x = pixy.ccc.blocks[i].m_x;                    //get x position
-		  y = pixy.ccc.blocks[i].m_y;                    //get y position
-		  width = pixy.ccc.blocks[i].m_width;            //get width
-		  height = pixy.ccc.blocks[i].m_height;          //get height
-		  printf("sig = %d    x= %d y= %d  width = %d height= %d \n  area=%d",sig,x,y,width,height,width*height);
+
+		   if(pixy.ccc.numBlocks)
+		  {
+			   if(Find==1)
+			   {
+				   lpc_link.send("S");
+				   Find=0;
+			   }
+			  sig = pixy.ccc.blocks[i].m_signature;    //get object's signature
+			  x = pixy.ccc.blocks[i].m_x;                    //get x position
+			  y = pixy.ccc.blocks[i].m_y;                    //get y position
+			  width = pixy.ccc.blocks[i].m_width;            //get width
+			  height = pixy.ccc.blocks[i].m_height;          //get height
+			  printf("sig = %d    x= %d y= %d  width = %d height= %d \n  area=%d",sig,x,y,width,height,width*height);
 
 
 
-		  if(sig==tsig){
-		  		newarea= width * height;
+			  if(sig==tsig)
+			  {
+					newarea= width * height;
 
-		  		if(x<x_min)
-		  		{
-		  			lpc_link.send("L");
-		  			printf("Left\n");
-		  			usleep(300000);
+					if(x<x_min)
+					{
+						lpc_link.send("L");
+						//printf("Left\n");
+						usleep(300000);
 
-		  		}
-		  		if(x>x_max)
-		  		{
-		  			lpc_link.send("R");
-		  			printf("Right\n");
-		  			usleep(300000);
-		  		}
-		  		else if(newarea>minArea)
-		  		{
-		  			lpc_link.send("M");
-		  			printf("move\n");
-		  			usleep(300000);
-		  		}
-		  		else if (newarea>maxArea)
-		  		{
-		  			lpc_link.send("B");
-		  			printf("back\n");
-		  			usleep(300000);
-		  		}
+					}
+					if(x>x_max)
+					{
+						lpc_link.send("R");
+						//printf("Right\n");
+						usleep(300000);
+					}
+					else if(newarea>minArea)
+					{
+						lpc_link.send("M");
+						//printf("move\n");
+						usleep(300000);
+					}
+					else if (newarea>maxArea)
+					{
+						lpc_link.send("B");
+						//printf("back\n");
+						usleep(300000);
+					}
 
-		     else
-		  	{
-		  		lpc_link.send("S");
-		  	//	printf("stop\n");
-		  		usleep(300000);
-		  	}
+				 else
+				{
+					lpc_link.send("S");
+				//	printf("stop\n");
+					usleep(300000);
+				}
 
 
 	 	  }}
 	  else
 	  {
-		  lpc_link.send("S");
+		  lpc_link.send("F");
 		  usleep(300000);
+		  Find=1;
 	  }
 
-
-
-	  	  return 0;
+	return 0;
 }
 
 
