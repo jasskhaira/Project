@@ -217,10 +217,15 @@ static void uart_task(void *pvParameters)
 	  		}
 	  		else if(recv=='F')
 	  		{
-	  		Search();
-	  		vTaskDelay(100);
+
+
+	  			Search();
+	  		vTaskDelay(600);
+	  		Stop();
+	  		vTaskDelay(10);
 	  		Move();
 	  		vTaskDelay(800);
+	  		 printf("reverse\n");
 
 
 	  	}
@@ -246,11 +251,11 @@ static void uart_task(void *pvParameters)
     		 //vTaskSuspend(Drive_task_Handle);
 
     		 Reverse();
-    		 vTaskDelay(100);
+    		 vTaskDelay(300);
     		 Turn_Left();
-    		 vTaskDelay(100);
+    		 vTaskDelay(300);
     		 Turn_Right();
-    		 vTaskDelay(100);
+    		 vTaskDelay(300);
     		 Stop();
     		 vTaskResume(Uart_Task_Handle);
     		// vTaskResume(Drive_task_Handle);
@@ -262,11 +267,11 @@ static void uart_task(void *pvParameters)
     		 //vTaskSuspend(Drive_task_Handle);
 
     		 Move();
-    		 vTaskDelay(100);
+    		 vTaskDelay(300);
     		 Turn_Left();
-    		 vTaskDelay(100);
+    		 vTaskDelay(300);
     		 Turn_Right();
-    		 vTaskDelay(100);
+    		 vTaskDelay(300);
     		 Stop();
     		 vTaskResume(Uart_Task_Handle);
     		// vTaskResume(Drive_task_Handle);
@@ -381,10 +386,10 @@ static void uart_task(void *pvParameters)
 
  void Search()
  {
-	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
-	 CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 60);
-	 CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 60);
-	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 0);
+	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 75);
+	 CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+	 CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
+	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 75);
 
  }
  float Front_Obstarcle()

@@ -175,7 +175,7 @@ begining:
 			while(1)
 			{
 				Bluetooth.recieve(&Manual_inst);
-				if(Manual_inst=='F')
+				if(Manual_inst=='M')
 				{
 					lpc_link.send("M");
 					usleep(300000);
@@ -202,6 +202,11 @@ begining:
 					lpc_link.send("S");
 					usleep(300000);
 				}
+				else if(Manual_inst=='F')
+				{
+					lpc_link.send("F");
+					usleep(300000);
+								}
 				else if(Manual_inst=='Q')
 				{
 					goto begining;
