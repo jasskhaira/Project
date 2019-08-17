@@ -120,6 +120,7 @@ int main()
 begining:
 	Mode_Status=0;
 	Sig_Status=0;
+	lpc_link.send("S");
 	Bluetooth.send("Welcome\n");
 	usleep(900000);
 	Bluetooth.send("Please Select the mode \n");
@@ -238,6 +239,7 @@ begining:
 		if(j=='Q')
 		{
 			lpc_link.send("S");
+			usleep(30000);
 			goto begining;
 		}
 

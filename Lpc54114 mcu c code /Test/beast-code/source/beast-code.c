@@ -41,6 +41,7 @@
 static void uart_task(void *pvParameters);
 static void Drive_task(void *pvParameters);
 static void Ultrasonic_Task(void *pvParameters);
+static void Object_Search();
 
 
 
@@ -55,6 +56,8 @@ void Reverse();
 float Front_Obstarcle();
 float Rear_Obstarcle();
 void Search();
+void Circle();
+
 
 uint8_t background_buffer[100];
 uint8_t recv_buffer[1];
@@ -75,6 +78,7 @@ xQueueHandle queue1= NULL;
 TaskHandle_t Uart_Task_Handle=NULL;
 TaskHandle_t Ultrasonic_Task_Handle=NULL;
 TaskHandle_t Drive_task_Handle=NULL;
+TaskHandle_t Object_Search=NULL;
 
 
 int main(void)
@@ -118,6 +122,7 @@ int main(void)
     		                }
 
 
+
          vTaskStartScheduler();
          for (;;)
              ;
@@ -151,11 +156,36 @@ static void uart_task(void *pvParameters)
 
                 }
 
+
          if (n > 0)
          {
        		send=recv_buffer[0];
+       		if(send=='F')
+       		{
+       			vTaskSuspend(Drive_task_Handle);
+       		   if (xTaskCreate(Object_Search, "Object_Search", configMINIMAL_STACK_SIZE + 10, NULL,2,&Object_Search) != pdPASS)
+       		   {
+       			   PRINTF("Task creation failed!.\r\n");
+       			   while (1);
+
+       	      }
+       		  if(send=='G')
+       		  {
+       			vTaskDelete(Object_Search);
+       			vTaskResume(Drive_task_Handle);
+
+
+       		  }
+       			  }
+
+       		   else
+       		   {
+       			xQueueSend(queue1,&send,10);
+       		   }
+
+
+
        		//printf("%c",recv_buffer);
-       		xQueueSend(queue1,&send,10);
          }
      }
 
@@ -215,21 +245,17 @@ static void uart_task(void *pvParameters)
 	 			// printf("reverse\n");
 	  			 recv='n';
 	  		}
-	  		else if(recv=='F')
+	  	/*	else if(recv=='F')
 	  		{
 
 
-	  			Search();
-	  		vTaskDelay(600);
-	  		Stop();
-	  		vTaskDelay(10);
-	  		Move();
-	  		vTaskDelay(800);
-	  		 printf("reverse\n");
-
-
-	  	}
- }
+	  		 	Circle();
+	  		 	Move();
+	  		 	vTaskDelay(300);
+	  		 	Search();
+	  		// printf("reverse\n");
+	  		}*/
+	  		}
  }
 
 
@@ -251,11 +277,11 @@ static void uart_task(void *pvParameters)
     		 //vTaskSuspend(Drive_task_Handle);
 
     		 Reverse();
-    		 vTaskDelay(300);
+    		 vTaskDelay(400);
     		 Turn_Left();
-    		 vTaskDelay(300);
+    		 vTaskDelay(400);
     		 Turn_Right();
-    		 vTaskDelay(300);
+    		 vTaskDelay(400);
     		 Stop();
     		 vTaskResume(Uart_Task_Handle);
     		// vTaskResume(Drive_task_Handle);
@@ -267,11 +293,11 @@ static void uart_task(void *pvParameters)
     		 //vTaskSuspend(Drive_task_Handle);
 
     		 Move();
-    		 vTaskDelay(300);
+    		 vTaskDelay(400);
     		 Turn_Left();
-    		 vTaskDelay(300);
+    		 vTaskDelay(400);
     		 Turn_Right();
-    		 vTaskDelay(300);
+    		 vTaskDelay(400);
     		 Stop();
     		 vTaskResume(Uart_Task_Handle);
     		// vTaskResume(Drive_task_Handle);
@@ -285,6 +311,21 @@ static void uart_task(void *pvParameters)
  	}
 
  }
+
+
+ static void Object_Search()
+ {
+ 	while(1)
+ 	{
+ 	Circle();
+ 	Move();
+ 	vTaskDelay(300);
+ 	Search();
+ 	}
+ }
+
+
+
 
 
 
@@ -359,7 +400,7 @@ static void uart_task(void *pvParameters)
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 90);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1,0);
 
  }
 
@@ -378,20 +419,37 @@ static void uart_task(void *pvParameters)
  void Reverse()
  {
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 90);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 80);
 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 90);
+		CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 80);
 
  }
+
+
 
  void Search()
  {
-	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 75);
-	 CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-	 CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
-	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 75);
+ 	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 75);
+ 	 CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+ 	 CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
+ 	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 75);
+ 	 vTaskDelay(750);
 
  }
+
+ void Circle()
+ {
+ 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 85);
+ 	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
+ 	CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 70);
+ 	CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 0);
+ 	vTaskDelay(1000);
+
+ }
+
+
+
+
  float Front_Obstarcle()
  {
 
