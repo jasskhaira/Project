@@ -74,11 +74,12 @@ struct rtos_usart_config usart_config = {
     .buffer_size = sizeof(background_buffer),
 };
 
+xQueueHandle Obj_track= NULL;
 xQueueHandle queue1= NULL;
 TaskHandle_t Uart_Task_Handle=NULL;
 TaskHandle_t Ultrasonic_Task_Handle=NULL;
 TaskHandle_t Drive_task_Handle=NULL;
-TaskHandle_t Object_Search=NULL;
+TaskHandle_t Object_Search_Handle=NULL;
 
 
 int main(void)
@@ -97,9 +98,11 @@ int main(void)
     MotorsSetup();
 
     queue1=xQueueCreate(1,sizeof(uint8_t));
+    Obj_track=xQueueCreate(1,sizeof(uint8_t));
 
 
-    if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, 2,&Uart_Task_Handle) != pdPASS)
+    if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, 3
+    		,&Uart_Task_Handle) != pdPASS)
          {
              PRINTF("Task creation failed!.\r\n");
              while (1)
@@ -107,19 +110,26 @@ int main(void)
          }
 
 
-    if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL,2,&Ultrasonic_Task_Handle) != pdPASS)
+    if (xTaskCreate(Drive_task, "Robot_driving_task", configMINIMAL_STACK_SIZE + 10, NULL,2,&Drive_task_Handle) != pdPASS)
                 {
                     PRINTF("Task creation failed!.\r\n");
                     while (1)
                         ;
                 }
 
-    if (xTaskCreate(Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,2,&Drive_task_Handle) != pdPASS)
+    if (xTaskCreate(Ultrasonic_Task, "Ultrasonic_Task", configMINIMAL_STACK_SIZE + 10, NULL,4,&Ultrasonic_Task_Handle) != pdPASS)
     		                {
     		                    PRINTF("Task creation failed!.\r\n");
     		                    while (1)
     		                        ;
     		                }
+    if (xTaskCreate(Object_Search, "Object_Search", configMINIMAL_STACK_SIZE + 10, NULL,0,&Object_Search_Handle) != pdPASS)
+          		   {
+          			   PRINTF("Task creation failed!.\r\n");
+          			   while (1);
+
+
+          	      }
 
 
 
@@ -135,13 +145,16 @@ int main(void)
 static void uart_task(void *pvParameters)
  {
 
-	int error;
-	uint8_t send;
+	vTaskSuspend(Object_Search_Handle);
+	int error,status=0;
+	uint8_t send,send1,data;
      size_t n            = 0;
      usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
      usart_config.base   = DEMO_USART;
 
      NVIC_SetPriority(DEMO_USART_IRQn, USART_NVIC_PRIO);
+
+
 
      USART_RTOS_Init(&handle, &t_handle, &usart_config);
 
@@ -159,27 +172,35 @@ static void uart_task(void *pvParameters)
 
          if (n > 0)
          {
-       		send=recv_buffer[0];
+        	 send=recv_buffer[0];
        		if(send=='F')
        		{
+       			//send1=recv_buffer[0];
+       			if(status==0){
        			vTaskSuspend(Drive_task_Handle);
-       		   if (xTaskCreate(Object_Search, "Object_Search", configMINIMAL_STACK_SIZE + 10, NULL,2,&Object_Search) != pdPASS)
-       		   {
-       			   PRINTF("Task creation failed!.\r\n");
-       			   while (1);
+       			vTaskResume(Object_Search_Handle);
+       			}
+       			xQueueSend(Obj_track,&send,10);
 
-       	      }
-       		  if(send=='G')
+
+       		}
+       		 else if(send=='S')
        		  {
-       			vTaskDelete(Object_Search);
-       			vTaskResume(Drive_task_Handle);
-
+       			 Stop();
 
        		  }
+
+       		  else
+       		   {
+       			  if(status=1)
+       			  {
+       				vTaskSuspend(Object_Search_Handle);
+       				  vTaskResume(Drive_task_Handle);
+
+       				  status=0;
+
        			  }
 
-       		   else
-       		   {
        			xQueueSend(queue1,&send,10);
        		   }
 
@@ -245,16 +266,11 @@ static void uart_task(void *pvParameters)
 	 			// printf("reverse\n");
 	  			 recv='n';
 	  		}
-	  	/*	else if(recv=='F')
+	  		else if(recv=='F')
 	  		{
-
-
-	  		 	Circle();
-	  		 	Move();
-	  		 	vTaskDelay(300);
-	  		 	Search();
-	  		// printf("reverse\n");
-	  		}*/
+	  			xQueueSend(Obj_track,&recv,10);
+	  			recv='n';
+	  		}
 	  		}
  }
 
@@ -273,8 +289,8 @@ static void uart_task(void *pvParameters)
     	 Rear_obs=Rear_Obstarcle();
     	 if(Front_obs<8)
     	 {	Stop();
-    		 vTaskSuspend(Uart_Task_Handle);
-    		 //vTaskSuspend(Drive_task_Handle);
+    		 vTaskSuspend(Drive_task_Handle);
+    		 vTaskSuspend(Object_Search_Handle);
 
     		 Reverse();
     		 vTaskDelay(400);
@@ -283,14 +299,14 @@ static void uart_task(void *pvParameters)
     		 Turn_Right();
     		 vTaskDelay(400);
     		 Stop();
-    		 vTaskResume(Uart_Task_Handle);
-    		// vTaskResume(Drive_task_Handle);
+    		 vTaskResume(Drive_task_Handle);
+    		 vTaskResume(Object_Search_Handle);
     		}
 
     	 if(Rear_obs<8)
     	 {	Stop();
     		 vTaskSuspend(Uart_Task_Handle);
-    		 //vTaskSuspend(Drive_task_Handle);
+    		 vTaskSuspend(Object_Search_Handle);
 
     		 Move();
     		 vTaskDelay(400);
@@ -300,7 +316,7 @@ static void uart_task(void *pvParameters)
     		 vTaskDelay(400);
     		 Stop();
     		 vTaskResume(Uart_Task_Handle);
-    		// vTaskResume(Drive_task_Handle);
+    		 vTaskResume(Object_Search_Handle);
     		}
 
 
@@ -313,16 +329,23 @@ static void uart_task(void *pvParameters)
  }
 
 
- static void Object_Search()
+ static void Object_Search(void *pvParameters)
  {
+	 uint8_t Obj_recv;
  	while(1)
+ 	{
+ 	xQueueReceive(Obj_track,&Obj_recv,10);
+ 	if(Obj_recv=='F')
  	{
  	Circle();
  	Move();
  	vTaskDelay(300);
  	Search();
+ 	Stop();
+
+ 	Obj_recv='n';
  	}
- }
+ }}
 
 
 
@@ -429,17 +452,17 @@ static void uart_task(void *pvParameters)
 
  void Search()
  {
- 	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 75);
+ 	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 70);
  	 CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
  	 CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
- 	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 75);
+ 	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 70);
  	 vTaskDelay(750);
 
  }
 
  void Circle()
  {
- 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 85);
+ 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 90);
  	CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
  	CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 70);
  	CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 0);
