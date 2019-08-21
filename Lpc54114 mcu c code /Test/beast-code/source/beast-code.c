@@ -223,7 +223,7 @@ static void uart_task(void *pvParameters)
 	  		xQueueReceive(queue1,&recv,10);
 	  		if(recv=='M')
 	  		{
-	  			Move();
+	  			Move(90);
 	  			//printf("moving\n");
 	  			recv='n';
 	  		}
@@ -249,7 +249,7 @@ static void uart_task(void *pvParameters)
 	  		else if(recv=='B')
 	  		{
 	  			Stop();
-	  			vTaskDelay(10);
+	  			vTaskDelay(5);
 	  			 Reverse();
 	  			// printf("reverse\n");
 	  			recv='n';
@@ -313,7 +313,7 @@ static void uart_task(void *pvParameters)
     		 vTaskSuspend(Object_Search_Handle);
     		 vTaskResume(Drive_task_Handle);
     		 vTaskDelay(5);
-    		 Move();
+    		 Move(90);
     		 vTaskDelay(150);
     		// Turn_Left();
     		 //vTaskDelay(200);
@@ -346,7 +346,7 @@ static void uart_task(void *pvParameters)
  	if(Obj_recv=='F')
  	{
  	Circle();
- 	Move();
+ 	Move(75);
  	vTaskDelay(300);
  	Search();
  	Stop();
@@ -385,12 +385,12 @@ static void uart_task(void *pvParameters)
  }
 
 
- void Move()
+ void Move(int speed)
  {
-		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 90);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, speed);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 90);
-		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
+		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, speed);
 
 
  }

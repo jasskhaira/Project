@@ -22,8 +22,8 @@ int y;
 int sig;
 int x_min=70;
 int x_max=200;
-int maxArea=10000;
-int minArea=1000;
+unsigned int maxArea=10000;
+unsigned int minArea=1000;
 unsigned int width;
 unsigned int height;
 unsigned int area;
@@ -53,7 +53,7 @@ int Track(char tsig)
 			  y = pixy.ccc.blocks[i].m_y;                    //get y position
 			  width = pixy.ccc.blocks[i].m_width;            //get width
 			  height = pixy.ccc.blocks[i].m_height;          //get height
-			  printf("sig = %d    x= %d y= %d  width = %d height= %d \n  area=%d",sig,x,y,width,height,width*height);
+			//  printf("sig = %d    x= %d y= %d  width = %d height= %d \n  area=%d",sig,x,y,width,height,width*height);
 
 
 
@@ -62,40 +62,55 @@ int Track(char tsig)
 					newarea= width * height;
 
 					printf("newarea %d\n",newarea);
-					if(x<x_min)
+
+					if(x<x_min && newarea<3000)
 					{
 						lpc_link.send("L");
 						//printf("Left\n");
 						usleep(200000);
 
 					}
-				   if(x>x_max)
+
+					if(x<x_min && newarea>3000)
+					{
+					  lpc_link.send("l");
+					//  printf("Left slow\n");
+					  usleep(200000);
+					}
+
+				   if(x>x_max && newarea<3000)
 					{
 						lpc_link.send("R");
 						//printf("Right\n");
 						usleep(200000);
 					}
-				  if(newarea<5000)
+
+
+				   if(x>x_max && newarea>3000)
+					{
+						lpc_link.send("r");
+						//printf("Right slow\n");
+						usleep(200000);
+					}
+
+				   if(newarea<5000)
 					{
 						lpc_link.send("M");
-						printf("move\n");
+						//printf("move\n");
 						usleep(200000);
 					}
 				  else if (newarea>maxArea)
 					{
 						lpc_link.send("B");
-						printf("back\n");
+						//printf("back\n");
 						usleep(200000);
 					}
-
 				 else
 				{
 					lpc_link.send("S");
-					printf("stop\n");
+					//printf("stop\n");
 					usleep(300000);
 				}
-
-
 	 	  }}
 	  else
 	  {
@@ -119,6 +134,7 @@ int main()
 
 
 begining:
+	pixy.setLamp(1,1);
 	Mode_Status=0;
 	Sig_Status=0;
 	lpc_link.send("S");
@@ -128,7 +144,7 @@ begining:
 	usleep(900000);
 	Bluetooth.send("A for automatic and M for manual \n");
 	usleep(100000);
-
+	pixy.setLamp(0,0);
 
 	while(Mode_Status==0)
 	{
@@ -141,7 +157,7 @@ begining:
 		{
 			Bluetooth.send("Please Select the color to track \n");
 			usleep(900000);
-			Bluetooth.send("Options- R for Red \n O for Orange\n");
+			Bluetooth.send("Options- B for Red \n O for Orange\n");
 			usleep(900000);
 
 			while(Sig_Status==0)
