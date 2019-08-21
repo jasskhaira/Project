@@ -23,7 +23,7 @@ int sig;
 int x_min=70;
 int x_max=200;
 int maxArea=10000;
-int minArea=624;
+int minArea=1000;
 unsigned int width;
 unsigned int height;
 unsigned int area;
@@ -61,36 +61,37 @@ int Track(char tsig)
 			  {
 					newarea= width * height;
 
+					printf("newarea %d\n",newarea);
 					if(x<x_min)
 					{
 						lpc_link.send("L");
 						//printf("Left\n");
-						usleep(300000);
+						usleep(200000);
 
 					}
-					if(x>x_max)
+				   if(x>x_max)
 					{
 						lpc_link.send("R");
 						//printf("Right\n");
-						usleep(300000);
+						usleep(200000);
 					}
-					else if(newarea>minArea)
+				  if(newarea<5000)
 					{
 						lpc_link.send("M");
-						//printf("move\n");
-						usleep(300000);
+						printf("move\n");
+						usleep(200000);
 					}
-					else if (newarea>maxArea)
+				  else if (newarea>maxArea)
 					{
 						lpc_link.send("B");
-						//printf("back\n");
-						usleep(300000);
+						printf("back\n");
+						usleep(200000);
 					}
 
 				 else
 				{
 					lpc_link.send("S");
-				//	printf("stop\n");
+					printf("stop\n");
 					usleep(300000);
 				}
 
@@ -179,39 +180,40 @@ begining:
 				if(Manual_inst=='M')
 				{
 					lpc_link.send("M");
-					usleep(300000);
+					usleep(400000);
 					//printf("ffff");
 				}
 				else if(Manual_inst=='B')
 					{
 					lpc_link.send("B");
-					usleep(300000);
+					usleep(400000);
 							}
 				else if(Manual_inst=='L')
 				{
 					lpc_link.send("L");
-					usleep(300000);
+					usleep(400000);
 				}
 				else if(Manual_inst=='R')
 				{
 					lpc_link.send("R");
-					usleep(300000);
+					usleep(400000);
 
 				}
 				else if(Manual_inst=='S')
 				{
 					lpc_link.send("S");
-					usleep(300000);
+					usleep(400000);
 				}
 				else if(Manual_inst=='F')
 				{
 					lpc_link.send("F");
-					usleep(300000);
+					usleep(400000);
 								}
 				else if(Manual_inst=='Q')
 				{
 					goto begining;
 				}
+				usleep(200);
 			}
 		}
 		else if(Mode=='Q')

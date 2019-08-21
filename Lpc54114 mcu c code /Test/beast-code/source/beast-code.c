@@ -147,7 +147,7 @@ static void uart_task(void *pvParameters)
 
 	vTaskSuspend(Object_Search_Handle);
 	int error,status=0;
-	uint8_t send,send1,data;
+	uint8_t send;
      size_t n            = 0;
      usart_config.srcclk = BOARD_DEBUG_UART_CLK_FREQ;
      usart_config.base   = DEMO_USART;
@@ -187,15 +187,16 @@ static void uart_task(void *pvParameters)
        		 else if(send=='S')
        		  {
        			 Stop();
+       			vTaskSuspend(Object_Search_Handle);
 
        		  }
 
        		  else
        		   {
-       			  if(status=1)
+       			  if(status==1)
        			  {
        				vTaskSuspend(Object_Search_Handle);
-       				  vTaskResume(Drive_task_Handle);
+       				vTaskResume(Drive_task_Handle);
 
        				  status=0;
 
@@ -289,16 +290,19 @@ static void uart_task(void *pvParameters)
     	 Rear_obs=Rear_Obstarcle();
     	 if(Front_obs<8)
     	 {	Stop();
+    	 	 vTaskSuspend(Uart_Task_Handle);
     		 vTaskSuspend(Drive_task_Handle);
     		 vTaskSuspend(Object_Search_Handle);
 
+    		 vTaskDelay(10);
     		 Reverse();
-    		 vTaskDelay(400);
-    		 Turn_Left();
-    		 vTaskDelay(400);
+    		 vTaskDelay(150);
+    		 /*Turn_Left();
+    		 vTaskDelay(200);
     		 Turn_Right();
-    		 vTaskDelay(400);
+    		 vTaskDelay(200);*/
     		 Stop();
+    		 vTaskResume(Uart_Task_Handle);
     		 vTaskResume(Drive_task_Handle);
     		 vTaskResume(Object_Search_Handle);
     		}
@@ -307,16 +311,20 @@ static void uart_task(void *pvParameters)
     	 {	Stop();
     		 vTaskSuspend(Uart_Task_Handle);
     		 vTaskSuspend(Object_Search_Handle);
-
+    		 vTaskResume(Drive_task_Handle);
+    		 vTaskDelay(5);
     		 Move();
-    		 vTaskDelay(400);
-    		 Turn_Left();
-    		 vTaskDelay(400);
-    		 Turn_Right();
-    		 vTaskDelay(400);
+    		 vTaskDelay(150);
+    		// Turn_Left();
+    		 //vTaskDelay(200);
+    		 //Move();
+    		 //vTaskDelay(80);
+    		 //Turn_Right();
+    		 //vTaskDelay(100);
     		 Stop();
     		 vTaskResume(Uart_Task_Handle);
     		 vTaskResume(Object_Search_Handle);
+    		 vTaskResume(Drive_task_Handle);
     		}
 
 
@@ -390,20 +398,20 @@ static void uart_task(void *pvParameters)
 
  void Turn_SlowLeft()
  {
-	 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 40);
+	 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
  		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
- 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
- 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 40);
+ 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 65);
+ 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
 
  }
 
 
  void Turn_SlowRight()
  {
-		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 40);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 65);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
- 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 40);
+ 		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1,0);
  }
 
 
@@ -452,10 +460,10 @@ static void uart_task(void *pvParameters)
 
  void Search()
  {
- 	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 70);
+ 	 CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 75);
  	 CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
  	 CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
- 	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 70);
+ 	 CTIMER_UpdatePwmDutycycle(CTIMER1,RM1, 75);
  	 vTaskDelay(750);
 
  }
