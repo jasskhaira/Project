@@ -176,9 +176,13 @@ static void uart_task(void *pvParameters)
        		if(send=='F')
        		{
        			//send1=recv_buffer[0];
-       			if(status==0){
+       			if(status==0)
+       			{
        			vTaskSuspend(Drive_task_Handle);
        			vTaskResume(Object_Search_Handle);
+       			//printf("drive suspend\n");
+       			//printf("search resume\n");
+       			status=1;
        			}
        			xQueueSend(Obj_track,&send,10);
 
@@ -197,7 +201,8 @@ static void uart_task(void *pvParameters)
        			  {
        				vTaskSuspend(Object_Search_Handle);
        				vTaskResume(Drive_task_Handle);
-
+       				//printf("drive resume\n");
+       				//printf("search suspend\n");
        				  status=0;
 
        			  }
@@ -288,7 +293,7 @@ static void uart_task(void *pvParameters)
  	{
        	 Front_obs=Front_Obstarcle();
     	 Rear_obs=Rear_Obstarcle();
-    	 if(Front_obs<8)
+    	 if(Front_obs<10)
     	 {	Stop();
     	 	 vTaskSuspend(Uart_Task_Handle);
     		 vTaskSuspend(Drive_task_Handle);
@@ -307,7 +312,7 @@ static void uart_task(void *pvParameters)
     		 vTaskResume(Object_Search_Handle);
     		}
 
-    	 if(Rear_obs<8)
+    	 if(Rear_obs<10)
     	 {	Stop();
     		 vTaskSuspend(Uart_Task_Handle);
     		 vTaskSuspend(Object_Search_Handle);
@@ -342,6 +347,7 @@ static void uart_task(void *pvParameters)
 	 uint8_t Obj_recv;
  	while(1)
  	{
+ 		printf("finding\n");
  	xQueueReceive(Obj_track,&Obj_recv,10);
  	if(Obj_recv=='F')
  	{
@@ -351,8 +357,9 @@ static void uart_task(void *pvParameters)
  	Search();
  	Stop();
 
- 	Obj_recv='n';
+
  	}
+ 	Obj_recv='n';
  }}
 
 
@@ -389,8 +396,8 @@ static void uart_task(void *pvParameters)
  {
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, speed);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
-		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 90);
-		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, speed);
+		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, speed);
+		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
 
 
  }
@@ -400,7 +407,7 @@ static void uart_task(void *pvParameters)
  {
 	 	CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 0);
  		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
- 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 65);
+ 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 70);
  		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1, 0);
 
  }
@@ -408,7 +415,7 @@ static void uart_task(void *pvParameters)
 
  void Turn_SlowRight()
  {
-		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 65);
+		CTIMER_UpdatePwmDutycycle(CTIMER, LM0, 70);
 		CTIMER_UpdatePwmDutycycle(CTIMER, LM1, 0);
 		CTIMER_UpdatePwmDutycycle(CTIMER, RM0, 0);
  		CTIMER_UpdatePwmDutycycle(CTIMER1, RM1,0);

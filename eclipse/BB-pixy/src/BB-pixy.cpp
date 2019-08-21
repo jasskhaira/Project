@@ -22,7 +22,7 @@ int y;
 int sig;
 int x_min=70;
 int x_max=200;
-unsigned int maxArea=10000;
+unsigned int maxArea=8000;
 unsigned int minArea=1000;
 unsigned int width;
 unsigned int height;
@@ -32,7 +32,7 @@ int i=0;
 //uint16_t blocks;
 int mySig,Sig_Status=0,Mode_Status=0;
 int p;
-unsigned char bt_data,Mode='n',Color='n',Manual_inst,j,Track_Mode=1,Find;
+unsigned char bt_data,Mode='n',Color='n',Manual_inst,j,Track_Mode=1,Find=1;
 
 
 
@@ -43,6 +43,7 @@ int Track(char tsig)
 
 		   if(pixy.ccc.numBlocks)
 		  {
+			   usleep(10000);
 			   if(Find==1)
 			   {
 				   lpc_link.send("S");
@@ -63,57 +64,58 @@ int Track(char tsig)
 
 					printf("newarea %d\n",newarea);
 
-					if(x<x_min && newarea<3000)
+					if(x<x_min )
 					{
 						lpc_link.send("L");
-						//printf("Left\n");
-						usleep(200000);
+						printf("Left\n");
+						usleep(100000);
 
 					}
-
+/*
 					if(x<x_min && newarea>3000)
 					{
 					  lpc_link.send("l");
-					//  printf("Left slow\n");
-					  usleep(200000);
+					 printf("Left slow\n");
+					  usleep(20000);
 					}
-
-				   if(x>x_max && newarea<3000)
+*/
+				   if(x>x_max )
 					{
 						lpc_link.send("R");
-						//printf("Right\n");
-						usleep(200000);
+						printf("Right\n");
+						usleep(100000);
 					}
 
 
-				   if(x>x_max && newarea>3000)
+/*				   if(x>x_max && newarea>3000)
 					{
 						lpc_link.send("r");
-						//printf("Right slow\n");
-						usleep(200000);
+						printf("Right slow\n");
+						usleep(20000);
 					}
-
-				   if(newarea<5000)
+*/
+				   if(newarea<7000)
 					{
 						lpc_link.send("M");
-						//printf("move\n");
-						usleep(200000);
+						printf("move\n");
+						usleep(100000);
 					}
-				  else if (newarea>maxArea)
+				   else if (newarea>maxArea)
 					{
 						lpc_link.send("B");
 						//printf("back\n");
-						usleep(200000);
+						usleep(100000);
 					}
 				 else
 				{
 					lpc_link.send("S");
-					//printf("stop\n");
+					printf("stop\n");
 					usleep(300000);
 				}
 	 	  }}
 	  else
 	  {
+		  usleep(300000);
 		  lpc_link.send("F");
 		  usleep(300000);
 		  Find=1;
@@ -134,7 +136,7 @@ int main()
 
 
 begining:
-	pixy.setLamp(1,1);
+	pixy.setLamp(1,0);
 	Mode_Status=0;
 	Sig_Status=0;
 	lpc_link.send("S");
@@ -157,7 +159,7 @@ begining:
 		{
 			Bluetooth.send("Please Select the color to track \n");
 			usleep(900000);
-			Bluetooth.send("Options- B for Red \n O for Orange\n");
+			Bluetooth.send("Options- P for Purple Ball \n G for Green Ball \n");
 			usleep(900000);
 
 			while(Sig_Status==0)
@@ -167,7 +169,7 @@ begining:
 				while(Bluetooth.recieve(&Color)<2);
 				printf("%d\n",p);
 				pixy.setLamp(0,0);
-				if(Color=='R')
+				if(Color=='P')
 				{
 					mySig=1;
 					Sig_Status=1;
@@ -180,7 +182,7 @@ begining:
 				}
 				else
 				{
-					Bluetooth.send("Enter a valid argument\n");
+					Bluetooth.send("Enter a valid Option\n");
 					//Sig_Status=0;
 				}
 			}
