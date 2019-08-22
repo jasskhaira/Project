@@ -14,7 +14,7 @@ int main()
 
    pixy.init();
 
-   pixy.setLamp(1,0);
+
 
    if ((BT = open("/dev/ttyO4", O_RDWR | O_NOCTTY | O_NDELAY))<0){
       perror("UART: Failed to open the file.\n");
@@ -67,25 +67,25 @@ int main()
 				  {
 					  write(LPC,"l",2);
 					  usleep(300000);
-					  printf("left\n")
+					  printf("left\n");
 				  }
-				  if(x>120)
+				  if(x>200)
 				  {
 				 	  write(LPC,"r",2);
 				 	  usleep(300000);
-				 	 printf("right\n")
+				 	 printf("right\n");
 				   }
-				  if(a>624)
+				  if(a<6000)
 				  {
 					  write(LPC,"g",2);
 					  usleep(300000);
-					  printf("go\n")
+					  printf("go\n");
 				  }
-				  if(a<624)
+				  if(a>8000)
 				  {
 					  write(LPC,"b",2);
 					  usleep(300000);
-					  printf("back\n")
+					  printf("back\n");
 				  }
 			  }}
 			  else

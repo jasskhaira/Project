@@ -7,7 +7,6 @@
 #include "fsl_debug_console.h"
 
 
-/* TODO: insert other include files here. */
 
 /* FreeRTOS kernel includes. */
 #include "FreeRTOS.h"
@@ -23,10 +22,10 @@
 /* TODO: insert other definitions and declarations here. */
 
 #define CTIMER CTIMER0                 /* Timer 0 */
-#define LM0 kCTIMER_Match_0			//	J1[19]
-#define RM0 kCTIMER_Match_1			//  J2[18]
-#define LM1 kCTIMER_Match_2			//  J1[16]
-#define RM1 kCTIMER_Match_0			//  J2[17]
+#define LM0 kCTIMER_Match_0			//	J1[19]					PWM Pin connected to left motor PIN1
+#define RM0 kCTIMER_Match_1			//  J2[18]					PWM Pin connected to left motor PIN2
+#define LM1 kCTIMER_Match_2			//  J1[16]					PWM Pin connected to right motor PIN1
+#define RM1 kCTIMER_Match_0			//  J2[17]					PWM Pin connected to right motor PIN2
 
 
 #define DEMO_USART USART0
@@ -38,33 +37,37 @@
 #define uart_task_PRIORITY (configMAX_PRIORITIES - 1)
 #define USART_NVIC_PRIO 5
 
-static void uart_task(void *pvParameters);
-static void Drive_task(void *pvParameters);
-static void Ultrasonic_Task(void *pvParameters);
-static void Object_Search();
+static void uart_task(void *pvParameters);				//Task responsible for receiving data from beaglebone
+static void Drive_task(void *pvParameters);				//This Task is used to drive motor
+static void Ultrasonic_Task(void *pvParameters);		//This Task associate with Ultarsonic Sensor to avoid obstracle
+static void Object_Search();							//This Task used to search teh object
 
 
 
-void MotorsSetup();
-void Move();
-void Turn_SlowLeft();
-void Turn_SlowRight();
-void Turn_Left();
-void Turn_Right();
-void Stop();
-void Reverse();
-float Front_Obstarcle();
-float Rear_Obstarcle();
-void Search();
-void Circle();
+void MotorsSetup();										// It set up PWM to drive motors
+void Move();											// It is used to move in forward direction
+void Turn_SlowLeft();									// It is used to turn left with slow speed
+void Turn_SlowRight();									// It is used to turn right with slow speed
+void Turn_Left();										// It is used to turn left
+void Turn_Right();										// It is used to turn right
+void Stop();											// It is used to Stop robot
+void Reverse();											// It is used to reverse the robot
+float Front_Obstarcle();								// It gives the distance of front obstacle
+float Rear_Obstarcle();									// It gives the distance of rear obstacle
+void Search();											// It drive the motors to search object
+void Circle();											// It drive the motors to make circle
 
 
-uint8_t background_buffer[100];
+uint8_t background_buffer[100];							// For receiving data from Beaglebone in background
 uint8_t recv_buffer[1];
 
-usart_rtos_handle_t handle;
+usart_rtos_handle_t handle;								// USART handle
 struct _usart_handle t_handle;
 
+
+/*This structure contain the configurations of USART
+ * USART runs at 9600 baudrate 8N1
+ */
 
 struct rtos_usart_config usart_config = {
     .baudrate    = 9600,
@@ -74,8 +77,14 @@ struct rtos_usart_config usart_config = {
     .buffer_size = sizeof(background_buffer),
 };
 
+/* Queue Handle  */
+
+
 xQueueHandle Obj_track= NULL;
 xQueueHandle queue1= NULL;
+
+/* Task Handles   */
+
 TaskHandle_t Uart_Task_Handle=NULL;
 TaskHandle_t Ultrasonic_Task_Handle=NULL;
 TaskHandle_t Drive_task_Handle=NULL;
@@ -86,8 +95,11 @@ int main(void)
 
 {
 
+
+
 	CLOCK_AttachClk(BOARD_DEBUG_UART_CLK_ATTACH);
 	SYSCON->ASYNCAPBCTRL = 1;
+
 
 
     BOARD_InitBootPins();
@@ -97,9 +109,13 @@ int main(void)
 
     MotorsSetup();
 
+    /* Creating Queues for InterTask communication */
+
     queue1=xQueueCreate(1,sizeof(uint8_t));
     Obj_track=xQueueCreate(1,sizeof(uint8_t));
 
+
+    /* Creating Tasks for rtos */
 
     if (xTaskCreate(uart_task, "Uart_task", configMINIMAL_STACK_SIZE + 10, NULL, 3
     		,&Uart_Task_Handle) != pdPASS)
@@ -158,9 +174,11 @@ static void uart_task(void *pvParameters)
 
      USART_RTOS_Init(&handle, &t_handle, &usart_config);
 
-     /* Receive user input and send it back to terminal. */
+
      while(1)
      {
+    	 /* Receive the data form USART */
+
          error=USART_RTOS_Receive(&handle, recv_buffer, sizeof(recv_buffer), &n);
          //printf("%c",recv_buffer);
          if (error == kStatus_USART_RxRingBufferOverrun)
@@ -173,7 +191,8 @@ static void uart_task(void *pvParameters)
          if (n > 0)
          {
         	 send=recv_buffer[0];
-       		if(send=='F')
+
+        	 if(send=='F')
        		{
        			//send1=recv_buffer[0];
        			if(status==0)
@@ -442,7 +461,7 @@ static void uart_task(void *pvParameters)
 
  }
 
- /* Api is used to stop the robot */
+
 
  void Stop()
  {

@@ -33,7 +33,7 @@
 uint8_t background_buffer[100];
 uint8_t recv_buffer[1];
 
-xQueueHandle queue1= NULL;
+xQueueHandle Q= NULL;
 
 usart_rtos_handle_t handle;
 struct _usart_handle t_handle;
@@ -77,7 +77,7 @@ static void DataTask(void *pvParameters)
          if (n > 0)
          {
         	 data=recv_buffer[0];
-       		xQueueSend(queue1,&data,10);
+       		xQueueSend(Q,&data,10);
          }
          }
      }
@@ -92,7 +92,7 @@ static void MotorTask(void *pvParameters)
 
 	  	while(1)
 	  	{
-	  		xQueueReceive(queue1,&recv,10);
+	  		xQueueReceive(Q,&recv,10);
 	  		if(recv=='g')
 	  		{
 	  			SCTIMER_UpdatePwmDutycycle(SCT0, DEMO_FIRST_SCTIMER_OUT, 80, eventnumber1);
@@ -139,7 +139,7 @@ static void MotorTask(void *pvParameters)
 	  		    printf("b");
 	  		}
 
-	  		recv='n';
+	  		recv='1';
 	  		}
 }
 
@@ -164,7 +164,7 @@ int main(void)
 
 	  BOARD_InitDebugConsole();
 
-	  queue1=xQueueCreate(1,sizeof(uint8_t));
+	  Q=xQueueCreate(1,sizeof(uint8_t));
 	  sctimerClock = SCTIMER_CLK_FREQ;
 
 	  SCTIMER_GetDefaultConfig(&sctimerInfo);
