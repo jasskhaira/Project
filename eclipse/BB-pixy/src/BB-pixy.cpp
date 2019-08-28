@@ -150,7 +150,7 @@ begining:
 
 	while(Mode_Status==0)
 	{
-		while((p=Bluetooth.recieve(&Mode))<2);
+		while(Bluetooth.recieve(&Mode)<2);
 
 		//p=Bluetooth.recieve(&Mode);
 		//printf("d%\n",p);
