@@ -22,14 +22,14 @@ int main(){
    tcsetattr(file, TCSANOW, &options);  //changes occur immmediately
 
    unsigned char transmit[2]="j";  //the string to send
-while(1){
+
    if ((count = write(file, &transmit,2))<0){        //send the string
       perror("Failed to write to the output\n");
       return -1;
    }
 
    usleep(10000);                  //give the Arduino a chance to respond
-}
+
    unsigned char receive[100];      //declare a buffer for receiving data
    if ((count = read(file, (void*)receive, 100))<0){   //receive the data
       perror("Failed to read from the input\n");
